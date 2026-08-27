@@ -88,6 +88,7 @@
   --page-max: 76rem; /* 1216px                                           */
   --measure: 68ch; /* running-copy line length                         */
   --gutter: clamp(1.25rem, 0.6rem + 3.2vw, 3rem);
+  --header-h: 4.5rem; /* 72px — sticky header; anchor scroll offset      */
 
   /* --- Motion ----------------------------------------------------------- */
   /* One idea only: "the drawing assembles". Reader-triggered, <=400ms. */

@@ -1,0 +1,69 @@
+.hero {
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: var(--s-9) var(--gutter) var(--s-8);
+}
+
+.kicker {
+  margin-bottom: var(--s-4);
+}
+
+.title {
+  max-width: 22ch;
+  margin-bottom: var(--s-5);
+}
+
+.lede {
+  max-width: 48ch;
+  margin-bottom: var(--s-7);
+  font-size: var(--fs-500);
+  line-height: var(--lh-snug);
+  color: var(--ink-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-4);
+}
+
+/* CTA primaire : remplissage jaune, texte encre. Le seul bouton jaune sur papier. */
+.ctaPrimary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: var(--s-3) var(--s-5);
+  background: var(--signal);
+  color: var(--on-signal);
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+/* Au survol/focus, le bouton s'inverse : encre + jaune (jaune en premier plan). */
+.ctaPrimary:hover,
+.ctaPrimary:focus-visible {
+  background: var(--ink);
+  color: var(--signal);
+}
+
+/* CTA secondaire : encre + soulignement jaune (règle des liens sur papier). */
+.ctaSecondary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: var(--s-3) var(--s-2);
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--signal);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.35em;
+}
+
+.ctaSecondary:hover {
+  text-decoration-color: var(--ink);
+}

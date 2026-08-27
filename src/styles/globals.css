@@ -16,8 +16,9 @@
 
 html {
   -webkit-text-size-adjust: 100%;
-  /* No scroll-behavior: smooth here — it is a motion decision, and this
-     project's motion budget is spent on one idea. */
+  /* Anchor jumps clear the sticky header. Not smooth: scroll-behavior is a
+     motion decision, and this project's motion budget is spent on one idea. */
+  scroll-padding-top: var(--header-h);
 }
 
 body {

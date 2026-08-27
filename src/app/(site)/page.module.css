@@ -1,0 +1,16 @@
+.page {
+  /* Marge basse pour respirer avant le pied de page. */
+  padding-bottom: var(--s-4);
+}
+
+/* Cartouche : deux libellés mono encadrant une planche, filet dessous. */
+.sheet {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--s-3);
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: var(--s-4) var(--gutter);
+  border-bottom: 1px solid var(--rule);
+}
