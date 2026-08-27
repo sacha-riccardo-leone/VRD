@@ -1,0 +1,41 @@
+.main {
+  max-inline-size: var(--page-max);
+  margin-inline: auto;
+  padding: var(--s-9) var(--gutter);
+}
+
+.main h1 {
+  margin-block: var(--s-3) var(--s-5);
+}
+
+.lede {
+  font-size: var(--fs-500);
+  color: var(--ink-muted);
+}
+
+.list {
+  margin-block-start: var(--s-7);
+  padding: 0;
+  list-style: none;
+  border-block-start: 1px solid var(--rule-strong);
+}
+
+.list li {
+  padding-block: var(--s-4);
+  border-block-end: 1px solid var(--rule);
+  max-inline-size: var(--measure);
+}
+
+.list a {
+  color: var(--ink);
+  text-decoration-color: var(--signal);
+  text-decoration-thickness: 2px;
+  min-block-size: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.aside {
+  color: var(--ink-muted);
+  font-size: var(--fs-300);
+}
