@@ -45,6 +45,8 @@ export function ThermalField() {
     const LMAX = 1.55;
     const NL = 13;
     const GRID_PULL = 0.28; // fraction : à quel point la grille glisse vers le curseur
+    const GRID_K = 0.045; // inertie de la grille (la sensation que tu as validée)
+    const FIELD_K = 0.02; // inertie de la source thermique — plus lente que la grille
     const levels = Array.from({ length: NL }, (_, k) => LMIN + (k / (NL - 1)) * (LMAX - LMIN));
     const T_MIN = 18;
     const T_MAX = 24;
@@ -65,7 +67,8 @@ export function ThermalField() {
     let grid = new Float32Array(0);
 
     const target = { x: 0.5, y: 0.5 }; // normalisé
-    const eased = { x: 0.5, y: 0.5 };
+    const eased = { x: 0.5, y: 0.5 }; // pilote la grille
+    const easedField = { x: 0.5, y: 0.5 }; // pilote la source thermique (plus lent)
     const cursorPx = { x: -1, y: -1 };
     let active = false;
     let running = false;
@@ -89,8 +92,8 @@ export function ThermalField() {
     }
 
     function computeGrid() {
-      const ex = eased.x * W;
-      const ey = eased.y * H;
+      const ex = easedField.x * W;
+      const ey = easedField.y * H;
       for (let j = 0; j < rows; j++) {
         for (let i = 0; i < cols; i++) {
           grid[j * cols + i] = fieldAt(i * CELL, j * CELL, ex, ey);
@@ -199,7 +202,7 @@ export function ThermalField() {
 
       let activeIdx = -1;
       if (active && cursorPx.x >= 0) {
-        const vCur = fieldAt(cursorPx.x, cursorPx.y, eased.x * W, eased.y * H);
+        const vCur = fieldAt(cursorPx.x, cursorPx.y, easedField.x * W, easedField.y * H);
         let best = Infinity;
         for (let k = 0; k < levels.length; k++) {
           const d = Math.abs(levels[k] - vCur);
@@ -240,11 +243,17 @@ export function ThermalField() {
     }
 
     function tick() {
-      eased.x += (target.x - eased.x) * 0.045; // plus lent = aimant plus calme
-      eased.y += (target.y - eased.y) * 0.045;
+      eased.x += (target.x - eased.x) * GRID_K;
+      eased.y += (target.y - eased.y) * GRID_K;
+      easedField.x += (target.x - easedField.x) * FIELD_K;
+      easedField.y += (target.y - easedField.y) * FIELD_K;
       computeGrid();
       render();
-      if (Math.hypot(target.x - eased.x, target.y - eased.y) < 0.0015) {
+      const rest = Math.max(
+        Math.hypot(target.x - eased.x, target.y - eased.y),
+        Math.hypot(target.x - easedField.x, target.y - easedField.y),
+      );
+      if (rest < 0.0015) {
         running = false;
         return;
       }
