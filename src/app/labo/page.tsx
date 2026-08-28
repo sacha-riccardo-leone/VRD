@@ -3,16 +3,20 @@ import { SchematicLoop } from "@/components/SchematicLoop";
 import { Manifold } from "@/components/Manifold";
 import { ExplodedAssembly } from "@/components/ExplodedAssembly";
 import { EXPLODED_PARTS } from "@/components/exploded-parts";
+import { AirHandlingUnit } from "@/components/AirHandlingUnit";
+import { ColonneMontanteSanitaire } from "@/components/ColonneMontanteSanitaire";
+import { RampeGaz } from "@/components/RampeGaz";
+import { PlanNiveauCote } from "@/components/PlanNiveauCote";
 import s from "./page.module.css";
 
 /**
  * Page de revue INTERNE (comme /tokens) — hors du groupe (site), donc sans
- * chrome. Sert à valider le prototype de champ thermique réactif avant de
- * décider où il vit. À retirer avant livraison. `noindex` global + robots
+ * chrome. Sert à valider les prototypes d'illustration technique avant de
+ * décider où ils vivent. À retirer avant livraison. `noindex` global + robots
  * Disallow s'appliquent déjà.
  */
 export const metadata = {
-  title: "Labo — champ thermique",
+  title: "Labo — illustrations techniques",
 };
 
 export default function Labo() {
@@ -88,6 +92,73 @@ export default function Labo() {
                 </li>
               ))}
             </ol>
+          </div>
+        </div>
+      </section>
+
+      <section className={s.schema} aria-labelledby="cta-titre">
+        <div className={s.schemaInner}>
+          <p className="label">Prototype · ventilation</p>
+          <h2 id="cta-titre" className={s.title}>
+            Centrale de traitement d’air
+          </h2>
+          <p className={s.caption}>
+            Air neuf, filtration G4 puis F7, batteries froide et chaude,
+            soufflage ; reprise en gaine tiretée via récupérateur avant rejet.
+            Illustration — contenu de démonstration.
+          </p>
+          <div className={s.schemaFigure}>
+            <AirHandlingUnit />
+          </div>
+        </div>
+      </section>
+
+      <section className={s.schema} aria-labelledby="sanitaire-titre">
+        <div className={s.schemaInner}>
+          <p className="label">Prototype · sanitaire</p>
+          <h2 id="sanitaire-titre" className={s.title}>
+            Colonne montante EF / ECS
+          </h2>
+          <p className={s.caption}>
+            Trois niveaux, piquage et robinet d’arrêt par étage, ballon en pied.
+            Trait plein = eau froide, tireté = eau chaude. Illustration —
+            contenu de démonstration.
+          </p>
+          <div className={s.schemaFigureNarrow}>
+            <ColonneMontanteSanitaire />
+          </div>
+        </div>
+      </section>
+
+      <section className={s.schema} aria-labelledby="gaz-titre">
+        <div className={s.schemaInner}>
+          <p className="label">Prototype · gaz</p>
+          <h2 id="gaz-titre" className={s.title}>
+            Rampe gaz — bloc sécurité
+          </h2>
+          <p className={s.caption}>
+            Vanne d’arrêt, filtre, détendeur, compteur et double électrovanne de
+            sécurité jusqu’au brûleur. Illustration — contenu de démonstration.
+          </p>
+          <div className={s.schemaFigure}>
+            <RampeGaz />
+          </div>
+        </div>
+      </section>
+
+      <section className={s.schema} aria-labelledby="plan-titre">
+        <div className={s.schemaInner}>
+          <p className="label">Prototype · plan</p>
+          <h2 id="plan-titre" className={s.title}>
+            Plan de niveau coté
+          </h2>
+          <p className={s.caption}>
+            Murs hachurés, débattement de porte, chaînes de cotes, repère de
+            niveau et raccordement du radiateur départ/retour. Illustration —
+            contenu de démonstration.
+          </p>
+          <div className={s.schemaFigure}>
+            <PlanNiveauCote />
           </div>
         </div>
       </section>

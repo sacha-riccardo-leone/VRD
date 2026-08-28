@@ -46,6 +46,12 @@
   max-width: 60rem;
 }
 
+/* Figures verticales (colonne montante) : bornées pour rester lisibles. */
+.schemaFigureNarrow {
+  margin-top: var(--s-7);
+  max-width: 34rem;
+}
+
 /* --- Vue éclatée : figure + légende numérotée ---------------------------- */
 .explodedGrid {
   display: grid;

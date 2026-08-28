@@ -1,0 +1,100 @@
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--ink);
+  overflow: visible;
+}
+
+.pipe,
+.pipeDashed {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pipe {
+  stroke-dasharray: 1;
+}
+
+.pipeDashed {
+  stroke-dasharray: 7 6;
+}
+
+.sym {
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Masque de croisement : interrompt le tracé du dessous (fond papier, sans contour).
+   Classe dédiée car .sym imposerait stroke:currentColor et l'attribut stroke="none"
+   serait ignoré (une règle CSS l'emporte sur un attribut de présentation SVG). */
+.mask {
+  fill: var(--paper);
+  stroke: none;
+}
+
+/* Nœuds de raccordement (tés) : points pleins, sans contour parasite */
+.node {
+  fill: currentColor;
+  stroke: none;
+}
+
+.lab {
+  font-family: var(--font-mono-stack);
+  font-size: 13px;
+  fill: var(--ink-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.capt {
+  font-size: 14px;
+}
+
+/* État caché : uniquement via [data-draw="pending"] (SSR / reduced-motion => tout visible) */
+.svg[data-draw="pending"] .pipe {
+  stroke-dashoffset: 1;
+}
+
+.svg[data-draw="pending"] .pipeDashed,
+.svg[data-draw="pending"] .mask,
+.svg[data-draw="pending"] .node,
+.svg[data-draw="pending"] .sym,
+.svg[data-draw="pending"] .lab {
+  opacity: 0;
+}
+
+/* Assemblage du dessin déclenché au scroll */
+.svg[data-draw="true"] .pipe {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset var(--dur-slow) var(--ease);
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+
+.svg[data-draw="true"] .pipeDashed {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 260ms;
+}
+
+.svg[data-draw="true"] .mask {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 260ms;
+}
+
+.svg[data-draw="true"] .node {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 340ms;
+}
+
+.svg[data-draw="true"] .sym {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 340ms;
+}
+
+.svg[data-draw="true"] .lab {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 520ms;
+}
