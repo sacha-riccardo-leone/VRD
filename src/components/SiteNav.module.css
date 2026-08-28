@@ -30,7 +30,7 @@
 
 .link:hover {
   text-decoration: underline;
-  text-decoration-color: var(--signal);
+  text-decoration-color: var(--ink);
   text-decoration-thickness: 2px;
   text-underline-offset: 0.35em;
 }

@@ -21,17 +21,18 @@ non confirmés (rôle CVCS Coop/Rennaz, « 12 certificats Minergie-P »,
 **Français réel.** Accents et accords corrects. Ne jamais reproduire les
 erreurs du site actuel (« projet commerciale », « techniques maitrisé »).
 
-**Direction A « Le Dossier » uniquement.** Papier off-white, encre near-black,
-un seul accent jaune (#FCC603), fond anthracite (#1C1C1C) réservé aux sections
-techniques. Pas de cyan.
+**Direction A « Le Dossier » uniquement — monochrome.** Papier off-white, encre
+near-black, fond anthracite (#1C1C1C) réservé aux sections techniques. **Aucune
+couleur d'accent** (décision du 28.08.2026) : les matériaux du client — cartes,
+site, signalétique — sont noir/blanc ; le jaune de gaz a été écarté pour ne pas
+imposer une teinte qu'ils n'ont pas choisie. Pas de cyan non plus.
 
-**L'accent inverse son rôle selon la surface.** #FCC603 mesure **1.38:1** sur
-le papier : sous tous les seuils WCAG, texte comme non-texte. Sur papier il
-n'est jamais un premier plan — uniquement un remplissage (`--on-signal` posé
-dessus, 11.76:1), un filet ou un surlignage (`--signal-wash`). Sur fond
-anthracite il redevient un premier plan (10.73:1) : texte, traits, cotes,
-anneau de focus. Les liens sur papier sont en encre avec un soulignement
-jaune, jamais en jaune.
+**Le contraste ne passe jamais par la teinte.** Hiérarchie et emphase :
+**inversion** encre↔papier, épaisseur de trait, tireté opposé au plein, poids
+typographique. Le bouton primaire est un aplat d'encre à texte papier ; au
+survol il s'inverse (papier, texte encre, filet d'encre). Les liens sont en
+encre soulignée. L'anneau de focus est en encre sur papier (16.28:1) et en
+papier sur anthracite (14.85:1).
 
 **Classe `.technique`** pour les sections sombres. Elle réassigne `--paper`,
 `--ink`, `--rule*` et `--focus-ring` ; tout ce qui est à l'intérieur hérite.

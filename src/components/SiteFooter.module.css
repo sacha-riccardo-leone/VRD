@@ -45,7 +45,7 @@
 .link {
   color: var(--ink);
   text-decoration: underline;
-  text-decoration-color: var(--signal);
+  text-decoration-color: var(--ink-muted);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
 }

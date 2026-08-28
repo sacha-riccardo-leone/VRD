@@ -39,20 +39,11 @@ const ON_PAPER: Pair[] = [
     limit: "filets décoratifs — jamais porteurs de sens",
     decorative: true,
   },
-  { fg: "#141210", bg: "#fcc603", use: "--on-signal sur --signal", limit: "texte posé SUR le remplissage jaune" },
-  {
-    fg: "#fcc603",
-    bg: "#f2efe9",
-    use: "--signal sur --paper",
-    limit: "interdit en premier plan — remplissage, filet ou repère uniquement",
-    forbidden: true,
-  },
 ];
 
 const ON_DARK: Pair[] = [
   { fg: "#f2efe9", bg: "#1c1c1c", use: "--on-dark sur --dark", limit: "corps de texte" },
   { fg: "#b0aeab", bg: "#1c1c1c", use: "--on-dark-muted sur --dark", limit: "texte secondaire" },
-  { fg: "#fcc603", bg: "#1c1c1c", use: "--signal sur --dark", limit: "accent en premier plan, traits, cotes, focus" },
   { fg: "#6e6e6e", bg: "#1c1c1c", use: "--rule-strong sur --dark", limit: "séparateurs porteurs de sens" },
   { fg: "#333333", bg: "#1c1c1c", use: "--dark-rule sur --dark", limit: "filets décoratifs", decorative: true },
 ];
@@ -136,51 +127,19 @@ export default function TokensPage() {
         <Swatches pairs={ON_DARK} dark />
       </section>
 
-      <section className={s.section} aria-labelledby="t-accent">
-        <h2 id="t-accent">L’accent, et pourquoi il change de rôle</h2>
+      <section className={s.section} aria-labelledby="t-mono">
+        <h2 id="t-mono">Contraste sans couleur</h2>
         <p className={s.note}>
-          #FCC603 mesure <strong>1.38:1</strong> sur le papier. C’est sous tous les seuils WCAG, texte comme
-          non-texte&nbsp;: en premier plan sur le fond clair il est illisible. L’assombrir jusqu’à 4.5:1 mène vers
-          #7A6100, un olive foncé qui ne se lit plus comme la même couleur. L’accent inverse donc son rôle selon la
-          surface.
+          Aucune teinte d’accent (décision du 28.08.2026) : les matériaux du client sont noir et blanc. La hiérarchie
+          et l’emphase passent par l’<strong>inversion</strong> encre↔papier, l’<strong>épaisseur de trait</strong>, le
+          <strong> tireté opposé au plein</strong> et le <strong>poids typographique</strong>. Le bouton primaire est un
+          aplat d’encre à texte papier ; au survol il s’inverse (papier, texte encre, filet d’encre) — voir « États
+          interactifs » plus bas.
         </p>
-        <div className={s.accentGrid}>
-          <figure className={s.demo}>
-            <div className={s.demoFill}>
-              <span>Demander une offre</span>
-            </div>
-            <figcaption className="label">Remplissage — encre sur jaune, 11.76:1</figcaption>
-          </figure>
-          <figure className={s.demo}>
-            <div className={s.demoBox}>
-              <p className={s.demoRule}>Chauffage, ventilation, climatisation, sanitaire</p>
-            </div>
-            <figcaption className="label">Filet — le jaune structure, il ne parle pas</figcaption>
-          </figure>
-          <figure className={s.demo}>
-            <div className={s.demoBox}>
-              <p>
-                Puissance installée <mark className={s.demoMark}>1 250 kW</mark> sur trois niveaux.
-              </p>
-            </div>
-            <figcaption className="label">Surlignage — encre sur --signal-wash</figcaption>
-          </figure>
-          {/* `.technique` goes on the box, not the figure: on the figure the
-              caption would inherit the dark palette's muted grey while still
-              sitting on paper — about 1.6:1. */}
-          <figure className={s.demo}>
-            <div className={`${s.demoBox} technique`}>
-              <p>
-                Section technique&nbsp;: <span className={s.demoOnDark}>reprise d’air 3 400 m³/h</span>
-              </p>
-            </div>
-            <figcaption className="label">Sur fond sombre, le jaune redevient premier plan — 10.73:1</figcaption>
-          </figure>
-        </div>
         <p className={s.note}>
-          Le cyan est retiré. Un schéma technique sépare ses circuits par épaisseur de trait et par tireté avant de le
-          faire par la teinte&nbsp;: ça survit à l’impression en noir et blanc et au daltonisme. Il reste trois niveaux
-          sur fond sombre — papier, gris moyen, jaune — plus l’épaisseur et le tireté. C’est suffisant.
+          Un schéma technique sépare ses circuits par épaisseur de trait et par tireté avant tout&nbsp;: ça survit à
+          l’impression en noir et blanc et au daltonisme. Sur fond sombre, l’isotherme active du champ thermique passe en
+          trait plein plus épais, pas en couleur.
         </p>
       </section>
 
@@ -220,7 +179,7 @@ export default function TokensPage() {
         <h2 id="t-etats">États interactifs</h2>
         <p className={s.note}>
           Naviguez au clavier&nbsp;: l’anneau de focus doit rester visible sur les deux fonds — encre sur papier
-          (16.28:1), jaune sur anthracite (10.73:1). Cible tactile minimale 44&nbsp;×&nbsp;44&nbsp;px.
+          (16.28:1), papier sur anthracite (14.85:1). Cible tactile minimale 44&nbsp;×&nbsp;44&nbsp;px.
         </p>
         <div className={s.states}>
           <a href="#t-etats">Lien dans le texte</a>

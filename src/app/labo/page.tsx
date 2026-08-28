@@ -23,8 +23,8 @@ export default function Labo() {
           </h1>
           <p className={s.caption}>
             Isothermes 18–24&nbsp;°C. Déplacez le curseur : la source de chaleur
-            le suit avec inertie, l’isotherme la plus proche passe en jaune avec
-            sa valeur. Schéma d’illustration — contenu de démonstration.
+            le suit avec inertie, l’isotherme la plus proche passe en trait plein
+            avec sa valeur. Schéma d’illustration — contenu de démonstration.
           </p>
         </div>
       </section>

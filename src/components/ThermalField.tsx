@@ -10,16 +10,17 @@ import s from "./ThermalField.module.css";
  * de chaleur sous le curseur + un relief fixe) rendu en isothermes par
  * « marching squares ». Le curseur est un aimant : le champ suit un point qui
  * le poursuit avec inertie (lerp), d'où le réajustement magnétique. L'isotherme
- * la plus proche du curseur passe en jaune, avec sa valeur — c'est une figure,
- * pas un décor : elle porte une unité (°C) et une légende.
+ * la plus proche du curseur passe en trait plein blanc (plus épais), avec sa
+ * valeur — c'est une figure, pas un décor : elle porte une unité (°C) et une légende.
  *
  * Contraintes respectées :
  *  - déclenché par le lecteur : la boucle rAF ne tourne QUE pendant/juste après
  *    un mouvement du curseur, puis s'arrête (aucune boucle ambiante) ;
  *  - `prefers-reduced-motion` : rendu statique unique, aucun écouteur, aucun rAF ;
  *  - canvas en fond, `pointer-events: none`, hauteur fixée : zéro décalage (CLS 0) ;
- *  - réservé au fond anthracite `.technique`, seul endroit où le jaune est un
- *    premier plan (10.73:1) et où le mouvement est permis.
+ *  - réservé au fond anthracite `.technique`, seul endroit où le mouvement est
+ *    permis ; monochrome — les circuits se distinguent par l'épaisseur et le
+ *    plein/tireté, pas par la couleur.
  */
 export function ThermalField() {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -37,7 +38,7 @@ export function ThermalField() {
     const cs = getComputedStyle(wrap);
     const C_LINE = cs.getPropertyValue("--on-dark-muted").trim() || "#b0aeab";
     const C_FRAME = cs.getPropertyValue("--dark-rule").trim() || "#333333";
-    const C_SIGNAL = cs.getPropertyValue("--signal").trim() || "#fcc603";
+    const C_ACTIVE = cs.getPropertyValue("--on-dark").trim() || "#f2efe9";
 
     // --- champ ------------------------------------------------------------
     const CELL = 26;
@@ -225,17 +226,18 @@ export function ThermalField() {
       ctx.restore();
 
       if (activeIdx >= 0) {
+        // Distinction par le trait, pas la couleur : plein + plus épais + blanc.
         ctx.save();
-        ctx.strokeStyle = C_SIGNAL;
-        ctx.setLineDash([5, 6]);
-        ctx.lineWidth = 1.6;
+        ctx.strokeStyle = C_ACTIVE;
+        ctx.setLineDash([]);
+        ctx.lineWidth = 2;
         ctx.stroke(pathForLevel(levels[activeIdx]));
         ctx.restore();
 
         const t = (levels[activeIdx] - LMIN) / (LMAX - LMIN);
         const temp = Math.round(T_MIN + Math.min(Math.max(t, 0), 1) * (T_MAX - T_MIN));
         ctx.save();
-        ctx.fillStyle = C_SIGNAL;
+        ctx.fillStyle = C_ACTIVE;
         ctx.font = '500 12px ui-monospace, "IBM Plex Mono", monospace';
         ctx.fillText(`${temp} °C`, cursorPx.x + 14, cursorPx.y - 12);
         ctx.restore();

@@ -23,20 +23,13 @@
   --ink: #141210; /* 16.28:1 on paper — AAA                            */
   --ink-muted: #55504a; /*  6.95:1 on paper — AA body                       */
 
-  /* --- Signal: one accent, and it is a FILL, not a foreground ------------
-     #FCC603 measures 1.38:1 against paper. That is below every WCAG floor,
-     text and non-text alike — as a foreground on the light surface it is
-     effectively invisible. Darkening it to reach 4.5:1 lands near #7A6100,
-     a dark olive that no longer reads as the same colour.
-
-     So the accent inverts by surface:
-       on PAPER  — a fill, a rule, a marker. Ink sits ON it (11.76:1).
-       on DARK   — a foreground. Text, lines, focus ring (10.73:1).
-     There is no accented small text on paper. Links there are ink with an
-     underline, or ink on a --signal-wash highlight.                       */
-  --signal: #fcc603;
-  --on-signal: #141210; /* 11.76:1 on the fill — AAA                        */
-  --signal-wash: rgb(252 198 3 / 22%); /* highlight behind ink              */
+  /* --- Emphasis: MONOCHROME ---------------------------------------------
+     No accent colour (decision 2026-08-28). The client's own materials —
+     cards, site, signage — are black-and-white; imposing a hue they never
+     chose was the wrong call. Hierarchy and emphasis are carried by
+     ink/paper INVERSION, line weight, dash-vs-solid and typographic weight —
+     never by hue. The primary "fill" is an ink block with paper text that
+     inverts on hover. Nothing here defines an accent, on purpose. */
 
   /* --- Dark: technical sections only ------------------------------------
      Anthracite, not blueprint. No cyan: technical drawings separate their
@@ -113,8 +106,7 @@
   --rule-strong: #6e6e6e; /*  3.34:1 on dark — meaningful separators       */
   --ink: var(--on-dark);
   --ink-muted: var(--on-dark-muted);
-  --signal-wash: rgb(252 198 3 / 14%);
-  --focus-ring: 2px solid var(--signal); /* 10.73:1 on dark */
+  --focus-ring: 2px solid var(--on-dark); /* 14.85:1 on dark */
 }
 
 @media (prefers-reduced-motion: reduce) {

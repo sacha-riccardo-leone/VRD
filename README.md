@@ -42,11 +42,11 @@ une ligne de config plus le remplacement du formulaire par un service hébergé.
 bibliothèque d'animation, pas de bibliothèque d'icônes, pas de SDK de cartes.
 Toute dépendance ajoutée doit se justifier dans la PR qui l'introduit.
 
-**Palette.** Papier off-white, encre near-black, un seul accent jaune
-#FCC603, fond anthracite #1C1C1C pour les sections techniques. L'accent est
-un **remplissage** sur le papier (1.38:1 en premier plan — inutilisable) et un
-**premier plan** sur l'anthracite (10.73:1). `npm run audit:contrast` fait
-respecter les deux règles, y compris l'interdiction.
+**Palette — monochrome.** Papier off-white, encre near-black, fond anthracite
+#1C1C1C pour les sections techniques. Aucune couleur d'accent (décision du
+28.08.2026) : le contraste passe par l'inversion encre↔papier, l'épaisseur de
+trait, le tireté/plein et le poids typographique. `npm run audit:contrast`
+vérifie chaque couple texte/fond.
 
 **Polices auto-hébergées.** IBM Plex Sans 400/600 + IBM Plex Mono 400/500,
 sous-ensemble `latin` uniquement — vérifié comme couvrant l'intégralité du jeu

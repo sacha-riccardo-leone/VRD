@@ -46,24 +46,12 @@ const CONTRACT = {
     ["ink-muted", "paper", 4.5, "texte secondaire"],
     ["rule-strong", "paper", 3.0, "séparateurs porteurs de sens"],
     ["rule", "paper", null, "décoratif"],
-    ["on-signal", "signal", 4.5, "texte SUR le remplissage jaune"],
     ["on-dark", "dark", 4.5, "corps de texte (fond sombre)"],
     ["on-dark-muted", "dark", 4.5, "texte secondaire (fond sombre)"],
-    ["signal", "dark", 4.5, "accent en premier plan — fond sombre uniquement"],
     ["dark-rule", "dark", null, "décoratif"],
   ],
   ".technique": [["rule-strong", "dark", 3.0, "séparateurs porteurs de sens (fond sombre)"]],
 };
-
-/**
- * Pairs that must NEVER be used as foreground-on-background, printed with
- * their real ratio so the number stays in front of whoever is tempted.
- * Asserted as a ceiling: if one ever climbs past 3:1 a token has moved and
- * the prohibition needs re-deciding rather than silently outliving its reason.
- */
-const FORBIDDEN = [
-  ["signal", "paper", 3.0, "jaune en premier plan sur papier — remplissage uniquement"],
-];
 
 const css = await readFile(TOKENS, "utf8");
 
@@ -109,17 +97,6 @@ for (const [sel, pairs] of Object.entries(CONTRACT)) {
       `  ${sel.padEnd(12)} ${pair} ${r.toFixed(2).padStart(5)}:1  ${String(min ?? "—").padStart(4)}  ${verdict}  ${use}`,
     );
   }
-}
-
-console.log("\n  INTERDIT — jamais en premier plan");
-console.log("  " + "-".repeat(98));
-for (const [fg, bg, ceiling, why] of FORBIDDEN) {
-  const r = ratio(root[fg], root[bg]);
-  const stale = r >= ceiling;
-  if (stale) failed++;
-  console.log(
-    `  ${"—".padEnd(12)} ${`--${fg} on --${bg}`.padEnd(36)} ${r.toFixed(2).padStart(5)}:1  ${String("<" + ceiling).padStart(4)}  ${stale ? "  STALE" : "  n/a  "}  ${why}`,
-  );
 }
 
 console.log("");
