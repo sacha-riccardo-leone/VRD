@@ -1,4 +1,5 @@
 import { ThermalField } from "@/components/ThermalField";
+import { SchematicLoop } from "@/components/SchematicLoop";
 import s from "./page.module.css";
 
 /**
@@ -26,6 +27,23 @@ export default function Labo() {
             le suit avec inertie, l’isotherme la plus proche passe en trait plein
             avec sa valeur. Schéma d’illustration — contenu de démonstration.
           </p>
+        </div>
+      </section>
+
+      <section className={s.schema} aria-labelledby="schema-titre">
+        <div className={s.schemaInner}>
+          <p className="label">Prototype · schéma de principe</p>
+          <h2 id="schema-titre" className={s.title}>
+            Boucle de chauffage
+          </h2>
+          <p className={s.caption}>
+            Le dessin s’assemble à l’arrivée dans le cadre : le départ se trace,
+            le retour et les symboles suivent. Trait plein = départ, tireté =
+            retour. Illustration — contenu de démonstration.
+          </p>
+          <div className={s.schemaFigure}>
+            <SchematicLoop />
+          </div>
         </div>
       </section>
     </main>

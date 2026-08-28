@@ -28,3 +28,20 @@
   font-size: var(--fs-200);
   line-height: var(--lh-snug);
 }
+
+/* --- Seconde section : schéma de principe (sur papier) ------------------- */
+.schema {
+  padding: var(--s-9) var(--gutter);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.schemaInner {
+  max-width: var(--page-max);
+  margin-inline: auto;
+}
+
+.schemaFigure {
+  margin-top: var(--s-7);
+  max-width: 60rem;
+}
