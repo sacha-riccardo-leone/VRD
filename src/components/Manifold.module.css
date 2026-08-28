@@ -1,0 +1,68 @@
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--ink);
+  overflow: visible;
+}
+
+.pipe,
+.pipeDashed {
+  fill: none;
+  stroke: currentColor;
+}
+.pipe {
+  stroke-dasharray: 1;
+}
+.pipeDashed {
+  stroke-dasharray: 7 6;
+}
+
+.sym {
+  stroke: currentColor;
+}
+
+.lab,
+.labStrong {
+  font-family: var(--font-mono-stack);
+  letter-spacing: 0.06em;
+  fill: var(--ink-muted);
+}
+.lab {
+  font-size: 13px;
+}
+.labStrong {
+  font-size: 14px;
+  font-weight: 500;
+  fill: var(--ink);
+}
+
+/* --- Révélation « le dessin s'assemble » --------------------------------- */
+.svg[data-draw="pending"] .pipe {
+  stroke-dashoffset: 1;
+}
+.svg[data-draw="pending"] .pipeDashed,
+.svg[data-draw="pending"] .sym,
+.svg[data-draw="pending"] .lab,
+.svg[data-draw="pending"] .labStrong {
+  opacity: 0;
+}
+
+.svg[data-draw="true"] .pipe {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset var(--dur-slow) var(--ease);
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+.svg[data-draw="true"] .pipeDashed {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 260ms;
+}
+.svg[data-draw="true"] .sym {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 340ms;
+}
+.svg[data-draw="true"] .lab,
+.svg[data-draw="true"] .labStrong {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 520ms;
+}

@@ -1,5 +1,8 @@
 import { ThermalField } from "@/components/ThermalField";
 import { SchematicLoop } from "@/components/SchematicLoop";
+import { Manifold } from "@/components/Manifold";
+import { ExplodedAssembly } from "@/components/ExplodedAssembly";
+import { EXPLODED_PARTS } from "@/components/exploded-parts";
 import s from "./page.module.css";
 
 /**
@@ -43,6 +46,48 @@ export default function Labo() {
           </p>
           <div className={s.schemaFigure}>
             <SchematicLoop />
+          </div>
+        </div>
+      </section>
+
+      <section className={s.schema} aria-labelledby="nourrice-titre">
+        <div className={s.schemaInner}>
+          <p className="label">Prototype · schéma de principe</p>
+          <h2 id="nourrice-titre" className={s.title}>
+            Nourrice de distribution
+          </h2>
+          <p className={s.caption}>
+            Quatre circuits, vanne d’isolement et débitmètre chacun. Trait plein =
+            départ, tireté = retour. Illustration — contenu de démonstration.
+          </p>
+          <div className={s.schemaFigure}>
+            <Manifold />
+          </div>
+        </div>
+      </section>
+
+      <section className={s.schema} aria-labelledby="eclate-titre">
+        <div className={s.schemaInner}>
+          <p className="label">Prototype · vue éclatée</p>
+          <h2 id="eclate-titre" className={s.title}>
+            Groupe de pompage
+          </h2>
+          <p className={s.caption}>
+            L’assemblage s’éclate à l’arrivée dans le cadre : chaque pièce rejoint
+            sa position, en cascade. Illustration — contenu de démonstration.
+          </p>
+          <div className={s.explodedGrid}>
+            <div className={s.explodedFigure}>
+              <ExplodedAssembly />
+            </div>
+            <ol className={s.legend}>
+              {EXPLODED_PARTS.map((p) => (
+                <li key={p.n}>
+                  <span className={s.legendNum}>{p.n}</span>
+                  {p.label}
+                </li>
+              ))}
+            </ol>
           </div>
         </div>
       </section>

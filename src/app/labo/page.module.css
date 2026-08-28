@@ -45,3 +45,49 @@
   margin-top: var(--s-7);
   max-width: 60rem;
 }
+
+/* --- Vue éclatée : figure + légende numérotée ---------------------------- */
+.explodedGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-7);
+  margin-top: var(--s-7);
+  align-items: start;
+}
+
+@media (min-width: 48rem) {
+  .explodedGrid {
+    grid-template-columns: minmax(0, 22rem) 1fr;
+  }
+}
+
+.explodedFigure {
+  max-width: 22rem;
+}
+
+.legend {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: var(--s-3);
+  align-self: center;
+  font-family: var(--font-mono-stack);
+  font-size: var(--fs-300);
+  color: var(--ink);
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+
+.legendNum {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 1.6rem;
+  block-size: 1.6rem;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  font-size: var(--fs-200);
+}

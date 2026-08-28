@@ -1,0 +1,59 @@
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--ink);
+  overflow: visible;
+  stroke-width: 1.7; /* hérité par tous les traits */
+}
+
+.part,
+.axis,
+.callout {
+  fill: none;
+  stroke: currentColor;
+}
+
+.axis {
+  stroke-dasharray: 6 7;
+}
+.leader {
+  stroke-dasharray: 4 5;
+}
+.balloon {
+  fill: var(--paper); /* masque l'axe derrière le numéro */
+}
+.num {
+  fill: var(--ink);
+  stroke: none;
+  font-family: var(--font-mono-stack);
+  font-size: 15px;
+}
+
+/* --- Assemblage éclaté au scroll -----------------------------------------
+   Caché seulement quand le JS a posé data-draw="pending". */
+.svg[data-draw="pending"] .part {
+  opacity: 0;
+  transform: translateY(var(--dy, 0));
+}
+.svg[data-draw="pending"] .axis,
+.svg[data-draw="pending"] .callout {
+  opacity: 0;
+}
+
+.svg[data-draw="true"] .axis {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease);
+}
+.svg[data-draw="true"] .part {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity var(--dur) var(--ease),
+    transform var(--dur-slow) var(--ease);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+.svg[data-draw="true"] .callout {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 600ms;
+}
