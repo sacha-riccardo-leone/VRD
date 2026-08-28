@@ -44,6 +44,8 @@ export function ThermalField() {
     const LMIN = -0.25;
     const LMAX = 1.55;
     const NL = 13;
+    const WARP_AMP = 26; // px — déplacement max de la grille près de la source
+    const WARP_SIGMA = 0.34; // largeur du warp de la grille (× minDim)
     const levels = Array.from({ length: NL }, (_, k) => LMIN + (k / (NL - 1)) * (LMAX - LMIN));
     const T_MIN = 18;
     const T_MAX = 24;
@@ -82,8 +84,8 @@ export function ThermalField() {
       }
       const dx = px - ex;
       const dy = py - ey;
-      const sg = 0.2 * minDim;
-      v += 1.1 * Math.exp(-(dx * dx + dy * dy) / (2 * sg * sg));
+      const sg = 0.24 * minDim; // source plus large = mouvement plus doux
+      v += 0.9 * Math.exp(-(dx * dx + dy * dy) / (2 * sg * sg));
       return v;
     }
 
@@ -151,6 +153,37 @@ export function ThermalField() {
       return p;
     }
 
+    // Déplacement radial de la grille : pousse un point à l'écart de la source,
+    // avec un fondu doux. La grille droite se courbe donc autour du curseur —
+    // le même aimant que les isothermes, appliqué aux lignes de construction.
+    function warp(x: number, y: number): [number, number] {
+      const ex = eased.x * W;
+      const ey = eased.y * H;
+      const dx = x - ex;
+      const dy = y - ey;
+      const d2 = dx * dx + dy * dy;
+      const sg = WARP_SIGMA * minDim;
+      const push = WARP_AMP * Math.exp(-d2 / (2 * sg * sg));
+      const dist = Math.sqrt(d2) || 1;
+      return [x + (dx / dist) * push, y + (dy / dist) * push];
+    }
+
+    function warpedLine(fixed: number, vary: "x" | "y", extent: number) {
+      const ST = 14;
+      ctx.beginPath();
+      let first = true;
+      for (let t = 0; t <= extent; t += ST) {
+        const [wx, wy] = vary === "y" ? warp(fixed, t) : warp(t, fixed);
+        if (first) {
+          ctx.moveTo(wx, wy);
+          first = false;
+        } else {
+          ctx.lineTo(wx, wy);
+        }
+      }
+      ctx.stroke();
+    }
+
     function drawFrame() {
       ctx.save();
       ctx.globalAlpha = 0.6;
@@ -159,28 +192,16 @@ export function ThermalField() {
       ctx.lineWidth = 1;
       const nx = 6;
       const ny = 4;
-      for (let i = 1; i < nx; i++) {
-        const x = (i / nx) * W;
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, H);
-        ctx.stroke();
-      }
-      for (let j = 1; j < ny; j++) {
-        const y = (j / ny) * H;
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(W, y);
-        ctx.stroke();
-      }
-      // marques de repère aux intersections
+      for (let i = 1; i < nx; i++) warpedLine((i / nx) * W, "y", H);
+      for (let j = 1; j < ny; j++) warpedLine((j / ny) * H, "x", W);
+
+      // marques de repère aux intersections, déplacées avec la grille
       ctx.setLineDash([]);
       const m = 5;
       for (let i = 1; i < nx; i += 2) {
         for (let j = 1; j < ny; j += 1) {
-          const x = (i / nx) * W;
-          const y = (j / ny) * H;
-          ctx.strokeRect(x - m, y - m, m * 2, m * 2);
+          const [wx, wy] = warp((i / nx) * W, (j / ny) * H);
+          ctx.strokeRect(wx - m, wy - m, m * 2, m * 2);
         }
       }
       ctx.restore();
@@ -233,8 +254,8 @@ export function ThermalField() {
     }
 
     function tick() {
-      eased.x += (target.x - eased.x) * 0.09;
-      eased.y += (target.y - eased.y) * 0.09;
+      eased.x += (target.x - eased.x) * 0.045; // plus lent = aimant plus calme
+      eased.y += (target.y - eased.y) * 0.045;
       computeGrid();
       render();
       if (Math.hypot(target.x - eased.x, target.y - eased.y) < 0.0015) {
