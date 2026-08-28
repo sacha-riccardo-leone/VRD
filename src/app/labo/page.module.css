@@ -1,0 +1,30 @@
+.section {
+  position: relative; /* ancre le champ en fond absolu */
+  display: flex;
+  align-items: flex-end;
+  min-height: 82vh;
+  padding: var(--s-8) var(--gutter) var(--s-7);
+  overflow: hidden;
+  background: var(--paper); /* sous .technique = anthracite */
+  color: var(--ink); /* sous .technique = clair */
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  width: 100%;
+}
+
+.title {
+  margin: var(--s-3) 0;
+}
+
+.caption {
+  max-width: 54ch;
+  color: var(--ink-muted);
+  font-family: var(--font-mono-stack);
+  font-size: var(--fs-200);
+  line-height: var(--lh-snug);
+}
