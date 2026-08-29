@@ -7,6 +7,15 @@
   /* Le substrat emprunte le jeton des filets décoratifs, jamais l'encre.
      `.technique` le redéfinit sur fond sombre : le fond suit la surface. */
   color: var(--rule);
+
+  /* Plusieurs motifs peignent quadrillages, cotes et lignes de rappel avec
+     `var(--ink-muted)` EN DUR : une valeur littérale ne consulte jamais la
+     couleur héritée, donc `color` ne les atteint pas. On rabat donc les jetons
+     d'encre eux-mêmes sur le substrat — les propriétés personnalisées héritent,
+     ce qui traverse la frontière CSS Modules là où un sélecteur de classe ne le
+     peut pas. `--paper` reste intact : l'occlusion doit valoir la surface. */
+  --ink: var(--rule);
+  --ink-muted: var(--rule);
 }
 
 .inner {
@@ -40,8 +49,12 @@
   overflow: visible;
 }
 
-/* Pas d'étiquettes en fond. */
-.backdrop text {
+/* Pas d'étiquettes en fond — ni leur mobilier : sans les numéros, les pastilles
+   deviennent des anneaux vides et les lignes de rappel pointent vers rien, ce
+   qui se lit comme une erreur de rendu. Sélecteur d'ATTRIBUT : les classes des
+   motifs sont hachées séparément et resteraient hors de portée. */
+.backdrop text,
+.backdrop [data-labels] {
   display: none;
 }
 
@@ -51,6 +64,12 @@
 .backdrop svg[data-draw] * {
   opacity: 1 !important;
   transition: none !important;
+  /* ExplodedAssembly se révèle par `translateY(var(--dy))`, pas par
+     dashoffset. On annule la DISTANCE, jamais la propriété `transform` :
+     les motifs axonométriques se placent avec <g transform="translate(...)">,
+     et une déclaration CSS l'emporterait sur cet attribut de présentation —
+     ils s'effondreraient sur l'origine. */
+  --dy: 0px !important;
 }
 
 /* Sélecteur d'ÉLÉMENT et non de classe : les classes des motifs sont hachées

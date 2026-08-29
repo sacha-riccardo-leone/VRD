@@ -96,8 +96,7 @@
 }
 
 /* Technical sections invert the surface. Add the class to a <section> and
-   everything inside inherits the dark palette — including the accent, which
-   only here is allowed to be a foreground. */
+   everything inside inherits the dark palette: ink, rules and focus ring. */
 .technique {
   --paper: var(--dark);
   --paper-raised: var(--dark-raised);

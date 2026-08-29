@@ -155,7 +155,7 @@ export function ExplodedAssembly() {
         </g>
       ))}
 
-      <g className={s.callout}>
+      <g className={s.callout} data-labels>
         {EXPLODED_PARTS.map((p) => (
           <g key={p.n}>
             <line className={s.leader} x1={147} y1={p.cy} x2={p.lx} y2={p.cy} />

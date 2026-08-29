@@ -12,6 +12,14 @@
   z-index: 1;
 }
 
+/* Sous 60rem, le substrat passerait sous le texte : il n'a plus la place de se
+   tenir à l'écart, et un fond illisible vaut moins que pas de fond. */
+@media (max-width: 60rem) {
+  .hero > [aria-hidden="true"] {
+    display: none;
+  }
+}
+
 .kicker {
   margin-bottom: var(--s-4);
 }

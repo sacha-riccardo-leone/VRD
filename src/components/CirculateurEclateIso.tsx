@@ -413,6 +413,7 @@ export function CirculateurEclateIso() {
         </g>
 
         {/* numéros à repères et légende */}
+        <g data-labels>
         {PIECES.map((p) => {
           const [bx, by] = project(balloon(p.from[1])).map(r2);
           return (
@@ -453,6 +454,7 @@ export function CirculateurEclateIso() {
             </g>
           );
         })}
+        </g>
       </g>
     </svg>
   );

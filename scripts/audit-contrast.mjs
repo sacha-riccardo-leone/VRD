@@ -47,6 +47,7 @@ const CONTRACT = {
     ["rule-strong", "paper", 3.0, "séparateurs porteurs de sens"],
     ["rule", "paper", null, "décoratif"],
     ["ink", "rule", 4.5, "texte par-dessus le substrat de planche (fond de section)"],
+    ["ink-muted", "rule", 4.5, "texte secondaire par-dessus le substrat (chapô du hero)"],
     ["on-dark", "dark", 4.5, "corps de texte (fond sombre)"],
     ["on-dark-muted", "dark", 4.5, "texte secondaire (fond sombre)"],
     ["dark-rule", "dark", null, "décoratif"],

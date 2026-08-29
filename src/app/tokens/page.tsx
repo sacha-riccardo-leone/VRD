@@ -138,8 +138,8 @@ export default function TokensPage() {
         </p>
         <p className={s.note}>
           Un schéma technique sépare ses circuits par épaisseur de trait et par tireté avant tout&nbsp;: ça survit à
-          l’impression en noir et blanc et au daltonisme. Sur fond sombre, l’isotherme active du champ thermique passe en
-          trait plein plus épais, pas en couleur.
+          l’impression en noir et blanc et au daltonisme. Sur fond sombre, l’isotherme active du champ thermique se
+          distingue par le seul trait continu — même teinte, même épaisseur.
         </p>
       </section>
 

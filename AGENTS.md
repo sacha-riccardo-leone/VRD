@@ -50,7 +50,9 @@ comme telle. Elle n’est admise que sous la discipline du composant
 `FigureBackdrop` : teinte `--rule` (jamais `--ink`), aucune étiquette, aucun
 mouvement, `aria-hidden`, `pointer-events: none`, hors flux. Un motif en fond
 qui s’anime, qui porte du texte, ou dont la teinte s’approche de l’encre, sort
-de l’exception. `npm run audit:contrast` vérifie que le texte reste lisible
+de l’exception. Elle vise les motifs POSÉS en fond via `FigureBackdrop` ; elle
+ne concerne pas `ThermalField`, qui est une figure interactive à part entière —
+il porte ses unités, réagit au lecteur et relève de la règle générale. `npm run audit:contrast` vérifie que le texte reste lisible
 par-dessus (`--ink` sur `--rule`).
 
 **Mouvement : une seule idée** — « le dessin s'assemble ». Déclenché par le
