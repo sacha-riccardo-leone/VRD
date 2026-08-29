@@ -1,15 +1,24 @@
 import Link from "next/link";
+import { FigureBackdrop } from "./FigureBackdrop";
+import { BatimentCoupeIso } from "./BatimentCoupeIso";
 import s from "./Hero.module.css";
 
 /**
- * Section 1 — Hero. Sur papier : le titre est en encre, le seul bouton jaune
- * du site sur fond clair est le CTA primaire (remplissage jaune, texte encre =
- * 11.76:1). Au survol il s'inverse en encre + jaune (le jaune passe premier plan,
- * 10.73:1) — les deux états respectent le contrat de contraste.
+ * Section 1 — Hero. Monochrome : le CTA primaire est un aplat d'encre à texte
+ * papier, inversé au survol ; le secondaire est de l'encre soulignée. La
+ * hiérarchie vient de l'inversion et du poids, jamais de la teinte.
+ *
+ * En fond, la coupe axonométrique de bâtiment en épaisseur de substrat — elle
+ * illustre le titre (« ce qui fait fonctionner un bâtiment ») sans le
+ * concurrencer. Voir FigureBackdrop pour la discipline appliquée.
  */
 export function Hero() {
   return (
     <section className={s.hero} aria-labelledby="hero-titre">
+      <FigureBackdrop placement="right" size="min(58%, 40rem)">
+        <BatimentCoupeIso />
+      </FigureBackdrop>
+      <div className={s.content}>
       <p className={`label ${s.kicker}`}>Technique du bâtiment · CVCS</p>
 
       <h1 id="hero-titre" className={s.title}>
@@ -29,6 +38,7 @@ export function Hero() {
         <Link href="/#realisations" className={s.ctaSecondary}>
           Voir nos réalisations
         </Link>
+      </div>
       </div>
     </section>
   );

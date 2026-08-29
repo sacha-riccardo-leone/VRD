@@ -1,7 +1,15 @@
 .hero {
+  position: relative; /* ancre le substrat de planche */
   max-width: var(--page-max);
   margin-inline: auto;
   padding: var(--s-9) var(--gutter) var(--s-8);
+  overflow: hidden;
+}
+
+/* Le texte passe devant le substrat. */
+.content {
+  position: relative;
+  z-index: 1;
 }
 
 .kicker {

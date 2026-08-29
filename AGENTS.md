@@ -43,6 +43,16 @@ noir et blanc et au daltonisme.
 
 **Dépendances : zéro par défaut.** Chaque ajout doit se justifier.
 
+**Motifs en fond de section — exception consignée (29.08.2026).** Les dessins
+techniques sont normalement des figures : ils portent unité, étiquette ou
+légende. Posés en FOND ils ne le font plus — c’est de la décoration, assumée
+comme telle. Elle n’est admise que sous la discipline du composant
+`FigureBackdrop` : teinte `--rule` (jamais `--ink`), aucune étiquette, aucun
+mouvement, `aria-hidden`, `pointer-events: none`, hors flux. Un motif en fond
+qui s’anime, qui porte du texte, ou dont la teinte s’approche de l’encre, sort
+de l’exception. `npm run audit:contrast` vérifie que le texte reste lisible
+par-dessus (`--ink` sur `--rule`).
+
 **Mouvement : une seule idée** — « le dessin s'assemble ». Déclenché par le
 lecteur, ≤400 ms, `prefers-reduced-motion` respecté, aucun décalage de mise
 en page.

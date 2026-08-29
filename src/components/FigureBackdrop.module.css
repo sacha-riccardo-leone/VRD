@@ -1,0 +1,62 @@
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  /* Le substrat emprunte le jeton des filets décoratifs, jamais l'encre.
+     `.technique` le redéfinit sur fond sombre : le fond suit la surface. */
+  color: var(--rule);
+}
+
+.inner {
+  position: absolute;
+  max-inline-size: none;
+}
+
+.right {
+  inset-inline-end: -8%;
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+}
+
+.left {
+  inset-inline-start: -8%;
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+}
+
+.center {
+  inset-inline-start: 50%;
+  inset-block-start: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Les motifs fixent `color: var(--ink)` sur leur propre .svg : on le neutralise
+   ici pour qu'ils héritent de la teinte de substrat. `.backdrop svg` (0,1,1)
+   l'emporte sur `.svg` (0,1,0). */
+.backdrop svg {
+  color: inherit;
+  overflow: visible;
+}
+
+/* Pas d'étiquettes en fond. */
+.backdrop text {
+  display: none;
+}
+
+/* Pas de mouvement en fond : le motif est posé, déjà complet. `!important` est
+   délibéré — il neutralise l'état caché `[data-draw="pending"]` du composant
+   sans dépendre d'un calcul de spécificité fragile. */
+.backdrop svg[data-draw] * {
+  opacity: 1 !important;
+  transition: none !important;
+}
+
+/* Sélecteur d'ÉLÉMENT et non de classe : les classes des motifs sont hachées
+   par CSS Modules, un `.pipe` écrit ici ne les atteindrait jamais. `path`, lui,
+   les atteint toutes. Sans remise à zéro du dashoffset, les tracés animés
+   resteraient invisibles en fond. */
+.backdrop svg[data-draw] path {
+  stroke-dashoffset: 0 !important;
+}

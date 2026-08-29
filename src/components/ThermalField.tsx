@@ -10,8 +10,9 @@ import s from "./ThermalField.module.css";
  * de chaleur sous le curseur + un relief fixe) rendu en isothermes par
  * « marching squares ». Le curseur est un aimant : le champ suit un point qui
  * le poursuit avec inertie (lerp), d'où le réajustement magnétique. L'isotherme
- * la plus proche du curseur passe en trait plein blanc (plus épais), avec sa
- * valeur — c'est une figure, pas un décor : elle porte une unité (°C) et une légende.
+ * la plus proche du curseur passe en trait continu (même gris, même épaisseur :
+ * seul le tireté disparaît), avec sa valeur — c'est une figure, pas un décor :
+ * elle porte une unité (°C) et une légende.
  *
  * Contraintes respectées :
  *  - déclenché par le lecteur : la boucle rAF ne tourne QUE pendant/juste après
@@ -38,7 +39,6 @@ export function ThermalField() {
     const cs = getComputedStyle(wrap);
     const C_LINE = cs.getPropertyValue("--on-dark-muted").trim() || "#b0aeab";
     const C_FRAME = cs.getPropertyValue("--dark-rule").trim() || "#333333";
-    const C_ACTIVE = cs.getPropertyValue("--on-dark").trim() || "#f2efe9";
 
     // --- champ ------------------------------------------------------------
     const CELL = 26;
@@ -226,18 +226,20 @@ export function ThermalField() {
       ctx.restore();
 
       if (activeIdx >= 0) {
-        // Distinction par le trait, pas la couleur : plein + plus épais + blanc.
+        // Distinction par le trait seul : même teinte, même épaisseur, même
+        // opacité que les autres isothermes — seul le tireté disparaît.
         ctx.save();
-        ctx.strokeStyle = C_ACTIVE;
+        ctx.globalAlpha = 0.34;
+        ctx.strokeStyle = C_LINE;
         ctx.setLineDash([]);
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 1;
         ctx.stroke(pathForLevel(levels[activeIdx]));
         ctx.restore();
 
         const t = (levels[activeIdx] - LMIN) / (LMAX - LMIN);
         const temp = Math.round(T_MIN + Math.min(Math.max(t, 0), 1) * (T_MAX - T_MIN));
         ctx.save();
-        ctx.fillStyle = C_ACTIVE;
+        ctx.fillStyle = C_LINE;
         ctx.font = '500 12px ui-monospace, "IBM Plex Mono", monospace';
         ctx.fillText(`${temp} °C`, cursorPx.x + 14, cursorPx.y - 12);
         ctx.restore();

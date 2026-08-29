@@ -11,6 +11,7 @@ import { ChaufferieIso } from "@/components/ChaufferieIso";
 import { CirculateurEclateIso } from "@/components/CirculateurEclateIso";
 import { ReseauGainesIso } from "@/components/ReseauGainesIso";
 import { BatimentCoupeIso } from "@/components/BatimentCoupeIso";
+import { FigureBackdrop } from "@/components/FigureBackdrop";
 import s from "./page.module.css";
 
 /**
@@ -223,6 +224,67 @@ export default function Labo() {
           </p>
           <div className={s.schemaFigureNarrow}>
             <CirculateurEclateIso />
+          </div>
+        </div>
+      </section>
+
+      <section className={s.schema} aria-labelledby="fond-titre">
+        <div className={s.schemaInner}>
+          <p className="label">Prototype · substrat de planche</p>
+          <h2 id="fond-titre" className={s.title}>
+            Motifs en fond de section
+          </h2>
+          <p className={s.caption}>
+            Les mêmes dessins, posés en fond : épaisseur de filet décoratif, aucune
+            étiquette, aucun mouvement, jamais devant le texte. À comparer avec les
+            mêmes motifs en figure, plus haut.
+          </p>
+        </div>
+        <div className={s.bdGrid}>
+          <div className={s.bdDemo}>
+            <FigureBackdrop placement="right" size="min(70%, 34rem)">
+              <BatimentCoupeIso />
+            </FigureBackdrop>
+            <div className={s.bdContent}>
+              <p className="label">Coupe de bâtiment</p>
+              <p className={s.bdText}>Nous concevons ce qui fait fonctionner un bâtiment : chauffage, ventilation, sanitaire et énergie, de l’étude à la mise en service.</p>
+            </div>
+          </div>
+          <div className={s.bdDemo}>
+            <FigureBackdrop placement="left" size="min(72%, 34rem)">
+              <ReseauGainesIso />
+            </FigureBackdrop>
+            <div className={s.bdContent}>
+              <p className="label">Réseau de gaines</p>
+              <p className={s.bdText}>Dimensionnement aéraulique, tracé des réseaux et coordination des passages avec les autres corps d’état.</p>
+            </div>
+          </div>
+          <div className={s.bdDemo}>
+            <FigureBackdrop placement="right" size="min(52%, 22rem)">
+              <CirculateurEclateIso />
+            </FigureBackdrop>
+            <div className={s.bdContent}>
+              <p className="label">Circulateur éclaté</p>
+              <p className={s.bdText}>Choix des équipements, points de fonctionnement et maintenabilité : ce qui se répare se dessine d’abord.</p>
+            </div>
+          </div>
+          <div className={s.bdDemo}>
+            <FigureBackdrop placement="right" size="min(46%, 20rem)">
+              <ExplodedAssembly />
+            </FigureBackdrop>
+            <div className={s.bdContent}>
+              <p className="label">Groupe de pompage</p>
+              <p className={s.bdText}>Production, distribution et régulation : les organes sont choisis pour le régime réel, pas pour le catalogue.</p>
+            </div>
+          </div>
+          <div className={s.bdDemo}>
+            <FigureBackdrop placement="left" size="min(78%, 36rem)">
+              <RampeGaz />
+            </FigureBackdrop>
+            <div className={s.bdContent}>
+              <p className="label">Rampe gaz</p>
+              <p className={s.bdText}>Alimentation et sécurité gaz : vannes, détente, comptage et double électrovanne jusqu’au brûleur.</p>
+            </div>
           </div>
         </div>
       </section>

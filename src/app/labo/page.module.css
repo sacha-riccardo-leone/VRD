@@ -97,3 +97,33 @@
   border-radius: 50%;
   font-size: var(--fs-200);
 }
+
+/* --- Démonstration : motifs en fond de section --------------------------- */
+.bdGrid {
+  display: grid;
+  gap: var(--s-5);
+  max-width: var(--page-max);
+  margin: var(--s-7) auto 0;
+}
+
+.bdDemo {
+  position: relative; /* ancre le substrat */
+  overflow: hidden;
+  min-height: 13rem;
+  display: flex;
+  align-items: center;
+  padding: var(--s-6) var(--gutter);
+  border: 1px solid var(--rule-strong);
+}
+
+.bdContent {
+  position: relative; /* le texte passe devant */
+  z-index: 1;
+}
+
+.bdText {
+  margin-top: var(--s-3);
+  max-width: 42ch;
+  font-size: var(--fs-500);
+  line-height: var(--lh-snug);
+}
