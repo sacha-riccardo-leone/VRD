@@ -1,0 +1,128 @@
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--ink);
+  overflow: visible;
+}
+
+/* Quadrillage de sol : le plus discret des traits, il ne porte pas de sens. */
+.rule {
+  fill: none;
+  stroke: var(--ink-muted);
+  stroke-width: 0.5;
+}
+
+/* Faces pleines : le seul « fill » plein autorisé — il masque ce qui passe
+   derrière (quadrillage, pieds du collecteur). Classe dédiée : une règle de
+   classe l'emporterait sur un attribut fill/stroke de présentation, donc rien
+   d'autre ne doit porter .solid. */
+.solid {
+  fill: var(--paper);
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+}
+
+/* Silhouette des cylindres : remplie, SANS trait — les cordes du bandeau ne
+   sont pas des arêtes ; les vraies arêtes sont tracées ensuite en .sym. */
+.mask {
+  fill: var(--paper);
+  stroke: none;
+}
+
+/* Arêtes et organes : volume et symboles, trait plein. */
+.sym {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+}
+
+/* Réseau principal (départ) : trait plein, plus épais. pathLength=1 → un seul
+   tiret couvre tout le tracé, qui se dessine par stroke-dashoffset. */
+.pipe {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+}
+
+/* Retour : tireté, plus fin. Distinction par le trait, jamais par la teinte. */
+.pipeDashed {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  stroke-dasharray: 6 5;
+}
+
+/* Lignes de rappel : pointillé fin — c'est ce qui les distingue des réseaux
+   là où elles les croisent. */
+.lead {
+  fill: none;
+  stroke: var(--ink-muted);
+  stroke-width: 0.9;
+  stroke-dasharray: 1 3;
+}
+
+.lab {
+  fill: var(--ink-muted);
+  stroke: none;
+  font-family: var(--font-mono-stack);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase; /* garantit la règle « étiquettes en MAJUSCULES » */
+}
+/* Les valeurs chiffrées gardent leurs unités telles quelles : « kW », pas
+   « KW ». Déclarée après .lab, elle l'emporte à spécificité égale. */
+.data {
+  font-size: 10.5px;
+  text-transform: none;
+}
+
+/* --- Révélation « le dessin s'assemble » ---------------------------------
+   L'état caché ne s'applique QUE lorsque le JS a posé data-draw="pending" ;
+   sans JS ou en reduced-motion (data-draw="done"), tout est visible d'emblée.
+   Ordre d'assemblage : le fond de plan et les volumes ensemble — sinon le
+   quadrillage se verrait au travers des faces le temps de la transition —,
+   puis les arêtes et organes, puis les réseaux, puis les annotations. */
+.svg[data-draw="pending"] .pipe {
+  stroke-dashoffset: 1;
+}
+.svg[data-draw="pending"] .rule,
+.svg[data-draw="pending"] .solid,
+.svg[data-draw="pending"] .mask,
+.svg[data-draw="pending"] .sym,
+.svg[data-draw="pending"] .pipeDashed,
+.svg[data-draw="pending"] .lead,
+.svg[data-draw="pending"] .lab {
+  opacity: 0;
+}
+
+.svg[data-draw="true"] .rule,
+.svg[data-draw="true"] .solid,
+.svg[data-draw="true"] .mask {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 200ms;
+}
+.svg[data-draw="true"] .sym {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 300ms;
+}
+.svg[data-draw="true"] .pipeDashed {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 380ms;
+}
+.svg[data-draw="true"] .pipe {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset var(--dur-slow) var(--ease);
+  transition-delay: calc(380ms + var(--i, 0) * 80ms);
+}
+.svg[data-draw="true"] .lead,
+.svg[data-draw="true"] .lab {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 520ms;
+}

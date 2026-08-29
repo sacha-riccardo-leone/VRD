@@ -1,0 +1,173 @@
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--ink);
+  overflow: visible;
+}
+
+/* ---- Architecture : trait fin, jamais le sujet ---------------------------- */
+
+/* Quadrillage de sol — le plus léger de la planche */
+.grid {
+  fill: none;
+  stroke: var(--ink-muted);
+  stroke-width: 0.6;
+  stroke-dasharray: 2 5;
+}
+
+/* Arêtes du volume, dalles, baies */
+.hair {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1;
+  stroke-linejoin: round;
+}
+
+/* ---- Technique : trait plein plus épais, c'est le sujet -------------------- */
+
+/* Réseau principal (départ, soufflage) — se trace au scroll.
+   stroke-dasharray:1 + pathLength=1 : un seul tiret couvre tout le tracé. */
+.pipe {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+}
+
+/* Retour / secondaire — tireté plus fin */
+.pipeDashed {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 6 5;
+}
+
+/* Détails d'appareillage : ellipses et génératrices des cylindres, nervures */
+.sym {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Volumes techniques opaques : masquent ce qui passe derrière.
+   Classe dédiée — une règle CSS l'emporterait sur un attribut fill de
+   présentation, donc jamais de fill:none imposé à ces éléments. */
+.solid {
+  fill: var(--paper);
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+}
+
+/* Silhouette reconstruite des cylindres : remplissage SEUL, sans trait,
+   sinon les cordes du bandeau barreraient les ellipses. */
+.mask {
+  fill: var(--paper);
+  stroke: none;
+}
+
+/* Percements de dalle : même principe d'occlusion, au trait fin */
+.plug {
+  fill: var(--paper);
+  stroke: currentColor;
+  stroke-width: 1.1;
+}
+
+/* Tés de piquage : pastilles pleines, sans contour parasite */
+.node {
+  fill: currentColor;
+  stroke: none;
+}
+
+/* ---- Cotation et repérage ------------------------------------------------- */
+
+.lead {
+  fill: none;
+  stroke: var(--ink-muted);
+  stroke-width: 0.9;
+  stroke-dasharray: 3 4;
+}
+
+.dim {
+  fill: none;
+  stroke: var(--ink-muted);
+  stroke-width: 0.9;
+}
+
+.lab {
+  font-family: var(--font-mono-stack);
+  font-size: 11px;
+  fill: var(--ink-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.sub {
+  font-size: 10px;
+}
+
+/* ---- « Le dessin s'assemble » --------------------------------------------
+   L'état caché n'existe QUE sous [data-draw="pending"] : sans JS, en SSR ou en
+   reduced-motion (data-draw="done"), la planche est intégralement visible. */
+
+.svg[data-draw="pending"] .pipe {
+  stroke-dashoffset: 1;
+}
+
+.svg[data-draw="pending"] .grid,
+.svg[data-draw="pending"] .hair,
+.svg[data-draw="pending"] .pipeDashed,
+.svg[data-draw="pending"] .sym,
+.svg[data-draw="pending"] .solid,
+.svg[data-draw="pending"] .mask,
+.svg[data-draw="pending"] .plug,
+.svg[data-draw="pending"] .node,
+.svg[data-draw="pending"] .lead,
+.svg[data-draw="pending"] .dim,
+.svg[data-draw="pending"] .lab {
+  opacity: 0;
+}
+
+/* 1. l'enveloppe se pose */
+.svg[data-draw="true"] .grid,
+.svg[data-draw="true"] .hair {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease);
+}
+
+/* 2. la technique se trace, niveau par niveau */
+.svg[data-draw="true"] .pipe {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset var(--dur-slow) var(--ease);
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+
+.svg[data-draw="true"] .pipeDashed {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 260ms;
+}
+
+/* 3. les volumes, leurs masques et les percements */
+.svg[data-draw="true"] .sym,
+.svg[data-draw="true"] .solid,
+.svg[data-draw="true"] .mask,
+.svg[data-draw="true"] .plug,
+.svg[data-draw="true"] .node {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 340ms;
+}
+
+/* 4. la cotation en dernier */
+.svg[data-draw="true"] .lead,
+.svg[data-draw="true"] .dim,
+.svg[data-draw="true"] .lab {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 520ms;
+}

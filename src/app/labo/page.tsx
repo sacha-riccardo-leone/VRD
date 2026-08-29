@@ -7,6 +7,10 @@ import { AirHandlingUnit } from "@/components/AirHandlingUnit";
 import { ColonneMontanteSanitaire } from "@/components/ColonneMontanteSanitaire";
 import { RampeGaz } from "@/components/RampeGaz";
 import { PlanNiveauCote } from "@/components/PlanNiveauCote";
+import { ChaufferieIso } from "@/components/ChaufferieIso";
+import { CirculateurEclateIso } from "@/components/CirculateurEclateIso";
+import { ReseauGainesIso } from "@/components/ReseauGainesIso";
+import { BatimentCoupeIso } from "@/components/BatimentCoupeIso";
 import s from "./page.module.css";
 
 /**
@@ -159,6 +163,66 @@ export default function Labo() {
           </p>
           <div className={s.schemaFigure}>
             <PlanNiveauCote />
+          </div>
+        </div>
+      </section>
+
+      <section className={s.schema} aria-labelledby="batiment-titre">
+        <div className={s.schemaInner}>
+          <p className="label">Prototype · axonométrie</p>
+          <h2 id="batiment-titre" className={s.title}>
+            Coupe axonométrique de bâtiment
+          </h2>
+          <p className={s.caption}>
+            Trois niveaux en écorché : chaufferie en pied, colonne montante départ/retour, piquages d’étage et CTA en toiture. Géométrie 3D réelle, projetée. Illustration — contenu de démonstration.
+          </p>
+          <div className={s.schemaFigure}>
+            <BatimentCoupeIso />
+          </div>
+        </div>
+      </section>
+
+      <section className={s.schema} aria-labelledby="chaufferie-titre">
+        <div className={s.schemaInner}>
+          <p className="label">Prototype · axonométrie</p>
+          <h2 id="chaufferie-titre" className={s.title}>
+            Chaufferie axonométrique
+          </h2>
+          <p className={s.caption}>
+            Chaudière 150 kW, ballon tampon 1 000 L et collecteur DN 80 sur dalle quadrillée ; départ plein, retour tireté, régime 70/50 °C. Illustration — contenu de démonstration.
+          </p>
+          <div className={s.schemaFigure}>
+            <ChaufferieIso />
+          </div>
+        </div>
+      </section>
+
+      <section className={s.schema} aria-labelledby="gaines-titre">
+        <div className={s.schemaInner}>
+          <p className="label">Prototype · axonométrie</p>
+          <h2 id="gaines-titre" className={s.title}>
+            Réseau de gaines
+          </h2>
+          <p className={s.caption}>
+            Caisson, gaine principale 600 × 300 traitée en volume et trois piquages coudés vers leurs bouches ; reprise en tireté. Illustration — contenu de démonstration.
+          </p>
+          <div className={s.schemaFigure}>
+            <ReseauGainesIso />
+          </div>
+        </div>
+      </section>
+
+      <section className={s.schema} aria-labelledby="circulateur-titre">
+        <div className={s.schemaInner}>
+          <p className="label">Prototype · axonométrie</p>
+          <h2 id="circulateur-titre" className={s.title}>
+            Circulateur — vue éclatée
+          </h2>
+          <p className={s.caption}>
+            Sept pièces alignées sur l’axe d’éclatement, arêtes cachées tiretées, axe pointillé, refoulement DN 65 à 12 m³/h. Illustration — contenu de démonstration.
+          </p>
+          <div className={s.schemaFigureNarrow}>
+            <CirculateurEclateIso />
           </div>
         </div>
       </section>

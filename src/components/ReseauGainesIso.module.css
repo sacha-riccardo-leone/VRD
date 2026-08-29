@@ -1,0 +1,114 @@
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--ink);
+  overflow: visible;
+  stroke-width: 1.6; /* repli ; chaque tracé pose la sienne en attribut */
+}
+
+/* --- Le trait porte toute la distinction : jamais la teinte ---------------
+   volume et réseau principal (plein 1,4 à 2,6) · reprise (tireté 1,5) ·
+   lignes de rappel et cotes (pointillé 1 à 1,2, encre atténuée).
+   Ces trois classes n'habillent que des éléments qui veulent bien
+   fill:none + stroke:currentColor ; tout le reste a sa classe dédiée. */
+.pipe,
+.pipeDashed,
+.sym {
+  fill: none;
+  stroke: currentColor;
+}
+.pipe {
+  stroke-dasharray: 1; /* pathLength=1 : un seul tiret couvre tout le tracé */
+  stroke-linejoin: round;
+}
+.pipeDashed {
+  stroke-dasharray: 7 6; /* reprise : tireté plus fin */
+}
+
+/* Occultation par le trait : les faces vues sont doublées d'un aplat papier
+   qui masque ce qui passe derrière. Classe dédiée — elle ne touche jamais un
+   élément qui a besoin d'un autre remplissage. */
+.solid {
+  fill: var(--paper);
+  stroke: none;
+}
+
+/* Flèches de sens : pleines, donc classe dédiée elle aussi. */
+.arrow {
+  fill: currentColor;
+  stroke: none;
+}
+
+/* Lignes de rappel et cotes : pointillé fin, encre atténuée. */
+.rappel {
+  fill: none;
+  stroke: var(--ink-muted);
+  stroke-width: 1;
+  stroke-dasharray: 1.5 4;
+}
+.cote {
+  fill: none;
+  stroke: var(--ink-muted);
+  stroke-width: 1.2;
+}
+/* Pointes de cote : même encre atténuée que la ligne qu'elles terminent. */
+.coteArrow {
+  fill: var(--ink-muted);
+  stroke: none;
+}
+
+.lab {
+  fill: var(--ink-muted);
+  stroke: none;
+  font-family: var(--font-mono-stack);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+/* Les valeurs chiffrées gardent leurs unités telles quelles : « m³/h », pas
+   « M³/H ». Déclarée après .lab, elle l'emporte à spécificité égale. */
+.data {
+  font-size: 9px;
+  text-transform: none;
+}
+
+/* --- Révélation « le dessin s'assemble » ---------------------------------
+   L'état caché ne s'applique QUE lorsque le JS a posé data-draw="pending" ;
+   sans JS ou en reduced-motion (data-draw="done"), tout est visible d'emblée. */
+.svg[data-draw="pending"] .pipe {
+  stroke-dashoffset: 1;
+}
+.svg[data-draw="pending"] .pipeDashed,
+.svg[data-draw="pending"] .solid,
+.svg[data-draw="pending"] .sym,
+.svg[data-draw="pending"] .arrow,
+.svg[data-draw="pending"] .rappel,
+.svg[data-draw="pending"] .cote,
+.svg[data-draw="pending"] .coteArrow,
+.svg[data-draw="pending"] .lab {
+  opacity: 0;
+}
+
+.svg[data-draw="true"] .pipe {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset var(--dur-slow) var(--ease);
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+.svg[data-draw="true"] .pipeDashed {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 260ms;
+}
+.svg[data-draw="true"] .solid,
+.svg[data-draw="true"] .sym,
+.svg[data-draw="true"] .arrow {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 340ms;
+}
+.svg[data-draw="true"] .rappel,
+.svg[data-draw="true"] .cote,
+.svg[data-draw="true"] .coteArrow,
+.svg[data-draw="true"] .lab {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 520ms;
+}

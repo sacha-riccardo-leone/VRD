@@ -1,0 +1,120 @@
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--ink);
+  overflow: visible;
+}
+
+/* --- Le trait porte toute la distinction : jamais la teinte ---------------
+   volume (plein 1,6) · réseau principal (plein 2,4) · caché et secondaire
+   (tireté 1,2) · axe d'éclatement et lignes de rappel (pointillé 1,15). */
+.pipe,
+.pipeDashed,
+.axis,
+.leader,
+.sym {
+  fill: none;
+  stroke: currentColor;
+}
+
+.pipe {
+  stroke-width: 1.6;
+  stroke-dasharray: 1; /* pathLength=1 : un seul tiret couvre tout le tracé */
+  stroke-linejoin: round;
+}
+/* Déclarée APRÈS .pipe : à spécificité égale, c'est l'ordre qui tranche. */
+.main {
+  stroke-width: 2.4; /* réseau principal — refoulement DN 65 */
+}
+.pipeDashed {
+  stroke-width: 1.2;
+  stroke-dasharray: 6 5; /* arêtes cachées, chambre interne */
+}
+.sym {
+  stroke-width: 1.3; /* perçages, nervures, six pans */
+}
+.axis,
+.leader {
+  stroke-width: 1.15;
+  stroke-dasharray: 1.5 5;
+  stroke-linecap: round;
+}
+
+/* Occlusion par le trait : la face remplie en papier masque ce qui passe
+   derrière. Classes dédiées — une règle de classe l'emporte sur l'attribut
+   de présentation, donc aucun `fill: none` ici. */
+.solid {
+  fill: var(--paper);
+  fill-rule: evenodd; /* alésages et joints : le trou reste ouvert */
+  stroke: none;
+}
+.node {
+  fill: var(--paper); /* la pastille masque la fin de la ligne de rappel */
+  stroke: currentColor;
+  stroke-width: 1.4;
+}
+
+.lab {
+  fill: var(--ink-muted);
+  stroke: none;
+  font-family: var(--font-mono-stack);
+  font-size: 12.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.sub {
+  font-size: 10.5px;
+}
+/* Valeurs chiffrées : la casse des unités SI est signifiante (m³/h, kW, mm),
+   les capitales s'arrêtent donc aux libellés. */
+.data {
+  text-transform: none;
+}
+.num {
+  fill: var(--ink);
+  stroke: none;
+  font-family: var(--font-mono-stack);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* --- Révélation « le dessin s'assemble » ---------------------------------
+   L'état caché ne s'applique QUE lorsque le JS a posé data-draw="pending" ;
+   sans JS ou en reduced-motion (data-draw="done"), tout est visible d'emblée. */
+.svg[data-draw="pending"] .pipe {
+  stroke-dashoffset: 1;
+}
+.svg[data-draw="pending"] .pipeDashed,
+.svg[data-draw="pending"] .axis,
+.svg[data-draw="pending"] .sym,
+.svg[data-draw="pending"] .solid,
+.svg[data-draw="pending"] .leader,
+.svg[data-draw="pending"] .node,
+.svg[data-draw="pending"] .lab,
+.svg[data-draw="pending"] .num {
+  opacity: 0;
+}
+
+.svg[data-draw="true"] .pipe {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset var(--dur-slow) var(--ease);
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+.svg[data-draw="true"] .pipeDashed,
+.svg[data-draw="true"] .axis {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 260ms;
+}
+.svg[data-draw="true"] .sym,
+.svg[data-draw="true"] .solid {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 340ms;
+}
+.svg[data-draw="true"] .leader,
+.svg[data-draw="true"] .node,
+.svg[data-draw="true"] .lab,
+.svg[data-draw="true"] .num {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 520ms;
+}
