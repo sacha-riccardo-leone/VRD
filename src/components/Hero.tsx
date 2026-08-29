@@ -32,10 +32,10 @@ export function Hero() {
       </p>
 
       <div className={s.actions}>
-        <Link href="/#contact" className={s.ctaPrimary}>
+        <Link href="/contact" className={s.ctaPrimary}>
           Discuter d’un projet
         </Link>
-        <Link href="/#realisations" className={s.ctaSecondary}>
+        <Link href="/realisations" className={s.ctaSecondary}>
           Voir nos réalisations
         </Link>
       </div>

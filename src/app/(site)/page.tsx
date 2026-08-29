@@ -1,4 +1,5 @@
 import { Hero } from "@/components/Hero";
+import { ProofBar } from "@/components/ProofBar";
 import s from "./page.module.css";
 
 /**
@@ -19,6 +20,7 @@ export default function Home() {
       </div>
 
       <Hero />
+      <ProofBar />
     </main>
   );
 }

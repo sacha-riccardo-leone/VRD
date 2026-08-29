@@ -1,0 +1,32 @@
+.head {
+  border-bottom: 1px solid var(--rule);
+}
+
+.sheet {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--s-3);
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: var(--s-4) var(--gutter);
+  border-bottom: 1px solid var(--rule);
+}
+
+.inner {
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: var(--s-8) var(--gutter);
+}
+
+.title {
+  max-width: 20ch;
+}
+
+.lede {
+  margin-top: var(--s-5);
+  max-width: 52ch;
+  font-size: var(--fs-500);
+  line-height: var(--lh-snug);
+  color: var(--ink-muted);
+}

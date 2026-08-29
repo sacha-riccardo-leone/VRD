@@ -1,0 +1,200 @@
+/* ==========================================================================
+   Planche 04 — Méthode.
+
+   Deux surfaces, une seule idée : la page bascule du papier à l'encre au
+   moment où l'on passe des phases (le déroulé administratif du mandat) à la
+   coordination (le travail sur la matière). L'inversion porte la hiérarchie —
+   pas la teinte, il n'y en a pas.
+
+   Le tireté est ici un signe, pas un ornement : il sépare le livrable de sa
+   description, et il encadre le contenu de démonstration. Plein = vérifié,
+   tireté = à confirmer — la même convention que la barre de preuve et que la
+   marque de démonstration de la planche 03.
+   ========================================================================== */
+
+.page {
+  /* Respiration avant le pied de page. */
+  padding-bottom: var(--s-4);
+}
+
+/* --- Sections ------------------------------------------------------------ */
+.section {
+  padding-block: var(--s-9);
+}
+
+.inner {
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.kicker {
+  margin-bottom: var(--s-4);
+}
+
+.title {
+  max-width: 26ch;
+}
+
+.intro {
+  margin-top: var(--s-5);
+  color: var(--ink-muted);
+}
+
+/* --- Le tableau des phases -----------------------------------------------
+   Une planche se lit en colonnes : le numéro à gauche, l'intitulé et le texte
+   à droite, un filet entre chaque ligne. Le numéro est en mono et en encre
+   pleine — c'est lui qui porte le repérage, donc il est le plus gros élément
+   de la ligne. Filet haut plus fort : c'est le bord du tableau. */
+.phases {
+  margin: var(--s-8) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--rule-strong);
+}
+
+.phase {
+  display: grid;
+  gap: var(--s-2);
+  /* Les <li> héritent de max-width: var(--measure) ; une grille de planche
+     doit pouvoir prendre toute la largeur, la mesure est rendue au texte. */
+  max-width: none;
+  padding-block: var(--s-6);
+  border-bottom: 1px solid var(--rule);
+}
+
+@media (min-width: 48rem) {
+  .phase {
+    grid-template-columns: 7rem 1fr;
+    column-gap: var(--s-6);
+    align-items: baseline;
+  }
+}
+
+.num {
+  font-family: var(--font-mono-stack);
+  font-size: var(--fs-600);
+  font-weight: 500;
+  line-height: var(--lh-snug);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.phaseTitle {
+  font-size: var(--fs-500);
+  line-height: var(--lh-snug);
+}
+
+.phaseText {
+  margin-top: var(--s-3);
+}
+
+/* Le livrable est détaché par un TIRETÉ : dans ce projet, plein et tireté sont
+   deux valeurs distinctes — autant s'en servir ici aussi. */
+.deliv {
+  margin-top: var(--s-4);
+  padding-top: var(--s-3);
+  max-width: 64ch;
+  border-top: 1px dashed var(--rule-strong);
+  font-family: var(--font-mono-stack);
+  font-size: var(--fs-200);
+  line-height: var(--lh-snug);
+  color: var(--ink-muted);
+}
+
+.delivLabel {
+  display: block;
+  margin-bottom: var(--s-1);
+}
+
+.source {
+  margin-top: var(--s-6);
+  max-width: 64ch;
+  font-family: var(--font-mono-stack);
+  font-size: var(--fs-200);
+  line-height: var(--lh-snug);
+  color: var(--ink-muted);
+}
+
+/* --- Section technique : inversion encre/papier --------------------------
+   La classe globale `.technique` réassigne les jetons sur la section ; il
+   reste à peindre la surface avec ces jetons réassignés. Tout ce qui est à
+   l'intérieur — y compris le réseau de gaines axonométrique, dont les faces
+   sont remplies en var(--paper) — suit sans réglage supplémentaire. */
+.tech {
+  padding-block: var(--s-9);
+  background: var(--paper);
+  color: var(--ink);
+  border-block: 1px solid var(--rule-strong);
+}
+
+.prose {
+  margin-top: var(--s-5);
+}
+
+.prose p + p {
+  margin-top: var(--s-4);
+}
+
+/* La figure remplit la largeur de son conteneur : on la borne. */
+.figure {
+  margin: var(--s-8) 0 0;
+  max-width: 58rem;
+}
+
+.figCaption {
+  margin-top: var(--s-4);
+  max-width: 64ch;
+  font-family: var(--font-mono-stack);
+  font-size: var(--fs-200);
+  line-height: var(--lh-snug);
+  color: var(--ink-muted);
+}
+
+/* --- Contenu de démonstration -------------------------------------------
+   Encadré tireté + marque, la même signalétique que la planche 03 : ce qui
+   n'est pas vérifié doit se voir autant que le reste. La marque garde les
+   majuscules et l'interlettrage de `.label` — c'est la forme employée
+   partout ailleurs dans le dossier, elle ne se réinvente pas ici. */
+.demo {
+  margin-top: var(--s-8);
+  max-width: 46rem;
+  padding: var(--s-5);
+  border: 1px dashed var(--rule-strong);
+}
+
+.demoHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3);
+  /* <p> hérite de la mesure ; cette ligne porte deux blocs, pas du texte. */
+  max-width: none;
+}
+
+.flag {
+  padding: 0.2em 0.6em;
+  border: 1px dashed var(--ink);
+  color: var(--ink);
+}
+
+.demoNote {
+  margin-top: var(--s-4);
+  max-width: 62ch;
+  font-family: var(--font-mono-stack);
+  font-size: var(--fs-200);
+  line-height: var(--lh-snug);
+  color: var(--ink-muted);
+}
+
+/* Liste NUMÉROTÉE : elle reste en flux normal. Une grille blockifierait les
+   <li> et l'affichage des marqueurs dépendrait alors du navigateur — or ici
+   la numérotation est le contenu. L'espacement passe par la marge. */
+.demoList {
+  margin: var(--s-5) 0 0;
+  padding-inline-start: var(--s-5);
+}
+
+.demoList li + li {
+  margin-top: var(--s-2);
+}
