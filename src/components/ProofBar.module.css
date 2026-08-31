@@ -85,11 +85,3 @@
   color: var(--ink-muted);
 }
 
-.source {
-  margin-block-start: var(--s-7);
-  max-width: 68ch;
-  font-family: var(--font-mono-stack);
-  font-size: var(--fs-100);
-  line-height: var(--lh-snug);
-  color: var(--ink-muted);
-}

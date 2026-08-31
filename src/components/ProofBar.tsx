@@ -46,11 +46,6 @@ export function ProofBar() {
             <dd className={s.statValue}>8</dd>
           </div>
         </dl>
-
-        <p className={s.source}>
-          Chiffres publiés par VRD — portfolio du bureau. Domaines&nbsp;: chauffage,
-          ventilation, froid, sanitaire, sprinkler, BIM, MCR, énergétique.
-        </p>
       </div>
     </section>
   );
