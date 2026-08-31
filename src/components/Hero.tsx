@@ -19,13 +19,19 @@ import s from "./Hero.module.css";
  * est grand ouvert, la première section arrive en haut de l'écran — aucun temps
  * mort, aucune page blanche entre les deux.
  *
- * Le repère du fût du R est MESURÉ sur un jumeau du texte réellement rendu :
- * un <text> placé dans <defs> n'est jamais mis en page, les API de mesure y
- * échouent, et le repli tombait sur le centre exact de « VRD » — c'est-à-dire
- * le contrepoinçon du R. L'anthracite grandissait alors au lieu du blanc, d'où
- * l'écran noir. Aucun fondu n'est utilisé : l'ouverture grandit jusqu'à
- * dépasser la fenêtre, puis la plaque est simplement retirée — invisible,
- * puisqu'elle n'affichait déjà plus rien.
+ * On plonge par le V, et non par le R : le V n'a PAS de contrepoinçon. Dans un
+ * masque, le contrepoinçon d'une lettre n'appartient pas au glyphe — il reste
+ * opaque, îlot collé au repère de plongée, qui grandit avec le reste et balaie
+ * l'écran. Le V n'en a aucun ; ceux du R et du D sont loin du centre et sortent
+ * du cadre aussitôt. C'est le seul moyen de garder les lettres correctes au
+ * repos ET de n'avoir rien qui traverse l'écran : avec un groupe unique mis à
+ * l'échelle, on ne peut pas avoir les deux sur une lettre à contrepoinçon.
+ *
+ * Le repère est trouvé en sondant les pixels du glyphe, et l'échelle finale est
+ * CALCULÉE : c'est celle à laquelle le coin visible le plus lointain entre dans
+ * l'ouverture. La progression est EXPONENTIELLE (maxScale ** p) : vitesse
+ * d'approche constante, comme un travelling. Aucun fondu, aucune étape de
+ * nettoyage — la plaque n'est retirée qu'une fois sortie du cadre.
  *
  * Le champ thermique se dessine PAR-DESSUS la plaque : il appartient à
  * l'anthracite, pas aux lettres. Il s'efface dès que la plongée commence.
@@ -69,9 +75,9 @@ export function Hero() {
     // La mesure attend `document.fonts.ready` : lancée trop tôt, elle porte sur
     // la police de repli et le résultat tombe à côté — c'était le défaut.
     // ------------------------------------------------------------------
-    let ox = 531; // repli calculé pour Plex : dans le fût, jamais dans un creux
+    let ox = 354; // repli : dans le jambage gauche du V, jamais dans un creux
     let oy = 395;
-    let maxScale = 200;
+    let maxScale = 30; // recalculé à la mesure
 
     const measure = () => {
       let frac = 0.17; // position du fût dans la chasse, en repli
@@ -89,8 +95,8 @@ export function Hero() {
           c.textBaseline = "alphabetic";
           c.fillStyle = "#000";
           const baseline = size * 1.1;
-          c.fillText("R", 0, baseline);
-          const advance = c.measureText("R").width;
+          c.fillText("V", 0, baseline);
+          const advance = c.measureText("V").width;
           const row = Math.round(baseline - size * 0.36); // mi-hauteur de capitale
           const px = c.getImageData(0, row, cv.width, 1).data;
 
@@ -112,15 +118,19 @@ export function Hero() {
       }
 
       try {
-        const a = text.getStartPositionOfChar(1); // le R
-        const b = text.getEndPositionOfChar(1);
+        const a = text.getStartPositionOfChar(0); // le V — sans contrepoinçon
+        const b = text.getEndPositionOfChar(0);
         if (b.x > a.x) {
           const chasse = b.x - a.x;
           ox = a.x + chasse * frac;
           oy = a.y - 300 * 0.36;
           // Échelle nécessaire pour que le fût couvre la fenêtre, majorée de 40 %.
           const demi = Math.max((chasse * stemFrac) / 2, 1);
-          maxScale = Math.max(Math.max(ox, 1200 - ox) / demi, 40) * 1.4;
+          // Échelle à laquelle le coin visible le plus lointain entre dans
+          // l'ouverture — calculée, jamais choisie à la main.
+          const dx = Math.max(ox, 1200 - ox);
+          const dy = Math.max(oy, 800 - oy);
+          maxScale = Math.max(Math.hypot(dx / demi, dy / (demi * 4)), 8) * 1.15;
         }
       } catch {
         // Texte pas encore mis en page : on garde le repli.
@@ -134,7 +144,12 @@ export function Hero() {
       const course = window.innerHeight;
       const p = clamp(window.scrollY / course);
 
-      const scale = 1 + p * p * (maxScale - 1);
+      // Progression EXPONENTIELLE, pas quadratique. Une interpolation en p²
+      // donne 70 % de course où il ne se passe rien, puis un coup de fouet à la
+      // fin. maxScale ** p tient une vitesse d'approche constante — c'est ce que
+      // fait un travelling réel, et c'est la différence la plus visible entre
+      // une bonne version et une mauvaise.
+      const scale = Math.pow(maxScale, p);
       mask.setAttribute(
         "transform",
         `translate(${ox} ${oy}) scale(${scale.toFixed(3)}) translate(${-ox} ${-oy})`,
@@ -148,7 +163,7 @@ export function Hero() {
       // n'affiche plus un seul pixel d'anthracite, on peut donc la retirer sans
       // transition — personne ne peut voir disparaître ce qui ne se voyait déjà
       // plus. Cela libère aussi le contenu de tout recouvrement.
-      plate.style.visibility = p >= HIDE_AT ? "hidden" : "visible";
+      plate.style.visibility = p > 0.995 ? "hidden" : "visible";
     };
 
     const onScroll = () => {
