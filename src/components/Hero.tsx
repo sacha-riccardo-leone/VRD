@@ -31,19 +31,6 @@ import s from "./Hero.module.css";
  * l'anthracite, pas aux lettres. Il s'efface dès que la plongée commence.
  */
 
-/**
- * Le fût du R est une barre étroite : environ 26 unités de viewBox sur 1200
- * visibles. Pour que son ouverture couvre la fenêtre entière, il faut donc une
- * échelle de l'ordre de 70 — d'où 200, qui laisse une marge confortable quel
- * que soit le format d'écran. C'est parce que cette valeur était trop basse (60)
- * qu'il restait de l'anthracite sur les bords, et qu'un fondu était nécessaire
- * pour le masquer. Avec une ouverture qui dépasse vraiment l'écran, il n'y a
- * plus rien à masquer : aucun fondu.
- */
-const MAX_SCALE = 200;
-
-/** Au-delà, l'ouverture dépasse largement l'écran : la plaque ne montre plus
- *  rien et peut être retirée sans que personne ne le voie. */
 const HIDE_AT = 0.85;
 
 export function Hero() {
@@ -70,23 +57,75 @@ export function Hero() {
       return;
     }
 
-    // Repère de plongée mesuré sur le glyphe. La mesure porte sur un texte
-    // RÉELLEMENT RENDU (invisible mais dans l'arbre de rendu) : un <text> placé
-    // dans <defs> n'est jamais mis en page, getStartPositionOfChar y échoue, et
-    // le repli tombait alors sur le centre exact de « VRD » — c'est-à-dire le
-    // contrepoinçon du R. D'où l'écran noir.
-    let ox = 470; // repli : à gauche du centre, donc du côté du fût
+    // ------------------------------------------------------------------
+    // Repère de plongée : TROUVÉ EN SONDANT LES PIXELS, pas estimé.
+    //
+    // Trois tentatives ont échoué en devinant où se trouve le fût du R. Ici on
+    // dessine le glyphe sur un canvas hors écran et on cherche la première
+    // colonne d'encre à mi-hauteur de capitale : c'est le fût, quelle que soit
+    // la police. On en déduit aussi sa LARGEUR, donc l'échelle réellement
+    // nécessaire pour que l'ouverture dépasse la fenêtre.
+    //
+    // La mesure attend `document.fonts.ready` : lancée trop tôt, elle porte sur
+    // la police de repli et le résultat tombe à côté — c'était le défaut.
+    // ------------------------------------------------------------------
+    let ox = 531; // repli calculé pour Plex : dans le fût, jamais dans un creux
     let oy = 395;
-    try {
-      const a = text.getStartPositionOfChar(1); // le R
-      const b = text.getEndPositionOfChar(1);
-      if (b.x > a.x) {
-        ox = a.x + (b.x - a.x) * 0.17; // dans le fût, pas dans la panse
-        oy = a.y - 300 * 0.36; // à mi-hauteur de capitale
+    let maxScale = 200;
+
+    const measure = () => {
+      let frac = 0.17; // position du fût dans la chasse, en repli
+      let stemFrac = 0.14; // largeur du fût, en repli
+
+      try {
+        const cs = getComputedStyle(text);
+        const size = parseFloat(cs.fontSize) || 300;
+        const cv = document.createElement("canvas");
+        cv.width = Math.ceil(size * 1.2);
+        cv.height = Math.ceil(size * 1.4);
+        const c = cv.getContext("2d", { willReadFrequently: true });
+        if (c) {
+          c.font = `${cs.fontWeight} ${size}px ${cs.fontFamily}`;
+          c.textBaseline = "alphabetic";
+          c.fillStyle = "#000";
+          const baseline = size * 1.1;
+          c.fillText("R", 0, baseline);
+          const advance = c.measureText("R").width;
+          const row = Math.round(baseline - size * 0.36); // mi-hauteur de capitale
+          const px = c.getImageData(0, row, cv.width, 1).data;
+
+          // Première colonne d'encre, puis fin de cette colonne : le fût.
+          let a = -1;
+          let b = -1;
+          for (let i = 0; i < cv.width; i++) {
+            const on = px[i * 4 + 3] > 128;
+            if (on && a < 0) a = i;
+            if (a >= 0 && !on) { b = i; break; }
+          }
+          if (a >= 0 && b > a && advance > 0) {
+            frac = (a + b) / 2 / advance;
+            stemFrac = (b - a) / advance;
+          }
+        }
+      } catch {
+        // Canvas indisponible : on garde les valeurs de repli.
       }
-    } catch {
-      // Police pas encore chargée : le repli reste du côté du plein.
-    }
+
+      try {
+        const a = text.getStartPositionOfChar(1); // le R
+        const b = text.getEndPositionOfChar(1);
+        if (b.x > a.x) {
+          const chasse = b.x - a.x;
+          ox = a.x + chasse * frac;
+          oy = a.y - 300 * 0.36;
+          // Échelle nécessaire pour que le fût couvre la fenêtre, majorée de 40 %.
+          const demi = Math.max((chasse * stemFrac) / 2, 1);
+          maxScale = Math.max(Math.max(ox, 1200 - ox) / demi, 40) * 1.4;
+        }
+      } catch {
+        // Texte pas encore mis en page : on garde le repli.
+      }
+    };
 
     const clamp = (n: number) => Math.min(Math.max(n, 0), 1);
 
@@ -95,7 +134,7 @@ export function Hero() {
       const course = window.innerHeight;
       const p = clamp(window.scrollY / course);
 
-      const scale = 1 + p * p * (MAX_SCALE - 1);
+      const scale = 1 + p * p * (maxScale - 1);
       mask.setAttribute(
         "transform",
         `translate(${ox} ${oy}) scale(${scale.toFixed(3)}) translate(${-ox} ${-oy})`,
@@ -116,7 +155,15 @@ export function Hero() {
       if (!raf.current) raf.current = requestAnimationFrame(apply);
     };
 
+    measure();
     apply();
+    // La police arrive après le premier rendu : on remesure alors, sinon le
+    // repère est calculé sur la police de repli.
+    document.fonts?.ready.then(() => {
+      measure();
+      apply();
+    });
+
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     return () => {
