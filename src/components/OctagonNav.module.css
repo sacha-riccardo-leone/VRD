@@ -1,26 +1,102 @@
-/* Scène plein écran, sur anthracite. La classe `.technique` est posée par la
-   page : tous les jetons d'encre y sont déjà inversés. */
+/* Scène plein écran sur anthracite. `.technique` est posée par la page : les
+   jetons d'encre y sont déjà inversés.
+   `overflow-x: hidden` est indispensable — le schéma latéral déborde du bord
+   droit à dessein et ne doit jamais créer de défilement horizontal. */
 .stage {
+  position: relative;
   min-height: calc(100svh - var(--header-h));
   display: grid;
   place-items: center;
   padding: var(--s-7) var(--gutter);
+  overflow-x: hidden;
+  overflow-y: visible;
 }
 
-/* Le disque de travail. Diamètre imposé : min(70vmin, 640px). */
-.ring {
-  --ring: min(70vmin, 640px);
-  position: relative;
-  inline-size: var(--ring);
-  block-size: var(--ring);
-  /* Les étiquettes des nœuds débordent volontairement du cercle. */
+/* --- Schémas latéraux ---------------------------------------------------- */
+/* Les huit sont montés en permanence : on ne fait varier que l'opacité, ce qui
+   donne un fondu croisé sans démontage. Décor pur, derrière tout le contenu. */
+.asides {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden; /* recadre le débordement, ne défile pas */
+}
+
+.aside {
+  position: absolute;
+  /* Aligné à droite et volontairement recadré par le bord de page. */
+  inset-inline-end: -15%;
+  inset-block-start: 50%;
+  block-size: 60vh;
+  inline-size: auto;
+  opacity: 0;
+  transform: translateY(-50%) translateX(20px);
+  transition:
+    opacity 200ms var(--ease),
+    transform 300ms var(--ease);
+}
+
+.aside[data-on="true"] {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+  transition:
+    opacity 300ms var(--ease),
+    transform 300ms var(--ease);
+}
+
+/* Les motifs peignent certains traits avec `--ink-muted` EN DUR : une valeur
+   littérale ne consulte pas la couleur héritée. On rabat donc les jetons
+   eux-mêmes — les propriétés personnalisées héritent et traversent la
+   frontière CSS Modules. Même mécanique que FigureBackdrop. */
+.aside {
+  color: var(--rule-strong);
+  --ink: var(--rule-strong);
+  --ink-muted: var(--rule-strong);
+}
+
+.aside svg {
+  block-size: 60vh;
+  inline-size: auto;
+  max-inline-size: none;
+  color: inherit;
+  opacity: 0.2; /* décor : jamais assez fort pour concurrencer le texte */
+  stroke-width: 1.5;
   overflow: visible;
 }
 
-/* --- Arêtes ------------------------------------------------------------- */
-/* Même traitement que la grille du champ thermique : --dark-rule, 1 px,
-   tireté 2/6, opacité 0.6. Ici l'épaisseur est exprimée en unités de viewBox
-   pour rester à 1 px à l'écran quelle que soit la taille du disque. */
+/* Pas d'étiquettes ni d'animation dans un décor. Sélecteurs d'ÉLÉMENT : les
+   classes des motifs sont hachées par CSS Modules et resteraient hors portée. */
+.aside text,
+.aside [data-labels] {
+  display: none;
+}
+
+.aside svg[data-draw] * {
+  opacity: 1 !important;
+  transition: none !important;
+  --dy: 0px !important;
+}
+
+.aside svg[data-draw] path {
+  stroke-dashoffset: 0 !important;
+}
+
+/* --- Le disque ----------------------------------------------------------- */
+.ring {
+  --ring: min(70vmin, 640px);
+  position: relative;
+  z-index: 1; /* devant les schémas */
+  inline-size: var(--ring);
+  block-size: var(--ring);
+  overflow: visible;
+}
+
+/* --- Arêtes — la constellation ------------------------------------------- */
+/* Même famille que la grille du champ thermique, mais RÉELLEMENT visible :
+   --dark-rule sur anthracite ne mesure que 1.35:1, soit invisible. On monte à
+   --rule-strong (3.34:1), en trait plein : une constellation se lit comme un
+   trait continu, pas comme un tireté. */
 .edges {
   position: absolute;
   inset: 0;
@@ -31,21 +107,21 @@
 }
 
 .edges line {
-  stroke: var(--dark-rule);
-  stroke-width: 0.22;
-  stroke-dasharray: 0.45 1.35;
-  opacity: 0.6;
-  vector-effect: non-scaling-stroke;
+  stroke: var(--rule-strong);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke; /* 1 px à l'écran quelle que soit la taille */
+  opacity: 0.55;
+  transition: opacity 280ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* --- Centre -------------------------------------------------------------- */
 .center {
   position: absolute;
-  inset: 22%;
+  inset: 24%;
   display: grid;
   place-items: center;
   text-align: center;
-  pointer-events: none; /* ne bloque jamais le pointeur destiné aux nœuds */
+  pointer-events: none;
 }
 
 .centerInner {
@@ -86,7 +162,6 @@
   color: var(--ink-muted);
 }
 
-/* La réserve doit se voir autant que le contenu qu'elle remplace. */
 .cardTodo {
   padding: var(--s-2) var(--s-3);
   border: 1px dashed var(--rule-strong);
@@ -124,72 +199,69 @@
 }
 
 /* --- Nœuds --------------------------------------------------------------- */
+/* Pastilles agrandies (3 → 5 rem, icône 1.5 → 2.5 rem). La largeur du nœud et
+   ses marges de centrage suivent, pour qu'aucune étiquette ne chevauche sa
+   voisine une fois le disque agrandi. */
 .node {
   position: absolute;
-  /* `left`/`top` portent le sommet ; la translation du magnétisme s'ajoute
-     dans `transform`, donc le centrage passe par la marge, pas par translate. */
-  margin-inline-start: -3.75rem;
-  margin-block-start: -3rem;
-  inline-size: 7.5rem;
-  min-block-size: 6rem;
+  /* `left`/`top` portent le sommet ; le magnétisme vit dans `transform`, donc
+     le centrage passe par la marge — jamais par translate, qui serait écrasé. */
+  margin-inline-start: -4.75rem;
+  margin-block-start: -4rem;
+  inline-size: 9.5rem;
+  min-block-size: 8rem;
   display: grid;
   justify-items: center;
   align-content: start;
-  gap: var(--s-2);
+  gap: var(--s-3);
   padding: var(--s-2);
   color: var(--ink);
   text-decoration: none;
   will-change: transform;
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .nodeIcon {
   display: grid;
   place-items: center;
-  inline-size: 3rem;
-  block-size: 3rem;
+  inline-size: 5rem;
+  block-size: 5rem;
   border: 1px solid var(--rule-strong);
   border-radius: 50%;
-  background: var(--paper); /* = anthracite : masque l'arête qui passe dessous */
+  background: var(--paper); /* anthracite : masque l'arête qui passe dessous */
   transition:
-    border-color var(--dur-fast) var(--ease),
-    background var(--dur-fast) var(--ease);
+    border-color 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 280ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .nodeIcon svg {
-  inline-size: 1.5rem;
-  block-size: 1.5rem;
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
 }
 
 .nodeLabel {
   font-family: var(--font-mono-stack);
-  font-size: var(--fs-100);
+  font-size: var(--fs-200);
   letter-spacing: var(--ls-label);
   text-transform: uppercase;
   text-align: center;
 }
 
-.node:hover .nodeIcon,
+.node[data-hovered="true"] .nodeIcon,
 .node:focus-visible .nodeIcon {
   border-color: var(--ink);
   background: var(--paper-raised);
 }
 
-/* Anneau de focus visible sur anthracite : --on-dark, 14.85:1. */
+/* Anneau de focus lisible sur anthracite : --on-dark, 14.85:1. */
 .node:focus-visible {
   outline: var(--focus-ring);
   outline-offset: var(--focus-offset);
 }
 
-/* --- Repli tablette : statique, mais la carte reste ouvrable au toucher --- */
-@media (hover: none), (max-width: 63.99rem) {
-  .node {
-    will-change: auto;
-  }
-}
-
 /* --- Repli mobile : plus d'octogone, une grille de deux colonnes ---------- */
-/* Le DOM ne change pas — seul le CSS reflue. Les huit noms restent écrits dès
-   le premier rendu, et chaque nœud reste un lien vers sa section. */
+/* Le DOM ne change pas : seul le CSS reflue. `transform: none` neutralise le
+   déplacement calculé en ligne, qui n'a plus de sens hors de l'anneau. */
 @media (max-width: 39.99rem) {
   .stage {
     min-height: 0;
@@ -205,7 +277,8 @@
   }
 
   .edges,
-  .center {
+  .center,
+  .asides {
     display: none;
   }
 
@@ -218,7 +291,17 @@
     gap: var(--s-3);
     padding: var(--s-5) var(--s-4);
     border: 1px solid var(--rule-strong);
-    transform: none !important; /* aucune translation résiduelle en grille */
+    transform: none !important;
+  }
+
+  .nodeIcon {
+    inline-size: 3.5rem;
+    block-size: 3.5rem;
+  }
+
+  .nodeIcon svg {
+    inline-size: 1.75rem;
+    block-size: 1.75rem;
   }
 
   .nodeLabel {
@@ -226,9 +309,32 @@
   }
 }
 
+/* Le schéma latéral n'a de sens qu'au survol : sur pointeur grossier, il ne
+   peut jamais apparaître. On le retire plutôt que de le déclencher au toucher,
+   où une tape doit naviguer vers la section, pas révéler un décor. */
+@media (hover: none), (max-width: 63.99rem) {
+  .asides {
+    display: none;
+  }
+}
+
+/* --- Mouvement réduit ---------------------------------------------------- */
+/* Aucun déplacement, aucune mise à l'échelle, aucune translation du schéma.
+   Les fondus d'opacité restent — ils n'induisent pas de mouvement. */
 @media (prefers-reduced-motion: reduce) {
   .centerTitle,
   .card {
     animation: none;
+  }
+
+  .node {
+    transition: none;
+    transform: none !important;
+  }
+
+  .aside,
+  .aside[data-on="true"] {
+    transform: translateY(-50%);
+    transition: opacity 200ms linear;
   }
 }

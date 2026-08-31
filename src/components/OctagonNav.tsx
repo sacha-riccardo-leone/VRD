@@ -1,31 +1,39 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DISCIPLINES } from "@/content/disciplines";
 import { DisciplineIcon } from "./DisciplineIcon";
+import { SchematicLoop } from "./SchematicLoop";
+import { Manifold } from "./Manifold";
+import { AirHandlingUnit } from "./AirHandlingUnit";
+import { ColonneMontanteSanitaire } from "./ColonneMontanteSanitaire";
+import { RampeGaz } from "./RampeGaz";
+import { ChaufferieIso } from "./ChaufferieIso";
+import { ReseauGainesIso } from "./ReseauGainesIso";
+import { BatimentCoupeIso } from "./BatimentCoupeIso";
 import s from "./OctagonNav.module.css";
 
 /**
- * Octogone des huit domaines : à la fois image d'ouverture et navigation vers
- * les sections détaillées, plus bas dans la page.
+ * Octogone des huit domaines : image d'ouverture et navigation vers les
+ * sections détaillées, plus bas dans la page.
  *
- * Géométrie — huit sommets d'un octogone régulier, dans le sens horaire depuis
- * midi. L'espace de travail est normalisé (viewBox 0 0 100 100) : le SVG des
- * arêtes et les nœuds partagent donc exactement le même repère, et les arêtes
- * peuvent suivre les nœuds déplacés.
+ * Géométrie — huit sommets d'un octogone régulier, sens horaire depuis midi.
+ * Repère normalisé (viewBox 0 0 100 100) partagé par les arêtes et les nœuds :
+ * les arêtes peuvent donc suivre les nœuds déplacés.
  *
- * Magnétisme — UN seul écouteur `pointermove` sur le conteneur, UNE seule
- * boucle rAF, et les transformations sont écrites directement dans le DOM par
- * refs. Aucun état React dans la boucle : aucun rendu pendant l'animation.
+ * Déplacement — ANCRÉ SUR LE NŒUD SURVOLÉ, jamais sur la position brute du
+ * curseur. Les positions sont donc déterministes : elles se calculent au rendu,
+ * les transitions CSS font le reste. Aucune boucle d'animation, aucun
+ * scintillement, aucun état bloqué en balayant rapidement les nœuds.
+ * Voisins immédiats : 12 px vers le nœud survolé. Voisins suivants : 4 px.
+ * Au-delà : rien.
  *
- * Repli — la boucle n'est jamais attachée sous 1024 px, ni sur pointeur
- * grossier, ni sous `prefers-reduced-motion`. Sous 640 px, le CSS reflue le même
- * DOM en grille de deux colonnes : les huit noms restent dans le document,
- * écrits, dès le premier rendu.
+ * Repli — sous 640 px le CSS reflue le MÊME DOM en grille de deux colonnes.
+ * Les huit noms sont écrits dans le document dès le premier rendu.
  */
 
 const N = 8;
-const R = 50; // rayon, en unités de viewBox
+const R = 50;
 const CX = 50;
 const CY = 50;
 
@@ -34,167 +42,110 @@ function vertex(i: number): [number, number] {
   const a = (-90 + i * (360 / N)) * (Math.PI / 180);
   return [CX + R * Math.cos(a), CY + R * Math.sin(a)];
 }
-
 const VERTICES: [number, number][] = Array.from({ length: N }, (_, i) => vertex(i));
 
-/** Longueur d'arête d'un octogone régulier : 2·R·sin(π/8). */
-const EDGE = 2 * R * Math.sin(Math.PI / N);
-/** Rayon d'influence : 0,6 × l'arête — deux nœuds adjacents au plus réagissent. */
-const INFLUENCE = 0.6 * EDGE;
-const MAX_PUSH = 24; // px
-const LERP = 0.15;
+/** Attraction en pixels, par distance au nœud survolé. */
+const PULL = [0, 12, 4] as const; // 0 = le nœud survolé lui-même (il ne bouge pas)
+
+/** Distance cyclique entre deux index sur l'anneau (0…4). */
+function ringGap(a: number, b: number): number {
+  const d = Math.abs(a - b);
+  return Math.min(d, N - d);
+}
+
+/**
+ * Déplacement du nœud i lorsque `hover` est survolé — vecteur unitaire de i
+ * vers le nœud survolé, multiplié par l'attraction de son rang.
+ */
+function offsetFor(i: number, hover: number | null): { x: number; y: number } {
+  if (hover === null || hover === i) return { x: 0, y: 0 };
+  const gap = ringGap(i, hover);
+  if (gap > 2) return { x: 0, y: 0 };
+  const [ax, ay] = VERTICES[i];
+  const [bx, by] = VERTICES[hover];
+  const dx = bx - ax;
+  const dy = by - ay;
+  const len = Math.hypot(dx, dy) || 1;
+  const p = PULL[gap];
+  return { x: (dx / len) * p, y: (dy / len) * p };
+}
+
+/** Le schéma affiché à droite pour chaque domaine. */
+function Schematic({ id }: { id: string }) {
+  switch (id) {
+    case "chauffage":
+      return <ChaufferieIso />;
+    case "ventilation":
+      return <AirHandlingUnit />;
+    case "froid":
+      return <SchematicLoop />;
+    case "sanitaire":
+      return <ColonneMontanteSanitaire />;
+    case "sprinkler":
+      return <Manifold />; // approximation : réseau de distribution
+    case "bim":
+      return <BatimentCoupeIso />;
+    case "mcr":
+      return <RampeGaz />; // vannes, détente, comptage : la chaîne de régulation
+    default:
+      return <ReseauGainesIso />; // énergétique — approximation
+  }
+}
 
 export function OctagonNav() {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const nodeRefs = useRef<(HTMLAnchorElement | null)[]>([]);
-  const lineRefs = useRef<(SVGLineElement | null)[]>([]);
-  const raf = useRef(0);
-
-  // État d'animation — hors de React, pour ne provoquer aucun rendu.
-  const cur = useRef(Array.from({ length: N }, () => ({ x: 0, y: 0 })));
-  const tgt = useRef(Array.from({ length: N }, () => ({ x: 0, y: 0 })));
-
-  const [active, setActive] = useState<number | null>(null);
-
-  /** Applique les positions courantes aux nœuds ET aux arêtes. */
-  const paint = useCallback((unitPerPx: number) => {
-    for (let i = 0; i < N; i++) {
-      const el = nodeRefs.current[i];
-      if (el) {
-        const { x, y } = cur.current[i];
-        el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-      }
-    }
-    // Les arêtes reprennent les sommets déplacés, convertis en unités.
-    for (let i = 0; i < N; i++) {
-      const line = lineRefs.current[i];
-      if (!line) continue;
-      const j = (i + 1) % N;
-      const a = VERTICES[i];
-      const b = VERTICES[j];
-      line.setAttribute("x1", String(a[0] + cur.current[i].x * unitPerPx));
-      line.setAttribute("y1", String(a[1] + cur.current[i].y * unitPerPx));
-      line.setAttribute("x2", String(b[0] + cur.current[j].x * unitPerPx));
-      line.setAttribute("y2", String(b[1] + cur.current[j].y * unitPerPx));
-    }
-  }, []);
+  const ringRef = useRef<HTMLDivElement>(null);
+  const [hover, setHover] = useState<number | null>(null);
+  /** Largeur du disque, pour convertir des pixels en unités de viewBox.
+   *  Mise à jour au redimensionnement seulement — jamais pendant l'animation. */
+  const [ringPx, setRingPx] = useState(640);
 
   useEffect(() => {
-    const wrap = wrapRef.current;
-    if (!wrap) return;
+    const el = ringRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => {
+      const w = el.getBoundingClientRect().width;
+      if (w > 0) setRingPx(w);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
-    // Le magnétisme ne s'attache qu'aux pointeurs fins, en large, sans réserve
-    // de mouvement. Ailleurs : rien du tout, pas même l'écouteur.
-    const ok =
-      window.matchMedia("(min-width: 1024px)").matches &&
-      window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
-      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!ok) return;
-
-    let box = wrap.getBoundingClientRect();
-    const remeasure = () => {
-      box = wrap.getBoundingClientRect();
-    };
-    const ro = new ResizeObserver(remeasure);
-    ro.observe(wrap);
-
-    const tick = () => {
-      const unitPerPx = box.width ? 100 / box.width : 0;
-      let moving = false;
-      for (let i = 0; i < N; i++) {
-        const c = cur.current[i];
-        const t = tgt.current[i];
-        c.x += (t.x - c.x) * LERP;
-        c.y += (t.y - c.y) * LERP;
-        if (Math.abs(t.x - c.x) > 0.05 || Math.abs(t.y - c.y) > 0.05) moving = true;
-      }
-      paint(unitPerPx);
-      if (moving) {
-        raf.current = requestAnimationFrame(tick);
-      } else {
-        raf.current = 0; // au repos : la boucle s'arrête d'elle-même
-      }
-    };
-
-    const start = () => {
-      if (!raf.current) raf.current = requestAnimationFrame(tick);
-    };
-
-    const onMove = (e: PointerEvent) => {
-      const px = e.clientX - box.left;
-      const py = e.clientY - box.top;
-      const pxPerUnit = box.width / 100;
-      const influencePx = INFLUENCE * pxPerUnit;
-      for (let i = 0; i < N; i++) {
-        const vx = VERTICES[i][0] * pxPerUnit;
-        const vy = VERTICES[i][1] * pxPerUnit;
-        const dx = px - vx;
-        const dy = py - vy;
-        const d = Math.hypot(dx, dy);
-        if (d < influencePx && d > 0.001) {
-          const f = Math.min(Math.max(1 - d / influencePx, 0), 1); // décroissance linéaire
-          tgt.current[i].x = (dx / d) * MAX_PUSH * f;
-          tgt.current[i].y = (dy / d) * MAX_PUSH * f;
-        } else {
-          tgt.current[i].x = 0;
-          tgt.current[i].y = 0;
-        }
-      }
-      start();
-    };
-
-    const onEnter = () => {
-      remeasure();
-      start();
-    };
-
-    const onLeave = () => {
-      for (let i = 0; i < N; i++) {
-        tgt.current[i].x = 0;
-        tgt.current[i].y = 0;
-      }
-      start(); // la boucle ramène les nœuds à l'origine, puis s'arrête
-    };
-
-    wrap.addEventListener("pointerenter", onEnter);
-    wrap.addEventListener("pointermove", onMove);
-    wrap.addEventListener("pointerleave", onLeave);
-    return () => {
-      ro.disconnect();
-      wrap.removeEventListener("pointerenter", onEnter);
-      wrap.removeEventListener("pointermove", onMove);
-      wrap.removeEventListener("pointerleave", onLeave);
-      cancelAnimationFrame(raf.current);
-      raf.current = 0;
-    };
-  }, [paint]);
-
-  const card = active === null ? null : DISCIPLINES[active];
+  const unitPerPx = 100 / ringPx;
+  const offsets = Array.from({ length: N }, (_, i) => offsetFor(i, hover));
+  const card = hover === null ? null : DISCIPLINES[hover];
 
   return (
     <div className={s.stage}>
-      <div ref={wrapRef} className={s.ring}>
-        {/* Arêtes : uniquement entre sommets ADJACENTS — jamais un maillage
-            complet. Même traitement de trait que la grille du champ thermique. */}
+      {/* Schémas : les huit sont montés en permanence et ne changent que
+          d'opacité — d'où un fondu croisé sans démontage, donc sans
+          scintillement ni schéma resté affiché. Décor pur. */}
+      <div className={s.asides} aria-hidden="true">
+        {DISCIPLINES.map((d, i) => (
+          <div key={d.id} className={s.aside} data-on={hover === i ? "true" : undefined}>
+            <Schematic id={d.id} />
+          </div>
+        ))}
+      </div>
+
+      <div ref={ringRef} className={s.ring}>
+        {/* Arêtes entre sommets ADJACENTS uniquement — jamais un maillage.
+            Les extrémités suivent les nœuds déplacés. */}
         <svg className={s.edges} viewBox="0 0 100 100" aria-hidden="true" focusable="false">
           {VERTICES.map((a, i) => {
-            const b = VERTICES[(i + 1) % N];
+            const j = (i + 1) % N;
+            const b = VERTICES[j];
             return (
               <line
                 key={i}
-                ref={(el) => {
-                  lineRefs.current[i] = el;
-                }}
-                x1={a[0]}
-                y1={a[1]}
-                x2={b[0]}
-                y2={b[1]}
+                x1={a[0] + offsets[i].x * unitPerPx}
+                y1={a[1] + offsets[i].y * unitPerPx}
+                x2={b[0] + offsets[j].x * unitPerPx}
+                y2={b[1] + offsets[j].y * unitPerPx}
               />
             );
           })}
         </svg>
 
-        {/* Centre : titre par défaut, carte au survol ou au focus. */}
         <div className={s.center}>
           <div className={s.centerInner} aria-live="polite">
             {card === null ? (
@@ -220,21 +171,27 @@ export function OctagonNav() {
           </div>
         </div>
 
-        {/* Les huit nœuds. Ordre du DOM = sens horaire depuis midi = ordre de
-            tabulation. Ce sont de vrais liens : ils fonctionnent sans JS. */}
+        {/* Ordre du DOM = sens horaire depuis midi = ordre de tabulation.
+            Vrais liens : la page fonctionne sans JavaScript. */}
         {DISCIPLINES.map((d, i) => (
           <a
             key={d.id}
-            ref={(el) => {
-              nodeRefs.current[i] = el;
-            }}
             href={`#${d.id}`}
             className={s.node}
-            style={{ left: `${VERTICES[i][0]}%`, top: `${VERTICES[i][1]}%` }}
-            onMouseEnter={() => setActive(i)}
-            onMouseLeave={() => setActive(null)}
-            onFocus={() => setActive(i)}
-            onBlur={() => setActive(null)}
+            data-hovered={hover === i ? "true" : undefined}
+            style={{
+              left: `${VERTICES[i][0]}%`,
+              top: `${VERTICES[i][1]}%`,
+              // translate3d puis scale : transform et opacité seulement, jamais
+              // une propriété qui déclencherait une mise en page.
+              transform: `translate3d(${offsets[i].x}px, ${offsets[i].y}px, 0) scale(${
+                hover === i ? 1.15 : 1
+              })`,
+            }}
+            onMouseEnter={() => setHover(i)}
+            onMouseLeave={() => setHover(null)}
+            onFocus={() => setHover(i)}
+            onBlur={() => setHover(null)}
           >
             <span className={s.nodeIcon}>
               <DisciplineIcon name={d.id} />
