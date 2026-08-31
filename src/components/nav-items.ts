@@ -9,6 +9,7 @@ export type NavItem = { href: string; label: string };
  * invisible en recherche non-marque.
  */
 export const navItems: NavItem[] = [
+  { href: "/", label: "Accueil" },
   { href: "/prestations", label: "Prestations" },
   { href: "/realisations", label: "Réalisations" },
   { href: "/a-propos", label: "À propos" },

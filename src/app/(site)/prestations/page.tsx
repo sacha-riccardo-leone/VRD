@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
 import { OctagonNav } from "@/components/OctagonNav";
-import { SchematicLoop } from "@/components/SchematicLoop";
 import s from "./page.module.css";
 
 /**
@@ -111,16 +110,6 @@ export default function PrestationsPage() {
               <li>Suivi d’exécution, mise en service, documents de révision</li>
             </ul>
           </div>
-
-          <figure className={s.figure}>
-            <SchematicLoop />
-            <figcaption className={s.caption}>
-              Boucle de chauffage&nbsp;: chaudière, circulateur, départ en trait
-              plein vers les émetteurs, retour en tireté, vase d’expansion sur
-              le retour. Schéma d’illustration — contenu de démonstration, aucun
-              projet VRD.
-            </figcaption>
-          </figure>
         </div>
       </section>
 
