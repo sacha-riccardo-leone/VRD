@@ -1,4 +1,4 @@
-/* Course de défilement. Sans portail (mobile, mouvement réduit) elle vaut un
+/* Course de défilement. Sans le survol (mobile, mouvement réduit) elle vaut un
    écran : le hero se comporte alors comme une section normale. */
 .wrap {
   position: relative;
@@ -6,15 +6,13 @@
 }
 
 .wrap[data-portal="on"] {
-  /* Deux écrans de course : la plongée est finie vite, le contenu suit. */
-  block-size: 260svh;
+  block-size: 240svh;
 }
 
 .stage {
   position: relative;
   block-size: calc(100svh - var(--header-h));
   overflow: hidden;
-  background: var(--paper);
   color: var(--ink);
 }
 
@@ -23,36 +21,32 @@
   inset-block-start: var(--header-h);
 }
 
-/* --- Derrière la plaque : le papier, et le dessin ------------------------ */
-.behind {
+/* La plaque : le fond anthracite et le champ thermique. Elle se dissout en fin
+   de course, laissant paraître le papier de la page. */
+.plate {
   position: absolute;
   inset: 0;
-  background: var(--paper-raised);
+  background: var(--paper); /* = --dark sous .technique */
 }
 
-/* ThermalField lit ces jetons au moment du rendu : on les réassigne ici pour
-   qu'il se dessine à l'encre sur le papier, sans toucher au composant. */
-.field {
+/* --- Le sigle ------------------------------------------------------------ */
+/* L'origine de la mise à l'échelle est le centre : pour « VRD », c'est le R. */
+.markWrap {
   position: absolute;
   inset: 0;
-  --on-dark-muted: var(--ink-muted);
-  --dark-rule: var(--rule);
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+  pointer-events: none;
 }
 
-/* --- La plaque percée ---------------------------------------------------- */
-.panel {
-  position: absolute;
-  inset: 0;
-  inline-size: 100%;
-  block-size: 100%;
-  pointer-events: none; /* le champ thermique garde le curseur */
-}
-
-/* Le sigle, en unités de viewBox. C'est ce qui fait le trou. */
-.markText {
-  font-family: var(--font-sans-stack);
-  font-size: 300px;
+.mark {
+  margin: 0;
+  font-size: clamp(5rem, 4rem + 14vw, 15rem);
   font-weight: 600;
+  line-height: 0.86;
   letter-spacing: -0.04em;
 }
 
@@ -60,7 +54,7 @@
 .overlay {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: 2;
   display: grid;
   align-content: end;
   gap: var(--s-4);

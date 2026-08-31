@@ -5,46 +5,45 @@ import { ThermalField } from "./ThermalField";
 import s from "./Hero.module.css";
 
 /**
- * Hero — portail. On traverse le sigle.
+ * Hero — variante (B) : le survol du sigle.
  *
- * Construction. Une plaque anthracite pleine page est PERCÉE aux lettres
- * « VRD » : masque SVG où le rectangle est opaque et le texte fait le trou.
- * Derrière la plaque, le papier et le champ thermique redessiné à l'encre. Au
- * repos, les lettres se lisent donc comme du papier à dessin avec ses lignes de
- * construction — c'est la teinte qu'avait déjà le titre, donc aucune rupture
- * visuelle avec la version précédente.
+ * Le sigle reste de l'encre pleine, il ne devient pas une fenêtre. Au
+ * défilement il grossit et passe le spectateur, pendant que la plaque
+ * anthracite se dissout : les lettres filent, la pièce sombre s'efface, on se
+ * retrouve dans le document sur papier.
  *
- * Au défilement, le masque grandit autour d'un point pris DANS LE PLEIN du R.
- * C'est ce qui ouvre : le contrepoinçon du R — le vide de sa panse — n'est pas
- * du glyphe, il resterait opaque et se refermerait au lieu de s'ouvrir. On sort
- * de la plaque noire, on passe par le R, on arrive dans le dessin.
+ * Différence avec la variante (A), le portail : ici rien n'est masqué. Aucune
+ * géométrie de glyphe à deviner, donc aucun risque que le zoom se referme sur
+ * un contrepoinçon ; et le titre reste du VRAI TEXTE, ce qui vaut mieux pour la
+ * sémantique comme pour le référencement. C'est aussi beaucoup plus simple.
  *
- * Mise en œuvre. Un seul écouteur de défilement, une seule boucle rAF, échelle
- * écrite directement dans le DOM par ref : aucun état React, donc aucun rendu
- * pendant l'animation. La plaque est en `pointer-events: none`, le champ
- * thermique continue donc de recevoir le curseur.
+ * Le centre de la mise à l'échelle est le milieu du sigle, c'est-à-dire le R :
+ * on passe donc bien par cette lettre, mais sans aperture à calibrer.
+ *
+ * Un seul écouteur de défilement, une seule boucle rAF, écriture directe dans
+ * le DOM par ref : aucun état React, aucun rendu pendant l'animation. Seules
+ * `transform` et `opacity` sont animées.
  *
  * Replis. Sous 1024 px et sous `prefers-reduced-motion` : ni épinglage, ni
- * boucle, l'écouteur n'est jamais posé et la course de défilement n'existe pas.
+ * boucle, l'ecouteur n'est jamais posé, la course de defilement n'existe pas.
  */
 
-/** Repère de zoom, en unités de viewBox : dans le PLEIN du R, pas son vide. */
-const ORIGIN_X = 566;
-const ORIGIN_Y = 408;
-/** Échelle finale. Au-delà, la lettre a de toute façon quitté l'écran. */
-const MAX_SCALE = 46;
+/** Échelle atteinte quand le sigle a fini de passer. */
+const MAX_SCALE = 14;
 
 export function Hero() {
   const wrapRef = useRef<HTMLDivElement>(null);
-  const maskRef = useRef<SVGGElement>(null);
+  const markRef = useRef<HTMLDivElement>(null);
+  const plateRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const raf = useRef(0);
 
   useEffect(() => {
     const wrap = wrapRef.current;
-    const mask = maskRef.current;
+    const mark = markRef.current;
+    const plate = plateRef.current;
     const overlay = overlayRef.current;
-    if (!wrap || !mask || !overlay) return;
+    if (!wrap || !mark || !plate || !overlay) return;
 
     const ok =
       window.matchMedia("(min-width: 1024px)").matches &&
@@ -53,17 +52,25 @@ export function Hero() {
 
     wrap.dataset.portal = "on";
 
+    const clamp = (n: number) => Math.min(Math.max(n, 0), 1);
+
     const apply = () => {
       raf.current = 0;
       const r = wrap.getBoundingClientRect();
       const course = r.height - window.innerHeight;
-      const p = course > 0 ? Math.min(Math.max(-r.top / course, 0), 1) : 0;
+      const p = course > 0 ? clamp(-r.top / course) : 0;
+
+      // Le sigle : accélère puis passe. transform + opacity seulement.
       const scale = 1 + p * p * (MAX_SCALE - 1);
-      mask.setAttribute(
-        "transform",
-        `translate(${ORIGIN_X} ${ORIGIN_Y}) scale(${scale.toFixed(3)}) translate(${-ORIGIN_X} ${-ORIGIN_Y})`,
-      );
-      overlay.style.opacity = String(Math.max(1 - p * 4, 0));
+      mark.style.transform = `scale(${scale.toFixed(3)})`;
+      mark.style.opacity = String(clamp(1 - p * 1.7));
+
+      // La plaque se dissout dans la seconde moitié, jamais avant : les
+      // lettres doivent partir avant que la pièce ne s'efface.
+      plate.style.opacity = String(clamp(1 - Math.max(p - 0.45, 0) * 2.2));
+
+      // Les textes secondaires s'effacent tôt.
+      overlay.style.opacity = String(clamp(1 - p * 4));
     };
 
     const onScroll = () => {
@@ -84,54 +91,15 @@ export function Hero() {
   return (
     <div ref={wrapRef} className={s.wrap}>
       <div className={`technique ${s.stage}`}>
-        <div className={s.behind}>
-          <div className={s.field}>
-            <ThermalField />
-          </div>
+        {/* La plaque : fond anthracite et champ thermique. Elle se dissout en
+            fin de course pour laisser paraître le papier. */}
+        <div ref={plateRef} className={s.plate}>
+          <ThermalField />
         </div>
 
-        <svg
-          className={s.panel}
-          viewBox="0 0 1200 800"
-          preserveAspectRatio="xMidYMid slice"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <defs>
-            <mask
-              id="vrd-portal"
-              maskUnits="userSpaceOnUse"
-              x="-3000"
-              y="-3000"
-              width="9000"
-              height="9000"
-            >
-              <rect x="-3000" y="-3000" width="9000" height="9000" fill="#fff" />
-              <g ref={maskRef}>
-                <text
-                  className={s.markText}
-                  x="600"
-                  y="408"
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  fill="#000"
-                >
-                  VRD
-                </text>
-              </g>
-            </mask>
-          </defs>
-          <rect
-            x="-3000"
-            y="-3000"
-            width="9000"
-            height="9000"
-            fill="var(--dark)"
-            mask="url(#vrd-portal)"
-          />
-        </svg>
-
-        <h1 className="visuallyHidden">VRD — Ingénieurs conseils</h1>
+        <div ref={markRef} className={s.markWrap}>
+          <h1 className={s.mark}>VRD</h1>
+        </div>
 
         <div ref={overlayRef} className={s.overlay}>
           <p className={s.sub}>Ingénieurs conseils</p>
