@@ -1,52 +1,56 @@
-/* Course de défilement. Sans le survol (mobile, mouvement réduit) elle vaut un
-   écran : le hero se comporte alors comme une section normale. */
-.wrap {
-  position: relative;
+/* Course de défilement : exactement un écran. Quand le masque est grand ouvert,
+   la première section arrive en haut — aucun temps mort entre les deux. */
+.spacer {
   block-size: calc(100svh - var(--header-h));
 }
 
-.wrap[data-portal="on"] {
-  block-size: 240svh;
-}
-
-.stage {
-  position: relative;
+/* La plaque est FIXE et couvre la fenêtre : la page défile derrière elle et se
+   laisse voir au travers des lettres. `pointer-events: none` pour que rien ne
+   soit intercepté ; seul le champ thermique reprend le curseur. */
+.plate {
+  position: fixed;
+  inset-block-start: var(--header-h);
+  inset-inline: 0;
   block-size: calc(100svh - var(--header-h));
+  z-index: 40;
   overflow: hidden;
   color: var(--ink);
-}
-
-.wrap[data-portal="on"] .stage {
-  position: sticky;
-  inset-block-start: var(--header-h);
-}
-
-/* La plaque : le fond anthracite et le champ thermique. Elle se dissout en fin
-   de course, laissant paraître le papier de la page. */
-.plate {
-  position: absolute;
-  inset: 0;
-  background: var(--paper); /* = --dark sous .technique */
-}
-
-/* --- Le sigle ------------------------------------------------------------ */
-/* L'origine de la mise à l'échelle est le centre : pour « VRD », c'est le R. */
-.markWrap {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  display: grid;
-  place-items: center;
-  transform-origin: 50% 50%;
-  will-change: transform, opacity;
   pointer-events: none;
 }
 
-.mark {
-  margin: 0;
-  font-size: clamp(5rem, 4rem + 14vw, 15rem);
+/* Sans portail (mobile, mouvement réduit) la plaque redevient une section
+   normale, en flux, et le sigle reste lisible au repos. */
+.plate[data-portal="off"] {
+  position: static;
+  z-index: auto;
+}
+
+/* --- Derrière la plaque : le dessin -------------------------------------- */
+/* Il ne se voit qu'au travers des lettres, et s'efface dès la plongée.
+   ThermalField lit ces jetons au rendu : on les réassigne pour qu'il se dessine
+   à l'encre sur le papier de la page, sans toucher au composant. */
+.field {
+  position: absolute;
+  inset: 0;
+  pointer-events: auto;
+  --on-dark-muted: var(--ink-muted);
+  --dark-rule: var(--rule);
+}
+
+/* --- La plaque percée ---------------------------------------------------- */
+.panel {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  pointer-events: none;
+}
+
+/* Le sigle, en unités de viewBox : c'est lui qui fait le trou. */
+.markText {
+  font-family: var(--font-sans-stack);
+  font-size: 300px;
   font-weight: 600;
-  line-height: 0.86;
   letter-spacing: -0.04em;
 }
 
@@ -54,7 +58,7 @@
 .overlay {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 1;
   display: grid;
   align-content: end;
   gap: var(--s-4);
@@ -84,20 +88,4 @@
   font-size: var(--fs-100);
   letter-spacing: var(--ls-label);
   color: var(--ink-muted);
-}
-
-/* Repère de plongée : le FÛT du R — la barre verticale pleine, en blanc — et
-   non son contrepoinçon, le vide de la panse. Viser le vide ferait grandir de
-   l'anthracite et l'écran finirait noir ; viser le plein fait grandir du blanc,
-   qui a exactement la valeur du papier de la page.
-   « VRD » étant centré, le R occupe le tiers median : son fût tombe donc un peu
-   à gauche du centre du mot. Ces deux valeurs sont les boutons de réglage. */
-.mark {
-  transform-origin: var(--dive-x, 37%) var(--dive-y, 50%);
-  will-change: transform;
-}
-
-.markWrap {
-  transform-origin: unset;
-  will-change: auto;
 }
