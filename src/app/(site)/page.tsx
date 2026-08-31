@@ -1,24 +1,16 @@
 import { Hero } from "@/components/Hero";
 import { ProofBar } from "@/components/ProofBar";
-import s from "./page.module.css";
 
 /**
- * Accueil — planche 01. Livré par incréments : pour l'instant le cartouche
- * (bloc-titre) + la Hero. Les sections 2 à 9 arrivent à leur tour, une revue
- * par section.
+ * Accueil. Contrairement aux pages intérieures, elle ne porte PAS de cartouche
+ * de planche : c'est une page d'atterrissage, elle s'annonce au lieu de se
+ * situer dans le dossier. Le hero occupe l'écran, en anthracite.
  *
- * Pas de metadata locale : le titre par défaut du layout racine
- * (« VRD ingénieurs-conseils SA ») convient pour l'accueil.
+ * Pas de metadata locale : le titre par défaut du layout racine convient.
  */
 export default function Home() {
   return (
-    <main id="contenu" className={s.page}>
-      {/* Cartouche : le bloc-titre de la planche, en mono. */}
-      <div className={s.sheet}>
-        <p className="label">Planche 01 · Accueil</p>
-        <p className="label">VRD · Sugiez (FR)</p>
-      </div>
-
+    <main id="contenu">
       <Hero />
       <ProofBar />
     </main>

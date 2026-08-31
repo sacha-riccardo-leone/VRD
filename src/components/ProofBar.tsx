@@ -1,64 +1,56 @@
+import { CountUp } from "./CountUp";
 import s from "./ProofBar.module.css";
 
 /**
- * Section 2 — Barre de preuve. Sa fonction : donner en un coup d'œil de quoi
- * situer le bureau, parce que l'audit a montré que le site actuel ne le fait
- * nulle part (équipe vide, aucune référence, certifications absentes alors
- * qu'elles existent sur LinkedIn).
+ * Section 2 — Chiffres clé.
  *
- * Intégrité du contenu — chaque valeur porte sa source :
- *  - 2020 : registre du commerce (CHE-287.600.663, inscription du 30.10.2020).
- *    Le site actuel affiche « fondée en 2021 » : contradiction avec le registre,
- *    à trancher avec VRD.
- *  - 6 collaborateurs, +200 projets : chiffres publiés par VRD.
- *  - 5 techniques : les spécialités listées sur leur site.
- *  - Certifications : vues sur LinkedIn uniquement, jamais confirmées sur une
- *    source primaire. Elles sont donc affichées SOUS RÉSERVE, marquées comme
- *    telles. On ne présente pas une qualification non vérifiée comme un fait.
+ * Source : le portfolio remis par VRD. Ce sont LEURS trois chiffres officiels —
+ * Âge 5, Collaborateurs 6, Projets réalisés +200. Deux corrections en découlent
+ * par rapport à la version précédente :
+ *  - le « 5 » désigne l'ÂGE du bureau, pas un nombre de techniques ;
+ *  - les domaines sont au nombre de HUIT (chauffage, ventilation, froid,
+ *    sanitaire, sprinkler, BIM, MCR, énergétique) et non cinq.
+ * L'année de création disparaît d'ici : elle est portée par le hero.
+ *
+ * Le nombre de projets ouvre la section, seul, et se compte à l'arrivée dans le
+ * cadre — c'est le chiffre qui porte la crédibilité du bureau.
  */
-type Stat = { value: string; label: string; note?: string };
-
-const STATS: Stat[] = [
-  { value: "2020", label: "Année de création", note: "Registre du commerce" },
-  { value: "6", label: "Collaborateurs", note: "Chiffre publié par VRD" },
-  { value: "200+", label: "Projets réalisés", note: "Chiffre publié par VRD" },
-  { value: "5", label: "Techniques maîtrisées", note: "CVCS · énergie · BIM" },
-];
-
-const CERTS = ["Minergie-P", "CECB+", "Sprinklers AEAI", "BIM"];
-
 export function ProofBar() {
   return (
     <section className={s.band} aria-labelledby="preuve-titre">
       <div className={s.inner}>
         <h2 id="preuve-titre" className={`label ${s.kicker}`}>
-          VRD en bref
+          Chiffres clé
         </h2>
 
+        {/* Le chiffre qui compte, seul sur sa ligne. */}
+        <div className={s.lead}>
+          <p className={s.leadValue}>
+            <CountUp to={200} suffix="+" />
+          </p>
+          <p className={s.leadLabel}>Projets réalisés</p>
+        </div>
+
+        {/* Les autres, alignés en dessous. */}
         <dl className={s.stats}>
-          {STATS.map((st) => (
-            <div className={s.stat} key={st.label}>
-              <dt className={s.statLabel}>{st.label}</dt>
-              <dd className={s.statValue}>{st.value}</dd>
-              {st.note ? <p className={s.statNote}>{st.note}</p> : null}
-            </div>
-          ))}
+          <div className={s.stat}>
+            <dd className={s.statValue}>6</dd>
+            <dt className={s.statLabel}>Collaborateurs</dt>
+          </div>
+          <div className={s.stat}>
+            <dd className={s.statValue}>5</dd>
+            <dt className={s.statLabel}>Ans d’existence</dt>
+          </div>
+          <div className={s.stat}>
+            <dd className={s.statValue}>8</dd>
+            <dt className={s.statLabel}>Domaines maîtrisés</dt>
+          </div>
         </dl>
 
-        <div className={s.certs}>
-          <p className={`label ${s.certsLabel}`}>
-            Qualifications <span className={s.flag}>à confirmer</span>
-          </p>
-          <ul className={s.certsList}>
-            {CERTS.map((c) => (
-              <li key={c}>{c}</li>
-            ))}
-          </ul>
-          <p className={s.certsNote}>
-            Relevées sur le profil LinkedIn du bureau, non vérifiées auprès d’une
-            source officielle — à valider avant publication.
-          </p>
-        </div>
+        <p className={s.source}>
+          Chiffres publiés par VRD — portfolio du bureau. Domaines&nbsp;: chauffage,
+          ventilation, froid, sanitaire, sprinkler, BIM, MCR, énergétique.
+        </p>
       </div>
     </section>
   );

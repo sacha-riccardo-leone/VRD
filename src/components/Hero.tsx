@@ -1,45 +1,32 @@
-import Link from "next/link";
-import { FigureBackdrop } from "./FigureBackdrop";
-import { BatimentCoupeIso } from "./BatimentCoupeIso";
+import { ThermalField } from "./ThermalField";
 import s from "./Hero.module.css";
 
 /**
- * Section 1 — Hero. Monochrome : le CTA primaire est un aplat d'encre à texte
- * papier, inversé au survol ; le secondaire est de l'encre soulignée. La
- * hiérarchie vient de l'inversion et du poids, jamais de la teinte.
+ * Section 1 — Hero. Page d'atterrissage, pas une page intérieure : plein écran,
+ * fond anthracite, tout en blanc, le champ thermique en fond réactif.
  *
- * En fond, la coupe axonométrique de bâtiment en épaisseur de substrat — elle
- * illustre le titre (« ce qui fait fonctionner un bâtiment ») sans le
- * concurrencer. Voir FigureBackdrop pour la discipline appliquée.
+ * Le contenu reprend l'identité réelle du bureau, telle qu'elle figure sur leur
+ * portfolio : le sigle VRD, « Ingénieurs conseils », et la baseline
+ * « techniques et énergétique du bâtiment ».
+ *
+ * `.technique` bascule toute la section sur la palette sombre — c'est aussi la
+ * seule surface où le mouvement est permis, et le champ thermique y vit déjà.
  */
 export function Hero() {
   return (
-    <section className={s.hero} aria-labelledby="hero-titre">
-      <FigureBackdrop placement="right" size="min(58%, 40rem)">
-        <BatimentCoupeIso />
-      </FigureBackdrop>
+    <section className={`technique ${s.hero}`} aria-labelledby="hero-titre">
+      <ThermalField />
+
       <div className={s.content}>
-      <p className={`label ${s.kicker}`}>Technique du bâtiment · CVCS</p>
-
-      <h1 id="hero-titre" className={s.title}>
-        Nous concevons ce qui fait fonctionner un bâtiment.
-      </h1>
-
-      <p className={s.lede}>
-        Bureau d’ingénieurs en technique du bâtiment à Sugiez. Chauffage, froid,
-        ventilation, sanitaire, énergie et BIM — de l’étude SIA à la mise en
-        service.
-      </p>
-
-      <div className={s.actions}>
-        <Link href="/contact" className={s.ctaPrimary}>
-          Discuter d’un projet
-        </Link>
-        <Link href="/realisations" className={s.ctaSecondary}>
-          Voir nos réalisations
-        </Link>
+        <h1 id="hero-titre" className={s.mark}>
+          VRD
+        </h1>
+        <p className={s.sub}>Ingénieurs conseils</p>
       </div>
-      </div>
+
+      <p className={s.baseline}>Techniques et énergétique du bâtiment</p>
+
+      <p className={s.stamp}>S.T. 2021</p>
     </section>
   );
 }
