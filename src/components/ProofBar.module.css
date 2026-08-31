@@ -53,6 +53,8 @@
 
 .stat {
   display: flex;
+  flex-direction: row-reverse; /* dt avant dd dans le DOM, valeur d'abord à l'écran */
+  justify-content: flex-end;
   align-items: baseline;
   gap: var(--s-4);
   padding-block: var(--s-3);

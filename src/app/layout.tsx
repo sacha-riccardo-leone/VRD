@@ -20,7 +20,6 @@ export const metadata: Metadata = {
   description:
     "Bureau d'ingénieurs-conseils en technique du bâtiment à Sugiez (FR) : chauffage, ventilation, climatisation, sanitaire.",
   robots: { index: false, follow: false, nocache: true },
-  alternates: { canonical: "/" },
 };
 
 export const viewport: Viewport = {

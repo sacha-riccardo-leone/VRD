@@ -34,16 +34,16 @@ export function ProofBar() {
         {/* Les autres, alignés en dessous. */}
         <dl className={s.stats}>
           <div className={s.stat}>
-            <dd className={s.statValue}>6</dd>
             <dt className={s.statLabel}>Collaborateurs</dt>
+            <dd className={s.statValue}>6</dd>
           </div>
           <div className={s.stat}>
-            <dd className={s.statValue}>5</dd>
             <dt className={s.statLabel}>Ans d’existence</dt>
+            <dd className={s.statValue}>5</dd>
           </div>
           <div className={s.stat}>
-            <dd className={s.statValue}>8</dd>
             <dt className={s.statLabel}>Domaines maîtrisés</dt>
+            <dd className={s.statValue}>8</dd>
           </div>
         </dl>
 

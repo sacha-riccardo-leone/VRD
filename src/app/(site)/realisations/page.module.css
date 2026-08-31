@@ -1,289 +1,198 @@
-/* ==========================================================================
-   Planche 03 — Réalisations.
-
-   L'index est la pièce maîtresse : une grille de six colonnes au-dessus de
-   64rem (marque + cinq champs), un bloc de texte mono en dessous. Le même
-   contenu, deux mises en forme, aucun duplicata dans le balisage — les
-   séparateurs « — » n'existent que dans la version étroite, où l'alignement
-   en colonnes ne peut plus faire le travail de la ponctuation.
-
-   Monochrome strict : la hiérarchie vient de l'inversion (avertissement sur
-   anthracite), du poids (intitulé du projet en encre pleine, le reste en encre
-   atténuée) et des filets (rule-strong ferme le tableau, rule sépare les
-   lignes). Aucune teinte, aucun hexadécimal — tout passe par les jetons.
-   ========================================================================== */
-
-.page {
-  padding-bottom: var(--s-4);
-}
-
-/* --- Sections courantes -------------------------------------------------- */
-
-.section {
-  max-width: var(--page-max);
-  margin-inline: auto;
-  padding: var(--s-8) var(--gutter);
-  border-top: 1px solid var(--rule);
-}
-
-.titre {
-  margin-top: var(--s-3);
-  max-width: 24ch;
-  font-size: var(--fs-600);
-}
-
-.intro {
-  margin-top: var(--s-5);
-  max-width: 58ch;
-  color: var(--ink-muted);
-}
-
-/* --- Avertissement : bande inversée, en tête de page ---------------------
-   La classe globale `.technique` réassigne les jetons de surface ; on se
-   contente ici de peindre avec eux. Une réserve de cette importance ne se
-   signale pas en petit gris sous le pli : elle prend une bande entière. */
-
-.avertissement {
-  background: var(--paper);
-  color: var(--ink);
+/* --- Chiffres d'ensemble ------------------------------------------------- */
+.totaux {
   border-block-end: 1px solid var(--rule-strong);
+  background: var(--paper-sunk);
 }
 
-.avertissementInner {
+.totauxList {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-5);
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: var(--s-7) var(--gutter);
+}
+
+@media (min-width: 46rem) {
+  .totauxList {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+  .total + .total {
+    padding-inline-start: var(--s-6);
+    border-inline-start: 1px solid var(--rule);
+  }
+}
+
+.total {
+  display: flex;
+  flex-direction: column-reverse; /* dt avant dd dans le DOM, valeur au-dessus à l'écran */
+  align-items: flex-start;
+}
+
+.totalValue {
+  margin: 0;
+  font-size: var(--fs-800);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: var(--ls-display);
+  font-variant-numeric: tabular-nums;
+}
+
+.totalLabel {
+  margin-block-end: var(--s-3); /* column-reverse : la marge basse pousse vers le haut */
+  font-family: var(--font-mono-stack);
+  font-size: var(--fs-100);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+/* --- Index --------------------------------------------------------------- */
+.index {
   max-width: var(--page-max);
   margin-inline: auto;
-  padding: var(--s-7) var(--gutter) var(--s-8);
+  padding: var(--s-8) var(--gutter) var(--s-7);
 }
 
-.marqueLigne {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--s-3);
-}
-
-/* Marqueur de réserve : encadré tireté, jamais discret. Même geste que la
-   barre de preuve de l'accueil — une donnée non vérifiée doit se voir autant
-   que la donnée elle-même. */
-.marque {
-  padding: 0.2em 0.6em;
-  border: 1px dashed var(--ink);
-  color: var(--ink);
-  font-size: var(--fs-100);
-  letter-spacing: var(--ls-label);
-  text-transform: uppercase;
-}
-
-.marqueSobre {
-  padding: 0.2em 0.6em;
-  border: 1px dashed var(--rule-strong);
-  color: var(--ink-muted);
-  font-size: var(--fs-100);
-  letter-spacing: var(--ls-label);
-  text-transform: uppercase;
-}
-
-.titreFort {
-  margin-top: var(--s-5);
-  max-width: 26ch;
-  font-size: var(--fs-700);
-}
-
-.avertissementTexte {
-  margin-top: var(--s-5);
-  max-width: 62ch;
-  color: var(--ink-muted);
-}
-
-/* --- L'index ------------------------------------------------------------- */
-
-.indexWrap {
-  margin-top: var(--s-6);
-}
-
-/* Ligne générique : bloc de texte mono en étroit, grille en large. Le mot
-   « ligne » est littéral — en dessous du point de bascule, une réalisation est
-   une phrase : PROJET — MAÎTRE D'OUVRAGE — LIEU — ANNÉE — TECHNIQUES. */
-.ligne {
-  display: block;
-  font-family: var(--font-mono-stack);
-  font-size: var(--fs-200);
-  line-height: var(--lh-snug);
-}
-
-/* En-tête de colonnes : sans objet tant que les colonnes n'existent pas. */
-.entete {
-  display: none;
-  padding-block: var(--s-3);
-  padding-inline: var(--s-3);
-}
-
-.index {
-  margin: 0;
+.list {
+  margin: var(--s-6) 0 0;
   padding: 0;
   list-style: none;
   border-block-start: 1px solid var(--rule-strong);
 }
 
-.rang {
-  /* `li` hérite de `max-width: var(--measure)` du reset global : une ligne
-     d'index doit occuper toute la largeur du tableau. */
-  max-width: none;
-  padding: var(--s-4) var(--s-3);
+/* Chaque référence est une ligne de planche : numéro, corps, chiffres. */
+.item {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-4);
+  padding-block: var(--s-6);
   border-block-end: 1px solid var(--rule);
 }
 
-/* Alternance très basse — le repère de balayage d'un tableau imprimé. */
-.rang:nth-child(even) {
-  background: var(--paper-sunk);
-}
-
-.rang:last-child {
-  border-block-end: 1px solid var(--rule-strong);
-}
-
-/* La marque de démonstration, sur CHAQUE ligne. Répétée dix fois : c'est
-   voulu. Une seule mention en haut de page se perd dès qu'on capture, copie
-   ou imprime une ligne isolée. */
-.marqueRang {
-  display: block;
-  width: fit-content;
-  margin-block-end: var(--s-2);
-  padding: 0.15em 0.5em;
-  border: 1px dashed var(--rule-strong);
-  color: var(--ink-muted);
-  font-size: var(--fs-100);
-  letter-spacing: var(--ls-label);
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.cellule {
-  color: var(--ink-muted);
-}
-
-/* Emphase par le poids et l'encre pleine, jamais par la teinte. */
-.cellulePrincipale {
-  color: var(--ink);
-  font-weight: 500;
-}
-
-.celluleAnnee {
-  font-variant-numeric: tabular-nums;
-}
-
-.separateur {
-  color: var(--ink-muted);
-}
-
-.noteIndex {
-  margin-top: var(--s-5);
-  max-width: 58ch;
-  font-family: var(--font-mono-stack);
-  font-size: var(--fs-200);
-  line-height: var(--lh-snug);
-  color: var(--ink-muted);
-}
-
-/* --- Gabarit d'une référence --------------------------------------------- */
-
-.champs {
-  display: grid;
-  gap: var(--s-5);
-  margin-top: var(--s-6);
-}
-
-.champ {
-  padding-top: var(--s-3);
-  border-top: 1px solid var(--rule);
-}
-
-/* Le <dt> porte AUSSI la classe globale `.label`, qui pose `--ink-muted`.
-   À spécificité égale, le gagnant dépendrait de l'ordre d'injection des
-   feuilles — fragile. Le sélecteur descendant tranche (0,2,0 contre 0,1,0) :
-   le terme est en encre pleine, sa définition en encre atténuée. */
-.champs .champTerme {
-  color: var(--ink);
-}
-
-.champTexte {
-  margin-top: var(--s-2);
-  max-width: 44ch;
-  font-size: var(--fs-300);
-  color: var(--ink-muted);
-}
-
-/* --- Appel : fournir les vraies références -------------------------------- */
-
-.appel {
-  position: relative; /* ancre le substrat de planche */
-  max-width: var(--page-max);
-  margin-inline: auto;
-  padding: var(--s-8) var(--gutter) var(--s-9);
-  border-top: 1px solid var(--rule-strong);
-  overflow: hidden;
-}
-
-.appelInner {
-  position: relative;
-  z-index: 1;
-}
-
-/* Sous 62rem, le substrat passerait sous le texte : il n'a plus la place de se
-   tenir à l'écart, et un fond illisible vaut moins que pas de fond. Même seuil
-   que la planche « À propos », qui pose un substrat de même emprise. */
-@media (max-width: 62rem) {
-  .appel > [aria-hidden="true"] {
-    display: none;
+@media (min-width: 52rem) {
+  .item {
+    grid-template-columns: 3rem minmax(0, 1fr) 15rem;
+    gap: var(--s-5);
+    align-items: start;
   }
 }
 
-.aFournir {
-  display: grid;
-  gap: var(--s-3);
-  margin-top: var(--s-6);
-  padding: 0;
-  list-style: none;
-  counter-reset: item;
-}
-
-.aFournir li {
-  position: relative;
-  max-width: 56ch;
-  padding-inline-start: var(--s-6);
-  font-size: var(--fs-300);
-  counter-increment: item;
-}
-
-/* Numérotation en mono, à la manière d'un repère de nomenclature. */
-.aFournir li::before {
-  content: counter(item, decimal-leading-zero);
-  position: absolute;
-  inset-inline-start: 0;
-  top: 0.2em;
+.num {
   font-family: var(--font-mono-stack);
-  font-size: var(--fs-100);
+  font-size: var(--fs-200);
   letter-spacing: var(--ls-label);
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.body {
+  min-width: 0;
+}
+
+.maitre {
+  font-size: var(--fs-600);
+  line-height: var(--lh-snug);
+}
+
+.meta {
+  margin-block-start: var(--s-3);
+  font-family: var(--font-mono-stack);
+  font-size: var(--fs-200);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
   color: var(--ink-muted);
 }
 
-.actions {
+.desc {
+  margin-block-start: var(--s-4);
+  max-width: 62ch;
+}
+
+.chiffres {
+  display: grid;
+  gap: var(--s-4);
+  margin: 0;
+  padding-block-start: var(--s-2);
+}
+
+@media (min-width: 52rem) {
+  .chiffres {
+    padding-inline-start: var(--s-5);
+    border-inline-start: 1px solid var(--rule);
+  }
+}
+
+.cLabel {
+  font-family: var(--font-mono-stack);
+  font-size: var(--fs-100);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.cValue {
+  margin: var(--s-1) 0 0;
+  font-size: var(--fs-500);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.note {
+  margin-block-start: var(--s-5);
+  font-family: var(--font-mono-stack);
+  font-size: var(--fs-200);
+  color: var(--ink-muted);
+}
+
+/* --- Clients ------------------------------------------------------------- */
+.clients {
+  border-block-start: 1px solid var(--rule-strong);
+  background: var(--paper-sunk);
+}
+
+.clientsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3) var(--s-6);
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: var(--s-5) var(--gutter) var(--s-8);
+  list-style: none;
+  font-size: var(--fs-500);
+}
+
+.clients h2 {
+  display: block;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: var(--s-7) var(--gutter) 0;
+}
+
+/* --- Appel à l'action ---------------------------------------------------- */
+.cta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--s-4);
-  margin-top: var(--s-7);
+  gap: var(--s-5);
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: var(--s-8) var(--gutter);
 }
 
-/* CTA primaire : aplat d'encre, texte papier ; il s'inverse au survol. */
-.ctaPrimary {
+.ctaText {
+  font-size: var(--fs-500);
+}
+
+.ctaLink {
   display: inline-flex;
   align-items: center;
   min-height: 48px;
   padding: var(--s-3) var(--s-5);
   background: var(--ink);
   color: var(--paper);
-  box-shadow: inset 0 0 0 2px var(--ink); /* filet visible une fois inversé */
+  box-shadow: inset 0 0 0 2px var(--ink);
   font-weight: 600;
   text-decoration: none;
   transition:
@@ -291,70 +200,8 @@
     color var(--dur-fast) var(--ease);
 }
 
-.ctaPrimary:hover,
-.ctaPrimary:focus-visible {
+.ctaLink:hover,
+.ctaLink:focus-visible {
   background: var(--paper);
   color: var(--ink);
-}
-
-.ctaSecondary {
-  display: inline-flex;
-  align-items: center;
-  min-height: 48px;
-  padding: var(--s-3) var(--s-2);
-  color: var(--ink);
-  font-weight: 600;
-  text-decoration: underline;
-  text-decoration-color: var(--ink-muted);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.35em;
-}
-
-.ctaSecondary:hover {
-  text-decoration-color: var(--ink);
-}
-
-/* --- Deux colonnes pour le gabarit --------------------------------------- */
-
-@media (min-width: 48rem) {
-  .champs {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--s-6) var(--s-7);
-  }
-}
-
-/* --- L'index passe en colonnes ------------------------------------------- */
-
-@media (min-width: 64rem) {
-  /* Première colonne en `ch` et non en `max-content` : l'en-tête et les lignes
-     sont deux grilles distinctes, et une piste `max-content` y mesurerait deux
-     contenus différents (rien d'un côté, la marque de l'autre) — les colonnes
-     ne tomberaient pas en face. Le `ch` se résout sur la même fonte mono et la
-     même taille dans les deux grilles : l'alignement est garanti. */
-  .ligne {
-    display: grid;
-    grid-template-columns:
-      16ch minmax(20ch, 2.4fr) minmax(16ch, 1.5fr)
-      minmax(9ch, 1fr) 5ch minmax(11ch, 1fr);
-    column-gap: var(--s-5);
-    align-items: baseline;
-  }
-
-  .entete {
-    display: grid;
-  }
-
-  /* La ponctuation cède la place à l'alignement : deux systèmes pour le même
-     rôle se contrediraient. */
-  .separateur {
-    display: none;
-  }
-
-  .marqueRang {
-    margin-block-end: 0;
-  }
-
-  .rang {
-    padding-block: var(--s-3);
-  }
 }
