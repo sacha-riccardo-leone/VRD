@@ -31,11 +31,6 @@ import s from "./Hero.module.css";
  * l'anthracite, pas aux lettres. Il s'efface dès que la plongée commence.
  */
 
-const HIDE_AT = 0.85;
-
-/** Un rectangle de bouchage, en unités de viewBox. */
-type Fill = { x: number; y: number; w: number; h: number };
-
 export function Hero() {
   const plateRef = useRef<HTMLDivElement>(null);
   const maskRef = useRef<SVGGElement>(null);
@@ -43,8 +38,8 @@ export function Hero() {
   const fieldRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const raf = useRef(0);
-  /** Rectangles qui bouchent le contrepoinçon du R dans le masque. */
-  const [fills, setFills] = useState<Fill[]>([]);
+  /** Contour du contrepoinçon du R, à boucher dans le masque. */
+  const [counter, setCounter] = useState("");
 
   useEffect(() => {
     const plate = plateRef.current;
@@ -81,50 +76,57 @@ export function Hero() {
     let ox = 593;
     let oy = 395;
     let maxScale = 40;
+    let coverScale = 26; // échelle à laquelle l'ouverture dépasse la fenêtre
 
     const measure = () => {
       let rA = 500;
+      let aY = 500;
       let chasse = 186;
       try {
         const a2 = text.getStartPositionOfChar(1); // le R
         const b2 = text.getEndPositionOfChar(1);
         if (b2.x > a2.x) {
           rA = a2.x;
+          aY = a2.y;
           chasse = b2.x - a2.x;
-          oy = a2.y - 300 * 0.36;
         }
       } catch {
         // Texte pas encore mis en page : on garde le repli.
       }
+      oy = aY - 300 * 0.36;
 
-      const out: Fill[] = [];
+      let pts = "";
       try {
         const cs = getComputedStyle(text);
         const size = parseFloat(cs.fontSize) || 300;
         const W = Math.ceil(size * 1.3);
-        const H = Math.ceil(size * 1.6);
+        const H = Math.ceil(size * 1.7);
         const cv = document.createElement("canvas");
         cv.width = W;
         cv.height = H;
         const c = cv.getContext("2d", { willReadFrequently: true });
         if (c) {
-          const baseline = size * 1.15;
+          const baseline = size * 1.25;
           c.font = `${cs.fontWeight} ${size}px ${cs.fontFamily}`;
           c.textBaseline = "alphabetic";
           c.fillStyle = "#000";
           c.fillText("R", 0, baseline);
-          const px = c.getImageData(0, 0, W, H).data;
 
+          // Conversion pixels -> unités de viewBox. C'EST ICI que la version
+          // précédente se trompait : elle divisait par la taille de police au
+          // lieu de la CHASSE réellement dessinée, d'où un bouchon à 62 % et
+          // décalé — la « boule » pixelisée.
+          const advance = c.measureText("R").width || size * 0.62;
+          const k = chasse / advance;
+
+          const px = c.getImageData(0, 0, W, H).data;
           const ink = (i: number) => px[i * 4 + 3] > 128;
-          // Propagation depuis le bord : marque tout l'extérieur.
+
+          // Propagation depuis le bord : tout ce que l'extérieur atteint.
           const ext = new Uint8Array(W * H);
           const stack: number[] = [];
-          for (let x = 0; x < W; x++) {
-            stack.push(x, (H - 1) * W + x);
-          }
-          for (let y = 0; y < H; y++) {
-            stack.push(y * W, y * W + W - 1);
-          }
+          for (let x = 0; x < W; x++) stack.push(x, (H - 1) * W + x);
+          for (let y = 0; y < H; y++) stack.push(y * W, y * W + W - 1);
           while (stack.length) {
             const i = stack.pop() as number;
             if (ext[i] || ink(i)) continue;
@@ -137,35 +139,39 @@ export function Hero() {
             if (y < H - 1) stack.push(i + W);
           }
 
-          // Ce qui n'est ni encre ni extérieur : le contrepoinçon.
-          const k = chasse / size; // canvas -> unités de viewBox
+          // Bords gauche et droit du contrepoinçon, ligne par ligne. On en fait
+          // un POLYGONE : des bandes d'un pixel donneraient l'escalier qu'on
+          // voyait une fois grossi treize fois.
+          const left: string[] = [];
+          const right: string[] = [];
           for (let y = 0; y < H; y++) {
-            let run = -1;
-            for (let x = 0; x <= W; x++) {
+            let lo = -1;
+            let hi = -1;
+            for (let x = 0; x < W; x++) {
               const i = y * W + x;
-              const inside = x < W && !ink(i) && !ext[i];
-              if (inside && run < 0) run = x;
-              if (!inside && run >= 0) {
-                out.push({
-                  x: rA + run * k,
-                  y: oy + (y - baseline + size * 0.36) * k,
-                  w: (x - run) * k + 0.5,
-                  h: k + 0.5,
-                });
-                run = -1;
+              if (!ink(i) && !ext[i]) {
+                if (lo < 0) lo = x;
+                hi = x;
               }
             }
+            if (lo >= 0) {
+              const sy = (aY + (y - baseline) * k).toFixed(1);
+              left.push(`${(rA + lo * k).toFixed(1)},${sy}`);
+              right.unshift(`${(rA + (hi + 1) * k).toFixed(1)},${sy}`);
+            }
           }
+          if (left.length > 2) pts = left.concat(right).join(" ");
         }
       } catch {
-        // Canvas indisponible : le contrepoinçon restera visible, sans plus.
+        // Canvas indisponible : le contrepoinçon restera ouvert, sans plus.
       }
-      setFills(out);
+      setCounter(pts);
 
-      // Le trou fait maintenant toute la largeur du R : on plonge en son centre.
+      // Le trou fait toute la largeur du R : on plonge en son centre.
       ox = rA + chasse * 0.5;
       const demi = Math.max(chasse * 0.34, 1);
-      maxScale = Math.max(Math.max(ox, 1200 - ox) / demi, 12) * 1.5;
+      coverScale = Math.max(Math.max(ox, 1200 - ox) / demi, 8);
+      maxScale = coverScale * 1.6;
     };
 
     const clamp = (n: number) => Math.min(Math.max(n, 0), 1);
@@ -189,7 +195,11 @@ export function Hero() {
       // n'affiche plus un seul pixel d'anthracite, on peut donc la retirer sans
       // transition — personne ne peut voir disparaître ce qui ne se voyait déjà
       // plus. Cela libère aussi le contenu de tout recouvrement.
-      plate.style.visibility = p >= HIDE_AT ? "hidden" : "visible";
+      // Retrait fondé sur la COUVERTURE réelle, pas sur une fraction devinée :
+      // dès que l'ouverture dépasse la fenêtre, la plaque n'affiche plus rien
+      // et peut partir sans que cela se voie. Un seuil fixe la faisait
+      // disparaître alors qu'un morceau de lettre était encore à l'écran.
+      plate.style.visibility = scale >= coverScale * 1.05 ? "hidden" : "visible";
     };
 
     const onScroll = () => {
@@ -241,12 +251,10 @@ export function Hero() {
                 <text className={s.markText} x="600" y="500" textAnchor="middle" fill="#000">
                   VRD
                 </text>
-                {/* Bandes qui bouchent le contrepoinçon du R : sans elles il
-                    reste un îlot opaque au milieu du trou, qui balaie l'écran
-                    pendant la plongée. */}
-                {fills.map((f, i) => (
-                  <rect key={i} x={f.x} y={f.y} width={f.w} height={f.h} fill="#000" />
-                ))}
+                {/* Bouche le contrepoinçon du R : sans lui, un îlot opaque
+                    subsiste au milieu du trou et balaie l'écran pendant la
+                    plongée. */}
+                {counter ? <polygon points={counter} fill="#000" /> : null}
               </g>
             </mask>
           </defs>
