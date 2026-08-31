@@ -1,0 +1,129 @@
+.figure {
+  margin: 0;
+  padding: var(--s-6);
+  border: 1px solid var(--rule-strong);
+  background: var(--paper-sunk);
+  color: var(--ink);
+}
+
+.head {
+  margin-block-end: var(--s-6);
+}
+
+.kicker {
+  margin-block-end: var(--s-4);
+}
+
+.lead {
+  display: grid;
+  gap: var(--s-3);
+}
+
+.leadValue {
+  font-size: var(--fs-800);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: var(--ls-display);
+  font-variant-numeric: tabular-nums;
+}
+
+.leadLabel {
+  max-width: 30ch;
+  font-family: var(--font-mono-stack);
+  font-size: var(--fs-200);
+  line-height: var(--lh-snug);
+  color: var(--ink-muted);
+}
+
+/* --- La barre ------------------------------------------------------------ */
+.chart {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  overflow: visible;
+}
+
+.seg {
+  stroke: currentColor;
+  stroke-width: 0.4;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Ligne de cote : le vocabulaire de la planche, jusque dans un graphique. */
+.dim line {
+  stroke: currentColor;
+  stroke-width: 0.6;
+  vector-effect: non-scaling-stroke;
+}
+
+.dimText {
+  font-family: var(--font-mono-stack);
+  font-size: 3px;
+  fill: var(--ink-muted);
+  letter-spacing: 0.06em;
+}
+
+/* --- Légende ------------------------------------------------------------- */
+.legend {
+  display: grid;
+  gap: var(--s-3);
+  margin-block-start: var(--s-6);
+  padding: 0;
+  list-style: none;
+}
+
+.legend li {
+  display: grid;
+  grid-template-columns: 1.25rem 1fr auto;
+  align-items: center;
+  gap: var(--s-3);
+  padding-block-end: var(--s-3);
+  border-block-end: 1px solid var(--rule);
+}
+
+/* Les pastilles reprennent les trois remplissages de la barre : aplat,
+   hachures serrées, hachures espacées. Aucune teinte en jeu. */
+.swatch {
+  inline-size: 1.25rem;
+  block-size: 0.9rem;
+  border: 1px solid currentColor;
+}
+
+.swatch[data-fill="solid"] {
+  background: currentColor;
+}
+
+.swatch[data-fill="hatch"] {
+  background-image: repeating-linear-gradient(
+    45deg,
+    currentColor 0 1.4px,
+    transparent 1.4px 4.2px
+  );
+}
+
+.swatch[data-fill="light"] {
+  background-image: repeating-linear-gradient(
+    45deg,
+    currentColor 0 0.9px,
+    transparent 0.9px 5.4px
+  );
+}
+
+.legLabel {
+  font-size: var(--fs-300);
+}
+
+.legValue {
+  font-family: var(--font-mono-stack);
+  font-size: var(--fs-300);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+}
+
+.source {
+  margin-block-start: var(--s-5);
+  font-family: var(--font-mono-stack);
+  font-size: var(--fs-100);
+  line-height: var(--lh-snug);
+  color: var(--ink-muted);
+}

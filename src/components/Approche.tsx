@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CoutCycleVie } from "./CoutCycleVie";
 import s from "./Approche.module.css";
 
 /**
@@ -22,6 +23,7 @@ export function Approche() {
   return (
     <section className={s.band} aria-labelledby="approche-titre">
       <div className={s.inner}>
+        <div className={s.text}>
         <p className={`label ${s.kicker}`}>
           Notre approche <span className={s.flag}>à valider par VRD</span>
         </p>
@@ -38,28 +40,13 @@ export function Approche() {
           du fournisseur.
         </p>
 
-        <ul className={s.criteres}>
-          <li>
-            <span className={s.critNum}>01</span>
-            <span className={s.critLabel}>Coût d’entretien</span>
-          </li>
-          <li>
-            <span className={s.critNum}>02</span>
-            <span className={s.critLabel}>Coût énergétique</span>
-          </li>
-          <li>
-            <span className={s.critNum}>03</span>
-            <span className={s.critLabel}>Durée de vie</span>
-          </li>
-          <li>
-            <span className={s.critNum}>04</span>
-            <span className={s.critLabel}>Pérennité du fournisseur</span>
-          </li>
-        </ul>
 
-        <Link href="/prestations" className={s.link}>
-          Voir nos prestations
-        </Link>
+          <Link href="/prestations" className={s.link}>
+            Voir nos prestations
+          </Link>
+        </div>
+
+        <CoutCycleVie />
       </div>
     </section>
   );
