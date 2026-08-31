@@ -29,7 +29,7 @@ import s from "./Hero.module.css";
  */
 
 /** Échelle atteinte quand le sigle a fini de passer. */
-const MAX_SCALE = 14;
+const MAX_SCALE = 26;
 
 export function Hero() {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -60,14 +60,17 @@ export function Hero() {
       const course = r.height - window.innerHeight;
       const p = course > 0 ? clamp(-r.top / course) : 0;
 
-      // Le sigle : accélère puis passe. transform + opacity seulement.
+      // Le sigle grandit SANS JAMAIS s'effacer : c'est son blanc qui devient
+      // la page. Le repère de mise à l'échelle est posé dans le FÛT du R — le
+      // plein — et non dans son contrepoinçon, le vide de la panse : viser ce
+      // vide ferait grandir de l'anthracite et l'écran finirait noir.
       const scale = 1 + p * p * (MAX_SCALE - 1);
       mark.style.transform = `scale(${scale.toFixed(3)})`;
-      mark.style.opacity = String(clamp(1 - p * 1.7));
 
-      // La plaque se dissout dans la seconde moitié, jamais avant : les
-      // lettres doivent partir avant que la pièce ne s'efface.
-      plate.style.opacity = String(clamp(1 - Math.max(p - 0.45, 0) * 2.2));
+      // La plaque anthracite cède en fin de course. Le blanc de la lettre et le
+      // papier de la page ont exactement la même valeur : la jonction est donc
+      // invisible, et tout finit en papier.
+      plate.style.opacity = String(clamp(1 - Math.max(p - 0.55, 0) * 2.6));
 
       // Les textes secondaires s'effacent tôt.
       overlay.style.opacity = String(clamp(1 - p * 4));

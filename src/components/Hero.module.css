@@ -85,3 +85,19 @@
   letter-spacing: var(--ls-label);
   color: var(--ink-muted);
 }
+
+/* Repère de plongée : le FÛT du R — la barre verticale pleine, en blanc — et
+   non son contrepoinçon, le vide de la panse. Viser le vide ferait grandir de
+   l'anthracite et l'écran finirait noir ; viser le plein fait grandir du blanc,
+   qui a exactement la valeur du papier de la page.
+   « VRD » étant centré, le R occupe le tiers median : son fût tombe donc un peu
+   à gauche du centre du mot. Ces deux valeurs sont les boutons de réglage. */
+.mark {
+  transform-origin: var(--dive-x, 37%) var(--dive-y, 50%);
+  will-change: transform;
+}
+
+.markWrap {
+  transform-origin: unset;
+  will-change: auto;
+}
