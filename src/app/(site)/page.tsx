@@ -1,5 +1,6 @@
 import { Hero } from "@/components/Hero";
 import { ProofBar } from "@/components/ProofBar";
+import { Approche } from "@/components/Approche";
 
 /**
  * Accueil. Contrairement aux pages intérieures, elle ne porte PAS de cartouche
@@ -13,6 +14,7 @@ export default function Home() {
     <main id="contenu">
       <Hero />
       <ProofBar />
+      <Approche />
     </main>
   );
 }
