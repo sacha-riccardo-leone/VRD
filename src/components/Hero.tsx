@@ -19,13 +19,15 @@ import s from "./Hero.module.css";
  * est grand ouvert, la première section arrive en haut de l'écran — aucun temps
  * mort, aucune page blanche entre les deux.
  *
- * Le repère du fût du R n'est plus deviné : il est MESURÉ au montage, avec
- * getStartPositionOfChar / getEndPositionOfChar sur le glyphe. Viser le
- * contrepoinçon — le vide de la panse — faisait grandir de l'anthracite et
- * finissait en noir ; c'est ce qui a fait échouer les deux essais précédents.
+ * Le repère du fût du R est MESURÉ sur un jumeau du texte réellement rendu :
+ * un <text> placé dans <defs> n'est jamais mis en page, les API de mesure y
+ * échouent, et le repli tombait sur le centre exact de « VRD » — c'est-à-dire
+ * le contrepoinçon du R. L'anthracite grandissait alors au lieu du blanc, d'où
+ * l'écran noir. La plaque s'efface en outre sur le dernier quart de la course :
+ * quelle que soit la géométrie, elle ne peut plus recouvrir le contenu.
  *
- * Le champ thermique vit derrière la plaque : il n'est donc visible qu'au
- * travers des lettres, et s'efface dès que la plongée commence.
+ * Le champ thermique se dessine PAR-DESSUS la plaque : il appartient à
+ * l'anthracite, pas aux lettres. Il s'efface dès que la plongée commence.
  */
 
 const MAX_SCALE = 60;
@@ -33,7 +35,7 @@ const MAX_SCALE = 60;
 export function Hero() {
   const plateRef = useRef<HTMLDivElement>(null);
   const maskRef = useRef<SVGGElement>(null);
-  const textRef = useRef<SVGTextElement>(null);
+  const measureRef = useRef<SVGTextElement>(null);
   const fieldRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const raf = useRef(0);
@@ -41,7 +43,7 @@ export function Hero() {
   useEffect(() => {
     const plate = plateRef.current;
     const mask = maskRef.current;
-    const text = textRef.current;
+    const text = measureRef.current;
     const field = fieldRef.current;
     const overlay = overlayRef.current;
     if (!plate || !mask || !text || !field || !overlay) return;
@@ -54,17 +56,22 @@ export function Hero() {
       return;
     }
 
-    // Repère de plongée MESURÉ sur le glyphe, jamais deviné : le R est le
-    // caractère d'index 1, et son fût occupe le bord gauche de sa chasse.
-    let ox = 600;
-    let oy = 400;
+    // Repère de plongée mesuré sur le glyphe. La mesure porte sur un texte
+    // RÉELLEMENT RENDU (invisible mais dans l'arbre de rendu) : un <text> placé
+    // dans <defs> n'est jamais mis en page, getStartPositionOfChar y échoue, et
+    // le repli tombait alors sur le centre exact de « VRD » — c'est-à-dire le
+    // contrepoinçon du R. D'où l'écran noir.
+    let ox = 470; // repli : à gauche du centre, donc du côté du fût
+    let oy = 395;
     try {
-      const a = text.getStartPositionOfChar(1);
+      const a = text.getStartPositionOfChar(1); // le R
       const b = text.getEndPositionOfChar(1);
-      ox = a.x + (b.x - a.x) * 0.17; // dans le fût, pas dans la panse
-      oy = a.y - 300 * 0.36; // à mi-hauteur de capitale au-dessus de la ligne de pied
+      if (b.x > a.x) {
+        ox = a.x + (b.x - a.x) * 0.17; // dans le fût, pas dans la panse
+        oy = a.y - 300 * 0.36; // à mi-hauteur de capitale
+      }
     } catch {
-      // Police pas encore chargée : on garde le repère par défaut.
+      // Police pas encore chargée : le repli reste du côté du plein.
     }
 
     const clamp = (n: number) => Math.min(Math.max(n, 0), 1);
@@ -84,7 +91,10 @@ export function Hero() {
       field.style.opacity = String(clamp(1 - p * 3));
       overlay.style.opacity = String(clamp(1 - p * 4));
 
-      // Une fois grand ouvert, la plaque ne doit plus rien intercepter.
+      // Filet de sécurité : quelle que soit la géométrie, la plaque s'efface
+      // sur le dernier quart. Sans cela, l'anthracite qui subsiste entre les
+      // lettres écartées finit par recouvrir le contenu.
+      plate.style.opacity = String(clamp((1 - p) / 0.25));
       plate.style.visibility = p >= 0.999 ? "hidden" : "visible";
     };
 
@@ -108,11 +118,6 @@ export function Hero() {
       <div className={s.spacer} />
 
       <div ref={plateRef} className={`technique ${s.plate}`}>
-        {/* Derrière la plaque, donc visible seulement au travers des lettres. */}
-        <div ref={fieldRef} className={s.field}>
-          <ThermalField />
-        </div>
-
         <svg
           className={s.panel}
           viewBox="0 0 1200 800"
@@ -131,19 +136,28 @@ export function Hero() {
             >
               <rect x="-6000" y="-6000" width="18000" height="18000" fill="#fff" />
               <g ref={maskRef}>
-                <text
-                  ref={textRef}
-                  className={s.markText}
-                  x="600"
-                  y="500"
-                  textAnchor="middle"
-                  fill="#000"
-                >
+                <text className={s.markText} x="600" y="500" textAnchor="middle" fill="#000">
                   VRD
                 </text>
               </g>
             </mask>
           </defs>
+
+          {/* Jumeau de mesure : identique au texte du masque, mais RENDU —
+              seul un élément mis en page répond à getStartPositionOfChar.
+              Invisible par fill-opacity, et non par visibility, pour rester
+              dans l'arbre de rendu. */}
+          <text
+            ref={measureRef}
+            className={s.markText}
+            x="600"
+            y="500"
+            textAnchor="middle"
+            fillOpacity={0}
+            aria-hidden="true"
+          >
+            VRD
+          </text>
           <rect
             x="-6000"
             y="-6000"
@@ -153,6 +167,12 @@ export function Hero() {
             mask="url(#vrd-portal)"
           />
         </svg>
+
+        {/* AU-DESSUS de la plaque : le dessin appartient à l'anthracite, pas
+            aux lettres. Il s'efface dès que la plongée commence. */}
+        <div ref={fieldRef} className={s.field}>
+          <ThermalField />
+        </div>
 
         <div ref={overlayRef} className={s.overlay}>
           <p className={s.sub}>Ingénieurs conseils</p>

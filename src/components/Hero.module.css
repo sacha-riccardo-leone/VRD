@@ -25,16 +25,15 @@
   z-index: auto;
 }
 
-/* --- Derrière la plaque : le dessin -------------------------------------- */
-/* Il ne se voit qu'au travers des lettres, et s'efface dès la plongée.
-   ThermalField lit ces jetons au rendu : on les réassigne pour qu'il se dessine
-   à l'encre sur le papier de la page, sans toucher au composant. */
+/* --- Au-dessus de la plaque : le dessin ---------------------------------- */
+/* Le champ appartient à l'anthracite, pas aux lettres : il se dessine donc
+   par-dessus la plaque, dans ses teintes sombres d'origine (aucun jeton n'est
+   réassigné ici). Il s'efface dès que la plongée commence. */
 .field {
   position: absolute;
   inset: 0;
+  z-index: 2;
   pointer-events: auto;
-  --on-dark-muted: var(--ink-muted);
-  --dark-rule: var(--rule);
 }
 
 /* --- La plaque percée ---------------------------------------------------- */
