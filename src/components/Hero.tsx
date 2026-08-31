@@ -37,6 +37,32 @@ import s from "./Hero.module.css";
  * l'anthracite, pas aux lettres. Il s'efface dès que la plongée commence.
  */
 
+/**
+ * Étendue du masque et des deux rectangles, en unités de viewBox.
+ *
+ * NE PAS AGRANDIR. Un `<mask>` n'est pas un découpage vectoriel : le navigateur
+ * en RASTÉRISE une surface, à la résolution de l'écran, de la taille de la
+ * région déclarée. La version précédente déclarait 18000 × 18000 unités « pour
+ * être tranquille ». Sous `slice`, une fenêtre de 1920 × 1080 donne un facteur
+ * d'échelle de 1,5875 : la surface demandée valait 28 575 × 28 575 pixels, soit
+ * 816 mégapixels, quand la dimension maximale d'une texture est de 16 384 chez
+ * la plupart des pilotes. Dépassée, elle est sous-échantillonnée ou abandonnée —
+ * d'où le rendu pixelisé, les morceaux de lettre qui disparaissent d'un coup, et
+ * l'anthracite qui subsiste en plein écran alors que la géométrie dit le
+ * contraire. Le défaut EMPIRE quand la fenêtre grandit, puisque le facteur
+ * d'échelle grandit avec elle.
+ *
+ * Cette étendue-ci suffit et se démontre : sous `preserveAspectRatio` en mode
+ * `slice`, k = max(L/1200, H/800), donc la largeur visible vaut L/k ≤ 1200 et la
+ * hauteur H/k ≤ 800. La région visible est TOUJOURS un sous-rectangle de la
+ * viewBox, quelle que soit la fenêtre. Le liseré de 8 unités absorbe l'anticrénelage
+ * du bord. Coût : 2,5 mégapixels au lieu de 816.
+ *
+ * Le glyphe agrandi déborde largement, et c'est sans effet : ce qui déborde est
+ * hors champ par construction.
+ */
+const ZONE = { x: -8, y: -8, w: 1216, h: 816 };
+
 export function Hero() {
   const plateRef = useRef<HTMLDivElement>(null);
   const maskRef = useRef<SVGGElement>(null);
@@ -232,12 +258,12 @@ export function Hero() {
             <mask
               id="vrd-portal"
               maskUnits="userSpaceOnUse"
-              x="-6000"
-              y="-6000"
-              width="18000"
-              height="18000"
+              x={ZONE.x}
+              y={ZONE.y}
+              width={ZONE.w}
+              height={ZONE.h}
             >
-              <rect x="-6000" y="-6000" width="18000" height="18000" fill="#fff" />
+              <rect x={ZONE.x} y={ZONE.y} width={ZONE.w} height={ZONE.h} fill="#fff" />
               <g ref={maskRef}>
                 <text className={s.markText} x="600" y="500" textAnchor="middle" fill="#000">
                   VRD
@@ -262,10 +288,10 @@ export function Hero() {
             VRD
           </text>
           <rect
-            x="-6000"
-            y="-6000"
-            width="18000"
-            height="18000"
+            x={ZONE.x}
+            y={ZONE.y}
+            width={ZONE.w}
+            height={ZONE.h}
             fill="var(--dark)"
             mask="url(#vrd-portal)"
           />
