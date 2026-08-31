@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
 import { OctagonNav } from "@/components/OctagonNav";
-import { DISCIPLINES } from "@/content/disciplines";
 import { SchematicLoop } from "@/components/SchematicLoop";
 import s from "./page.module.css";
 
@@ -55,43 +54,7 @@ export default function PrestationsPage() {
         <OctagonNav />
       </section>
 
-      {/* Marquage du contenu représentatif — visible à l’écran, en tête de
-          page, avant toute affirmation. */}
-      <div className={s.noteWrap}>
-        <aside className={s.note} aria-labelledby="note-relecture-titre">
-          <p id="note-relecture-titre" className={`label ${s.noteLabel}`}>
-            Note de relecture{" "}
-            <span className={s.flag}>contenu représentatif</span>
-          </p>
-          <p className={s.noteText}>
-            Les cinq techniques ci-dessous sont bien celles que VRD affiche, et
-            elles correspondent au but inscrit au registre du commerce. Le
-            détail des prestations et le déroulé annoncé, eux, décrivent une
-            mission d’ingénierie-conseil type&nbsp;: ils ont été rédigés pour
-            cette maquette et doivent être relus, corrigés ou remplacés par le
-            bureau avant publication. Aucun projet, aucun client, aucune
-            référence et aucune certification n’y figurent — rien de tout cela
-            n’est public à ce jour.
-          </p>
-        </aside>
-      </div>
 
-      {/* Sommaire — l’index de la planche. Cinq entrées, cinq ancres. */}
-      <nav className={s.sommaire} aria-labelledby="sommaire-titre">
-        <h2 id="sommaire-titre" className={`label ${s.sommaireLabel}`}>
-          Sommaire des techniques
-        </h2>
-        <ol className={s.sommaireList}>
-          {DISCIPLINES.map((d, i) => (
-            <li key={d.id}>
-              <a className={s.sommaireLink} href={`#${d.id}`}>
-                <span className="label">{String(i + 1).padStart(2, "0")}</span>
-                <span className={s.sommaireName}>{d.label}</span>
-              </a>
-            </li>
-          ))}
-        </ol>
-      </nav>
 
       {/* --- 01 · Chauffage & froid ------------------------------------- */}
       <section
