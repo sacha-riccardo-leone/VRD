@@ -315,3 +315,22 @@
 .ctaSecondary:hover {
   text-decoration-color: var(--ink);
 }
+
+/* --- Octogone d'ouverture ------------------------------------------------ */
+/* Pleine largeur, hors de la colonne de texte : la section porte `.technique`,
+   donc tous les jetons d'encre y sont déjà inversés sur anthracite. */
+.octogone {
+  background: var(--paper); /* = --dark sous .technique */
+  color: var(--ink);
+  border-block-end: 1px solid var(--rule-strong);
+}
+
+/* Réserve de contenu manquant — même traitement que les autres marqueurs de la
+   page : encadré tireté, jamais discret. */
+.todo {
+  margin-block-start: var(--s-4);
+  padding: var(--s-4);
+  border: 1px dashed var(--rule-strong);
+  font-size: var(--fs-300);
+  color: var(--ink-muted);
+}

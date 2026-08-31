@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
+import { OctagonNav } from "@/components/OctagonNav";
+import { DISCIPLINES } from "@/content/disciplines";
 import { SchematicLoop } from "@/components/SchematicLoop";
 import s from "./page.module.css";
 
@@ -46,6 +48,13 @@ export default function PrestationsPage() {
         lede="Chauffage et froid, ventilation, sanitaire, énergétique, BIM. Voici ce que chacune recouvre dans une mission d’ingénierie-conseil, et à quel moment elle intervient."
       />
 
+      <section className={`technique ${s.octogone}`} aria-labelledby="octogone-titre">
+        <h2 id="octogone-titre" className="visuallyHidden">
+          Nos huit techniques
+        </h2>
+        <OctagonNav />
+      </section>
+
       {/* Marquage du contenu représentatif — visible à l’écran, en tête de
           page, avant toute affirmation. */}
       <div className={s.noteWrap}>
@@ -73,53 +82,31 @@ export default function PrestationsPage() {
           Sommaire des techniques
         </h2>
         <ol className={s.sommaireList}>
-          <li>
-            <a className={s.sommaireLink} href="#chauffage-froid">
-              <span className="label">01</span>
-              <span className={s.sommaireName}>Chauffage &amp; froid</span>
-            </a>
-          </li>
-          <li>
-            <a className={s.sommaireLink} href="#ventilation">
-              <span className="label">02</span>
-              <span className={s.sommaireName}>Ventilation</span>
-            </a>
-          </li>
-          <li>
-            <a className={s.sommaireLink} href="#sanitaire">
-              <span className="label">03</span>
-              <span className={s.sommaireName}>Sanitaire</span>
-            </a>
-          </li>
-          <li>
-            <a className={s.sommaireLink} href="#energetique">
-              <span className="label">04</span>
-              <span className={s.sommaireName}>Énergétique</span>
-            </a>
-          </li>
-          <li>
-            <a className={s.sommaireLink} href="#bim">
-              <span className="label">05</span>
-              <span className={s.sommaireName}>BIM &amp; coordination</span>
-            </a>
-          </li>
+          {DISCIPLINES.map((d, i) => (
+            <li key={d.id}>
+              <a className={s.sommaireLink} href={`#${d.id}`}>
+                <span className="label">{String(i + 1).padStart(2, "0")}</span>
+                <span className={s.sommaireName}>{d.label}</span>
+              </a>
+            </li>
+          ))}
         </ol>
       </nav>
 
       {/* --- 01 · Chauffage & froid ------------------------------------- */}
       <section
-        id="chauffage-froid"
+        id="chauffage"
         className={s.tech}
-        aria-labelledby="chauffage-froid-titre"
+        aria-labelledby="chauffage-titre"
       >
         <div className={s.techInner}>
           <div className={s.techHead}>
             <p className={`label ${s.techLabel}`}>
-              Technique&nbsp;01&nbsp;/&nbsp;05{" "}
+              Technique&nbsp;01&nbsp;/&nbsp;08{" "}
               <span className={s.flag}>contenu représentatif</span>
             </p>
-            <h2 id="chauffage-froid-titre" className={s.techTitle}>
-              Chauffage &amp; froid
+            <h2 id="chauffage-titre" className={s.techTitle}>
+              Chauffage
             </h2>
             <p className={s.claim}>
               Production, distribution, émission&nbsp;: des installations
@@ -137,11 +124,10 @@ export default function PrestationsPage() {
               circulateurs, équilibrage des colonnes et des boucles.
             </p>
             <p>
-              Le froid obéit à la même logique, avec ses charges d’été et sa
-              gestion de la condensation. Le bureau établit les schémas de
-              principe et les plans, rédige les descriptifs d’appel d’offres,
-              compare les soumissions, puis suit l’exécution jusqu’à la mise en
-              service et à la remise des documents de révision.
+              Le bureau établit les schémas de principe et les plans, rédige les
+              descriptifs d’appel d’offres, compare les soumissions, puis suit
+              l’exécution jusqu’à la mise en service et à la remise des documents
+              de révision.
             </p>
 
             <p className={`label ${s.listLabel}`}>
@@ -184,7 +170,7 @@ export default function PrestationsPage() {
         <div className={s.techInner}>
           <div className={s.techHead}>
             <p className={`label ${s.techLabel}`}>
-              Technique&nbsp;02&nbsp;/&nbsp;05{" "}
+              Technique&nbsp;02&nbsp;/&nbsp;08{" "}
               <span className={s.flag}>contenu représentatif</span>
             </p>
             <h2 id="ventilation-titre" className={s.techTitle}>
@@ -233,6 +219,34 @@ export default function PrestationsPage() {
         </div>
       </section>
 
+      <section id="froid" className={s.tech} aria-labelledby="froid-titre">
+        <div className={s.techInner}>
+          <div className={s.techHead}>
+            <p className={`label ${s.techLabel}`}>
+              Technique&nbsp;03&nbsp;/&nbsp;08{" "}
+              <span className={s.flag}>contenu représentatif</span>
+            </p>
+            <h2 id="froid-titre" className={s.techTitle}>
+              Froid
+            </h2>
+            
+          </div>
+
+          <div className={s.techBody}>
+            <p>
+              Le froid obéit à la même logique, avec ses charges d’été et sa
+              gestion de la condensation.
+            </p>
+            <p className={s.todo}>
+              <strong>Contenu à fournir.</strong> Le site actuel ne décrit le
+              froid que par cette phrase, à l’intérieur du chapitre chauffage.
+              Un descriptif propre reste à rédiger avec VRD.
+            </p>
+          </div>
+        </div>
+      </section>
+
+
       {/* --- 03 · Sanitaire --------------------------------------------- */}
       <section
         id="sanitaire"
@@ -242,7 +256,7 @@ export default function PrestationsPage() {
         <div className={s.techInner}>
           <div className={s.techHead}>
             <p className={`label ${s.techLabel}`}>
-              Technique&nbsp;03&nbsp;/&nbsp;05{" "}
+              Technique&nbsp;04&nbsp;/&nbsp;08{" "}
               <span className={s.flag}>contenu représentatif</span>
             </p>
             <h2 id="sanitaire-titre" className={s.techTitle}>
@@ -293,7 +307,108 @@ export default function PrestationsPage() {
         </div>
       </section>
 
+      <section id="sprinkler" className={s.tech} aria-labelledby="sprinkler-titre">
+        <div className={s.techInner}>
+          <div className={s.techHead}>
+            <p className={`label ${s.techLabel}`}>
+              Technique&nbsp;05&nbsp;/&nbsp;08{" "}
+              <span className={s.flag}>contenu représentatif</span>
+            </p>
+            <h2 id="sprinkler-titre" className={s.techTitle}>
+              Sprinkler
+            </h2>
+            
+          </div>
+
+          <div className={s.techBody}>
+            <p className={s.todo}>
+              <strong>Contenu à fournir.</strong> Ce domaine figure parmi les huit
+              du portfolio de VRD, mais aucun descriptif n’existe à ce jour — ni
+              sur le site actuel, ni dans le portfolio. À rédiger avec le bureau.
+            </p>
+          </div>
+        </div>
+      </section>
+
+
       {/* --- 04 · Énergétique ------------------------------------------- */}
+
+      {/* --- 05 · BIM & coordination ------------------------------------ */}
+      <section id="bim" className={s.tech} aria-labelledby="bim-titre">
+        <div className={s.techInner}>
+          <div className={s.techHead}>
+            <p className={`label ${s.techLabel}`}>
+              Technique&nbsp;06&nbsp;/&nbsp;08{" "}
+              <span className={s.flag}>contenu représentatif</span>
+            </p>
+            <h2 id="bim-titre" className={s.techTitle}>
+              BIM &amp; coordination
+            </h2>
+            <p className={s.claim}>
+              Une maquette unique, tous les corps d’état alignés.
+            </p>
+          </div>
+
+          <div className={s.techBody}>
+            <p>
+              Chauffage, ventilation et sanitaire se modélisent dans une
+              maquette exportée en IFC, avec des rôles, des échanges et un
+              niveau de détail fixés au démarrage plutôt que subis en cours de
+              route. La coordination se fait sur la maquette fédérée&nbsp;: les
+              collisions sont détectées, arbitrées en séance, puis corrigées
+              avant que quiconque ne perce une dalle.
+            </p>
+            <p>
+              Réservations, gaines techniques et hauteurs de faux plafond
+              sortent du même modèle que les plans&nbsp;: une seule référence,
+              donc pas d’écart entre les documents. Les quantités extraites de
+              la maquette alimentent les descriptifs d’appel d’offres et le
+              suivi des coûts.
+            </p>
+
+            <p className={`label ${s.listLabel}`}>
+              Prestations <span className={s.flag}>à valider</span>
+            </p>
+            <ul className={s.list}>
+              <li>Modélisation des réseaux CVCS et export IFC</li>
+              <li>
+                Rôles, échanges et niveaux de détail définis par phase de projet
+              </li>
+              <li>
+                Maquette fédérée&nbsp;: détection et arbitrage des collisions
+              </li>
+              <li>
+                Réservations coordonnées avec la structure et l’architecture
+              </li>
+              <li>Extraction de quantités pour les appels d’offres</li>
+              <li>Plans issus du modèle, sans écart entre les documents</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="mcr" className={s.tech} aria-labelledby="mcr-titre">
+        <div className={s.techInner}>
+          <div className={s.techHead}>
+            <p className={`label ${s.techLabel}`}>
+              Technique&nbsp;07&nbsp;/&nbsp;08{" "}
+              <span className={s.flag}>contenu représentatif</span>
+            </p>
+            <h2 id="mcr-titre" className={s.techTitle}>
+              MCR
+            </h2>
+            
+          </div>
+
+          <div className={s.techBody}>
+            <p className={s.todo}>
+              <strong>Contenu à fournir.</strong> Ce domaine figure parmi les huit
+              du portfolio de VRD, mais aucun descriptif n’existe à ce jour — ni
+              sur le site actuel, ni dans le portfolio. À rédiger avec le bureau.
+            </p>
+          </div>
+        </div>
+      </section>
       <section
         id="energetique"
         className={s.tech}
@@ -302,7 +417,7 @@ export default function PrestationsPage() {
         <div className={s.techInner}>
           <div className={s.techHead}>
             <p className={`label ${s.techLabel}`}>
-              Technique&nbsp;04&nbsp;/&nbsp;05{" "}
+              Technique&nbsp;08&nbsp;/&nbsp;08{" "}
               <span className={s.flag}>contenu représentatif</span>
             </p>
             <h2 id="energetique-titre" className={s.techTitle}>
@@ -357,59 +472,6 @@ export default function PrestationsPage() {
         </div>
       </section>
 
-      {/* --- 05 · BIM & coordination ------------------------------------ */}
-      <section id="bim" className={s.tech} aria-labelledby="bim-titre">
-        <div className={s.techInner}>
-          <div className={s.techHead}>
-            <p className={`label ${s.techLabel}`}>
-              Technique&nbsp;05&nbsp;/&nbsp;05{" "}
-              <span className={s.flag}>contenu représentatif</span>
-            </p>
-            <h2 id="bim-titre" className={s.techTitle}>
-              BIM &amp; coordination
-            </h2>
-            <p className={s.claim}>
-              Une maquette unique, tous les corps d’état alignés.
-            </p>
-          </div>
-
-          <div className={s.techBody}>
-            <p>
-              Chauffage, ventilation et sanitaire se modélisent dans une
-              maquette exportée en IFC, avec des rôles, des échanges et un
-              niveau de détail fixés au démarrage plutôt que subis en cours de
-              route. La coordination se fait sur la maquette fédérée&nbsp;: les
-              collisions sont détectées, arbitrées en séance, puis corrigées
-              avant que quiconque ne perce une dalle.
-            </p>
-            <p>
-              Réservations, gaines techniques et hauteurs de faux plafond
-              sortent du même modèle que les plans&nbsp;: une seule référence,
-              donc pas d’écart entre les documents. Les quantités extraites de
-              la maquette alimentent les descriptifs d’appel d’offres et le
-              suivi des coûts.
-            </p>
-
-            <p className={`label ${s.listLabel}`}>
-              Prestations <span className={s.flag}>à valider</span>
-            </p>
-            <ul className={s.list}>
-              <li>Modélisation des réseaux CVCS et export IFC</li>
-              <li>
-                Rôles, échanges et niveaux de détail définis par phase de projet
-              </li>
-              <li>
-                Maquette fédérée&nbsp;: détection et arbitrage des collisions
-              </li>
-              <li>
-                Réservations coordonnées avec la structure et l’architecture
-              </li>
-              <li>Extraction de quantités pour les appels d’offres</li>
-              <li>Plans issus du modèle, sans écart entre les documents</li>
-            </ul>
-          </div>
-        </div>
-      </section>
 
       {/* --- Appel à l’action : inversion encre/papier ------------------- */}
       <section className={`technique ${s.cta}`} aria-labelledby="cta-titre">
