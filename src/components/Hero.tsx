@@ -79,97 +79,115 @@ export function Hero() {
     let coverScale = 26; // échelle à laquelle l'ouverture dépasse la fenêtre
 
     const measure = () => {
-      let rA = 500;
-      let aY = 500;
-      let chasse = 186;
+      // Encombrement RÉEL de l'encre du R dans le SVG. On n'utilise plus les
+      // positions d'avance : elles incluent le letter-spacing (-0,04 em), ce qui
+      // rétrécissait le bouchon d'environ 6 % et laissait un croissant noir.
+      let ex = 500;
+      let ey = 290;
+      let ew = 186;
+      let eh = 210;
       try {
-        const a2 = text.getStartPositionOfChar(1); // le R
-        const b2 = text.getEndPositionOfChar(1);
-        if (b2.x > a2.x) {
-          rA = a2.x;
-          aY = a2.y;
-          chasse = b2.x - a2.x;
+        const e = text.getExtentOfChar(1); // le R
+        if (e.width > 0 && e.height > 0) {
+          ex = e.x;
+          ey = e.y;
+          ew = e.width;
+          eh = e.height;
         }
       } catch {
         // Texte pas encore mis en page : on garde le repli.
       }
-      oy = aY - 300 * 0.36;
 
       let pts = "";
       try {
         const cs = getComputedStyle(text);
         const size = parseFloat(cs.fontSize) || 300;
-        const W = Math.ceil(size * 1.3);
-        const H = Math.ceil(size * 1.7);
+        const W = Math.ceil(size * 1.4);
+        const H = Math.ceil(size * 1.8);
         const cv = document.createElement("canvas");
         cv.width = W;
         cv.height = H;
         const c = cv.getContext("2d", { willReadFrequently: true });
         if (c) {
-          const baseline = size * 1.25;
           c.font = `${cs.fontWeight} ${size}px ${cs.fontFamily}`;
           c.textBaseline = "alphabetic";
           c.fillStyle = "#000";
-          c.fillText("R", 0, baseline);
-
-          // Conversion pixels -> unités de viewBox. C'EST ICI que la version
-          // précédente se trompait : elle divisait par la taille de police au
-          // lieu de la CHASSE réellement dessinée, d'où un bouchon à 62 % et
-          // décalé — la « boule » pixelisée.
-          const advance = c.measureText("R").width || size * 0.62;
-          const k = chasse / advance;
+          c.fillText("R", size * 0.15, size * 1.35);
 
           const px = c.getImageData(0, 0, W, H).data;
           const ink = (i: number) => px[i * 4 + 3] > 128;
 
-          // Propagation depuis le bord : tout ce que l'extérieur atteint.
-          const ext = new Uint8Array(W * H);
-          const stack: number[] = [];
-          for (let x = 0; x < W; x++) stack.push(x, (H - 1) * W + x);
-          for (let y = 0; y < H; y++) stack.push(y * W, y * W + W - 1);
-          while (stack.length) {
-            const i = stack.pop() as number;
-            if (ext[i] || ink(i)) continue;
-            ext[i] = 1;
-            const x = i % W;
-            const y = (i - x) / W;
-            if (x > 0) stack.push(i - 1);
-            if (x < W - 1) stack.push(i + 1);
-            if (y > 0) stack.push(i - W);
-            if (y < H - 1) stack.push(i + W);
-          }
-
-          // Bords gauche et droit du contrepoinçon, ligne par ligne. On en fait
-          // un POLYGONE : des bandes d'un pixel donneraient l'escalier qu'on
-          // voyait une fois grossi treize fois.
-          const left: string[] = [];
-          const right: string[] = [];
+          // Boîte d'encre mesurée sur les pixels. C'est elle qu'on fait
+          // correspondre à l'encombrement SVG : la correspondance est alors
+          // exacte, sans rien supposer des chasses, approches ou lignes de pied.
+          let minX = W;
+          let minY = H;
+          let maxX = -1;
+          let maxY = -1;
           for (let y = 0; y < H; y++) {
-            let lo = -1;
-            let hi = -1;
             for (let x = 0; x < W; x++) {
-              const i = y * W + x;
-              if (!ink(i) && !ext[i]) {
-                if (lo < 0) lo = x;
-                hi = x;
+              if (ink(y * W + x)) {
+                if (x < minX) minX = x;
+                if (x > maxX) maxX = x;
+                if (y < minY) minY = y;
+                if (y > maxY) maxY = y;
               }
             }
-            if (lo >= 0) {
-              const sy = (aY + (y - baseline) * k).toFixed(1);
-              left.push(`${(rA + lo * k).toFixed(1)},${sy}`);
-              right.unshift(`${(rA + (hi + 1) * k).toFixed(1)},${sy}`);
-            }
           }
-          if (left.length > 2) pts = left.concat(right).join(" ");
+          if (maxX > minX && maxY > minY) {
+            const kx = ew / (maxX - minX + 1);
+            const ky = eh / (maxY - minY + 1);
+
+            // Propagation depuis le bord : tout ce que l'extérieur atteint.
+            const ext = new Uint8Array(W * H);
+            const stack: number[] = [];
+            for (let x = 0; x < W; x++) stack.push(x, (H - 1) * W + x);
+            for (let y = 0; y < H; y++) stack.push(y * W, y * W + W - 1);
+            while (stack.length) {
+              const i = stack.pop() as number;
+              if (ext[i] || ink(i)) continue;
+              ext[i] = 1;
+              const x = i % W;
+              const y = (i - x) / W;
+              if (x > 0) stack.push(i - 1);
+              if (x < W - 1) stack.push(i + 1);
+              if (y > 0) stack.push(i - W);
+              if (y < H - 1) stack.push(i + W);
+            }
+
+            // Contour du contrepoinçon, en polygone. Débordement d'une demi-unité
+            // de chaque côté : mieux vaut mordre sur le trait que laisser un
+            // liseré d'anthracite.
+            const left: string[] = [];
+            const right: string[] = [];
+            for (let y = minY; y <= maxY; y++) {
+              let lo = -1;
+              let hi = -1;
+              for (let x = minX; x <= maxX; x++) {
+                const i = y * W + x;
+                if (!ink(i) && !ext[i]) {
+                  if (lo < 0) lo = x;
+                  hi = x;
+                }
+              }
+              if (lo >= 0) {
+                const sy = (ey + (y - minY) * ky).toFixed(1);
+                left.push(`${(ex + (lo - minX) * kx - 0.5).toFixed(1)},${sy}`);
+                right.unshift(`${(ex + (hi - minX + 1) * kx + 0.5).toFixed(1)},${sy}`);
+              }
+            }
+            if (left.length > 2) pts = left.concat(right).join(" ");
+          }
         }
       } catch {
         // Canvas indisponible : le contrepoinçon restera ouvert, sans plus.
       }
       setCounter(pts);
 
-      // Le trou fait toute la largeur du R : on plonge en son centre.
-      ox = rA + chasse * 0.5;
-      const demi = Math.max(chasse * 0.34, 1);
+      // On plonge au centre de l'encre du R, trou désormais d'un seul tenant.
+      ox = ex + ew / 2;
+      oy = ey + eh / 2;
+      const demi = Math.max(ew * 0.34, 1);
       coverScale = Math.max(Math.max(ox, 1200 - ox) / demi, 8);
       maxScale = coverScale * 1.6;
     };
