@@ -1,45 +1,80 @@
-.hero {
-  position: relative; /* ancre le champ thermique */
-  overflow: hidden;
-  /* Plein écran sous l'en-tête collant. `svh` évite le saut des barres
-     d'adresse mobiles — donc aucun décalage de mise en page. */
-  min-height: calc(100svh - var(--header-h));
-  display: grid;
-  align-content: center;
-  padding: var(--s-8) var(--gutter) var(--s-9);
-  background: var(--paper); /* = --dark sous .technique */
-  color: var(--ink); /* = --on-dark sous .technique */
-}
-
-/* Tout le texte passe devant le champ. */
-.content,
-.baseline,
-.stamp {
+/* Course de défilement. Sans portail (mobile, mouvement réduit) elle vaut un
+   écran : le hero se comporte alors comme une section normale. */
+.wrap {
   position: relative;
-  z-index: 1;
-  max-width: var(--page-max);
-  margin-inline: auto;
-  width: 100%;
+  block-size: calc(100svh - var(--header-h));
 }
 
-.mark {
-  /* Le sigle domine : la page d'accueil s'annonce, elle n'explique pas. */
-  font-size: clamp(5rem, 4rem + 14vw, 15rem);
+.wrap[data-portal="on"] {
+  /* Deux écrans de course : la plongée est finie vite, le contenu suit. */
+  block-size: 260svh;
+}
+
+.stage {
+  position: relative;
+  block-size: calc(100svh - var(--header-h));
+  overflow: hidden;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.wrap[data-portal="on"] .stage {
+  position: sticky;
+  inset-block-start: var(--header-h);
+}
+
+/* --- Derrière la plaque : le papier, et le dessin ------------------------ */
+.behind {
+  position: absolute;
+  inset: 0;
+  background: var(--paper-raised);
+}
+
+/* ThermalField lit ces jetons au moment du rendu : on les réassigne ici pour
+   qu'il se dessine à l'encre sur le papier, sans toucher au composant. */
+.field {
+  position: absolute;
+  inset: 0;
+  --on-dark-muted: var(--ink-muted);
+  --dark-rule: var(--rule);
+}
+
+/* --- La plaque percée ---------------------------------------------------- */
+.panel {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  pointer-events: none; /* le champ thermique garde le curseur */
+}
+
+/* Le sigle, en unités de viewBox. C'est ce qui fait le trou. */
+.markText {
+  font-family: var(--font-sans-stack);
+  font-size: 300px;
   font-weight: 600;
-  line-height: 0.86;
   letter-spacing: -0.04em;
-  margin: 0;
+}
+
+/* --- Textes secondaires -------------------------------------------------- */
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  align-content: end;
+  gap: var(--s-4);
+  max-inline-size: var(--page-max);
+  margin-inline: auto;
+  padding: var(--s-8) var(--gutter) var(--s-9);
+  pointer-events: none;
 }
 
 .sub {
-  margin-top: var(--s-4);
-  font-size: clamp(1.25rem, 1rem + 1.4vw, 2.25rem);
-  font-weight: 400;
-  letter-spacing: 0.01em;
+  font-size: clamp(1.1rem, 0.9rem + 1vw, 1.75rem);
 }
 
 .baseline {
-  margin-top: var(--s-9);
   font-family: var(--font-mono-stack);
   font-size: var(--fs-200);
   letter-spacing: var(--ls-label);
@@ -47,13 +82,10 @@
   color: var(--ink-muted);
 }
 
-/* Repère discret, en bas à droite — la marque du dossier. */
 .stamp {
   position: absolute;
   inset-block-end: var(--s-6);
-  inset-inline: 0;
-  padding-inline: var(--gutter);
-  text-align: end;
+  inset-inline-end: var(--gutter);
   font-family: var(--font-mono-stack);
   font-size: var(--fs-100);
   letter-spacing: var(--ls-label);
