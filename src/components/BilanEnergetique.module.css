@@ -1,0 +1,99 @@
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--ink);
+  overflow: visible;
+}
+
+.pipe,
+.pipeDashed {
+  fill: none;
+  stroke: currentColor;
+  stroke-linejoin: round;
+}
+
+/* Conduites et apports : trait plein, se tracent au défilement */
+.pipe {
+  stroke-dasharray: 1;
+}
+
+/* Flux secondaires et sortants : tireté fin */
+.pipeDashed {
+  stroke-dasharray: 7 6;
+  stroke-linecap: round;
+}
+
+/* Symboles : contour seul. Aucune déclaration fill ici, pour que l'attribut
+   fill="none" porté par le <g> reste effectif sur les enfants sans classe. */
+.sym {
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Pastille papier avec contour (onduleur, compresseur, fenêtres, bouche de
+   ventilation). Classe dédiée : une règle de classe l'emporte sur un attribut
+   de présentation SVG, .sym ne doit donc jamais imposer de remplissage. */
+.node {
+  fill: var(--paper);
+  stroke: currentColor;
+}
+
+/* Symboles pleins : flèche du compresseur, repère de la classe atteinte */
+.solid {
+  fill: currentColor;
+  stroke: none;
+}
+
+.lab {
+  font-family: var(--font-mono-stack);
+  font-size: 13px;
+  fill: var(--ink-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Lettres de l'échelle de performance */
+.classe {
+  font-size: 14px;
+}
+
+/* Classe atteinte : distinguée par la densité de l'encre, jamais par la couleur */
+.classeAtteinte {
+  fill: var(--ink);
+}
+
+/* État caché : uniquement via [data-draw="pending"]
+   (rendu serveur et mouvement réduit — tout reste visible) */
+.svg[data-draw="pending"] .pipe {
+  stroke-dashoffset: 1;
+}
+
+.svg[data-draw="pending"] .pipeDashed,
+.svg[data-draw="pending"] .sym,
+.svg[data-draw="pending"] .lab {
+  opacity: 0;
+}
+
+/* Assemblage du dessin, déclenché au défilement, joué une seule fois */
+.svg[data-draw="true"] .pipe {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset var(--dur-slow) var(--ease);
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+
+.svg[data-draw="true"] .pipeDashed {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 260ms;
+}
+
+.svg[data-draw="true"] .sym {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 340ms;
+}
+
+.svg[data-draw="true"] .lab {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 520ms;
+}

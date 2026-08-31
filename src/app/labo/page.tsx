@@ -11,6 +11,8 @@ import { ChaufferieIso } from "@/components/ChaufferieIso";
 import { CirculateurEclateIso } from "@/components/CirculateurEclateIso";
 import { ReseauGainesIso } from "@/components/ReseauGainesIso";
 import { BatimentCoupeIso } from "@/components/BatimentCoupeIso";
+import { ReseauSprinkler } from "@/components/ReseauSprinkler";
+import { BilanEnergetique } from "@/components/BilanEnergetique";
 import { FigureBackdrop } from "@/components/FigureBackdrop";
 import s from "./page.module.css";
 
@@ -285,6 +287,32 @@ export default function Labo() {
               <p className="label">Rampe gaz</p>
               <p className={s.bdText}>Alimentation et sécurité gaz : vannes, détente, comptage et double électrovanne jusqu’au brûleur.</p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className={s.schema} aria-labelledby="sprinkler-titre">
+        <div className={s.schemaInner}>
+          <p className="label">Prototype · protection incendie</p>
+          <h2 id="sprinkler-titre" className={s.title}>
+            Réseau sprinkler
+          </h2>
+          <p className={s.caption}>Réservoir, pompe, clapet anti-retour, poste de contrôle sous eau (vanne verrouillée, clapet d’alarme, cloche hydraulique, manomètres), colonne montante, antenne et têtes à déflecteur. Ligne d’essai en tireté vers l’égout. Illustration — contenu de démonstration.</p>
+          <div className={s.schemaFigure}>
+            <ReseauSprinkler />
+          </div>
+        </div>
+      </section>
+
+      <section className={s.schema} aria-labelledby="bilan-titre">
+        <div className={s.schemaInner}>
+          <p className="label">Prototype · énergétique</p>
+          <h2 id="bilan-titre" className={s.title}>
+            Bilan énergétique
+          </h2>
+          <p className={s.caption}>Apports en trait plein (solaire, pompe à chaleur sur sondes géothermiques), déperditions en tireté par poste (toiture, murs, fenêtres, ventilation, plancher), échelle de performance A–G. Illustration — contenu de démonstration.</p>
+          <div className={s.schemaFigure}>
+            <BilanEnergetique />
           </div>
         </div>
       </section>

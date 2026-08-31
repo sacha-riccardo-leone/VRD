@@ -4,13 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { DISCIPLINES } from "@/content/disciplines";
 import { DisciplineIcon } from "./DisciplineIcon";
 import { SchematicLoop } from "./SchematicLoop";
-import { Manifold } from "./Manifold";
 import { AirHandlingUnit } from "./AirHandlingUnit";
 import { ColonneMontanteSanitaire } from "./ColonneMontanteSanitaire";
 import { RampeGaz } from "./RampeGaz";
 import { ChaufferieIso } from "./ChaufferieIso";
-import { ReseauGainesIso } from "./ReseauGainesIso";
 import { BatimentCoupeIso } from "./BatimentCoupeIso";
+import { ReseauSprinkler } from "./ReseauSprinkler";
+import { BilanEnergetique } from "./BilanEnergetique";
 import s from "./OctagonNav.module.css";
 
 /**
@@ -82,13 +82,13 @@ function Schematic({ id }: { id: string }) {
     case "sanitaire":
       return <ColonneMontanteSanitaire />;
     case "sprinkler":
-      return <Manifold />; // approximation : réseau de distribution
+      return <ReseauSprinkler />;
     case "bim":
       return <BatimentCoupeIso />;
     case "mcr":
       return <RampeGaz />; // vannes, détente, comptage : la chaîne de régulation
     default:
-      return <ReseauGainesIso />; // énergétique — approximation
+      return <BilanEnergetique />;
   }
 }
 

@@ -1,0 +1,82 @@
+/* ReseauSprinkler — planche d'ingénieur monochrome.
+   Aucune teinte : tout passe par var(--ink), var(--ink-muted), var(--paper). */
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--ink);
+  overflow: visible;
+}
+
+.pipe,
+.pipeDashed {
+  fill: none;
+  stroke: currentColor;
+  stroke-linejoin: round;
+}
+.pipe {
+  stroke-dasharray: 1; /* pathLength=1 : un seul tiret couvre tout le tracé */
+  stroke-linecap: round;
+}
+.pipeDashed {
+  stroke-dasharray: 7 6; /* liaison d'alarme, ligne d'essai, jets */
+}
+
+/* Les enfants d'un groupe .sym HÉRITENT fill:none. Tout enfant qui doit être
+   rempli porte sa propre classe (.mask ou .solid) : une déclaration posée sur
+   l'élément l'emporte toujours sur une valeur héritée, donc aucun conflit. */
+.sym {
+  fill: none;
+  stroke: currentColor;
+  stroke-linejoin: round;
+}
+.mask {
+  fill: var(--paper); /* corps d'appareil : masque la conduite qu'il interrompt */
+  stroke: currentColor;
+}
+.solid {
+  fill: currentColor; /* triangle de refoulement, axes, marteau de cloche */
+  stroke: none;
+}
+
+.lab {
+  font-family: var(--font-mono-stack);
+  font-size: 13px;
+  fill: var(--ink-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.sub {
+  font-size: 11px; /* données chiffrées et sous-titres d'organes */
+}
+
+/* --- Révélation « le dessin s'assemble » ---------------------------------
+   L'état caché ne s'applique QUE lorsque le JS a posé data-draw="pending".
+   Sans JS, ou en reduced-motion (data-draw="done"), tout est visible d'emblée. */
+.svg[data-draw="pending"] .pipe {
+  stroke-dashoffset: 1;
+}
+.svg[data-draw="pending"] .pipeDashed,
+.svg[data-draw="pending"] .sym,
+.svg[data-draw="pending"] .lab {
+  opacity: 0;
+}
+
+.svg[data-draw="true"] .pipe {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset var(--dur-slow) var(--ease);
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+.svg[data-draw="true"] .pipeDashed {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 260ms;
+}
+.svg[data-draw="true"] .sym {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 340ms;
+}
+.svg[data-draw="true"] .lab {
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease) 520ms;
+}
