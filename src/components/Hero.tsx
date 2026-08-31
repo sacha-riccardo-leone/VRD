@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ThermalField } from "./ThermalField";
 import s from "./Hero.module.css";
 
@@ -19,19 +19,22 @@ import s from "./Hero.module.css";
  * est grand ouvert, la première section arrive en haut de l'écran — aucun temps
  * mort, aucune page blanche entre les deux.
  *
- * Le repère du fût du R est MESURÉ sur un jumeau du texte réellement rendu :
- * un <text> placé dans <defs> n'est jamais mis en page, les API de mesure y
- * échouent, et le repli tombait sur le centre exact de « VRD » — c'est-à-dire
- * le contrepoinçon du R. L'anthracite grandissait alors au lieu du blanc, d'où
- * l'écran noir. Aucun fondu n'est utilisé : l'ouverture grandit jusqu'à
- * dépasser la fenêtre, puis la plaque est simplement retirée — invisible,
- * puisqu'elle n'affichait déjà plus rien.
+ * Le contrepoinçon du R — le vide enfermé dans sa panse — n'appartient pas au
+ * glyphe : dans un masque texte il reste donc OPAQUE, îlot d'anthracite au
+ * milieu du trou, qui grandit avec le reste et balaie l'écran. On le bouche :
+ * un canvas hors écran dessine le R, une propagation depuis le bord distingue
+ * l'extérieur de l'intérieur, et l'intérieur est rendu au masque en bandes. La
+ * lettre devient un trou d'un seul tenant, et comme il fait toute la largeur du
+ * R, il couvre l'écran bien plus vite qu'un fût seul.
  *
  * Le champ thermique se dessine PAR-DESSUS la plaque : il appartient à
  * l'anthracite, pas aux lettres. Il s'efface dès que la plongée commence.
  */
 
 const HIDE_AT = 0.85;
+
+/** Un rectangle de bouchage, en unités de viewBox. */
+type Fill = { x: number; y: number; w: number; h: number };
 
 export function Hero() {
   const plateRef = useRef<HTMLDivElement>(null);
@@ -40,6 +43,8 @@ export function Hero() {
   const fieldRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const raf = useRef(0);
+  /** Rectangles qui bouchent le contrepoinçon du R dans le masque. */
+  const [fills, setFills] = useState<Fill[]>([]);
 
   useEffect(() => {
     const plate = plateRef.current;
@@ -58,73 +63,109 @@ export function Hero() {
     }
 
     // ------------------------------------------------------------------
-    // Repère de plongée : TROUVÉ EN SONDANT LES PIXELS, pas estimé.
+    // Le contrepoinçon du R doit être BOUCHÉ.
     //
-    // Trois tentatives ont échoué en devinant où se trouve le fût du R. Ici on
-    // dessine le glyphe sur un canvas hors écran et on cherche la première
-    // colonne d'encre à mi-hauteur de capitale : c'est le fût, quelle que soit
-    // la police. On en déduit aussi sa LARGEUR, donc l'échelle réellement
-    // nécessaire pour que l'ouverture dépasse la fenêtre.
+    // Dans un masque texte, le glyphe fait le trou — mais le contrepoinçon, le
+    // vide enfermé dans la panse, n'appartient pas au glyphe : il reste opaque.
+    // C'est donc un îlot d'anthracite collé au fût, qui grandit avec le reste et
+    // balaie l'écran avant de sortir. Aucun réglage de repère ne le corrige :
+    // il faut le remplir.
     //
-    // La mesure attend `document.fonts.ready` : lancée trop tôt, elle porte sur
-    // la police de repli et le résultat tombe à côté — c'était le défaut.
+    // On repère l'intérieur par propagation depuis le bord du canvas : tout ce
+    // qui n'est pas de l'encre et que le bord peut atteindre est EXTÉRIEUR ; le
+    // reste est un contrepoinçon. On le rend au masque sous forme de bandes.
+    // La lettre devient alors un trou d'un seul tenant — plus aucun îlot — et,
+    // le trou faisant désormais toute la largeur du R et non celle du fût, il
+    // couvre l'écran bien plus vite.
     // ------------------------------------------------------------------
-    let ox = 531; // repli calculé pour Plex : dans le fût, jamais dans un creux
+    let ox = 593;
     let oy = 395;
-    let maxScale = 200;
+    let maxScale = 40;
 
     const measure = () => {
-      let frac = 0.17; // position du fût dans la chasse, en repli
-      let stemFrac = 0.14; // largeur du fût, en repli
-
+      let rA = 500;
+      let chasse = 186;
       try {
-        const cs = getComputedStyle(text);
-        const size = parseFloat(cs.fontSize) || 300;
-        const cv = document.createElement("canvas");
-        cv.width = Math.ceil(size * 1.2);
-        cv.height = Math.ceil(size * 1.4);
-        const c = cv.getContext("2d", { willReadFrequently: true });
-        if (c) {
-          c.font = `${cs.fontWeight} ${size}px ${cs.fontFamily}`;
-          c.textBaseline = "alphabetic";
-          c.fillStyle = "#000";
-          const baseline = size * 1.1;
-          c.fillText("R", 0, baseline);
-          const advance = c.measureText("R").width;
-          const row = Math.round(baseline - size * 0.36); // mi-hauteur de capitale
-          const px = c.getImageData(0, row, cv.width, 1).data;
-
-          // Première colonne d'encre, puis fin de cette colonne : le fût.
-          let a = -1;
-          let b = -1;
-          for (let i = 0; i < cv.width; i++) {
-            const on = px[i * 4 + 3] > 128;
-            if (on && a < 0) a = i;
-            if (a >= 0 && !on) { b = i; break; }
-          }
-          if (a >= 0 && b > a && advance > 0) {
-            frac = (a + b) / 2 / advance;
-            stemFrac = (b - a) / advance;
-          }
-        }
-      } catch {
-        // Canvas indisponible : on garde les valeurs de repli.
-      }
-
-      try {
-        const a = text.getStartPositionOfChar(1); // le R
-        const b = text.getEndPositionOfChar(1);
-        if (b.x > a.x) {
-          const chasse = b.x - a.x;
-          ox = a.x + chasse * frac;
-          oy = a.y - 300 * 0.36;
-          // Échelle nécessaire pour que le fût couvre la fenêtre, majorée de 40 %.
-          const demi = Math.max((chasse * stemFrac) / 2, 1);
-          maxScale = Math.max(Math.max(ox, 1200 - ox) / demi, 40) * 1.4;
+        const a2 = text.getStartPositionOfChar(1); // le R
+        const b2 = text.getEndPositionOfChar(1);
+        if (b2.x > a2.x) {
+          rA = a2.x;
+          chasse = b2.x - a2.x;
+          oy = a2.y - 300 * 0.36;
         }
       } catch {
         // Texte pas encore mis en page : on garde le repli.
       }
+
+      const out: Fill[] = [];
+      try {
+        const cs = getComputedStyle(text);
+        const size = parseFloat(cs.fontSize) || 300;
+        const W = Math.ceil(size * 1.3);
+        const H = Math.ceil(size * 1.6);
+        const cv = document.createElement("canvas");
+        cv.width = W;
+        cv.height = H;
+        const c = cv.getContext("2d", { willReadFrequently: true });
+        if (c) {
+          const baseline = size * 1.15;
+          c.font = `${cs.fontWeight} ${size}px ${cs.fontFamily}`;
+          c.textBaseline = "alphabetic";
+          c.fillStyle = "#000";
+          c.fillText("R", 0, baseline);
+          const px = c.getImageData(0, 0, W, H).data;
+
+          const ink = (i: number) => px[i * 4 + 3] > 128;
+          // Propagation depuis le bord : marque tout l'extérieur.
+          const ext = new Uint8Array(W * H);
+          const stack: number[] = [];
+          for (let x = 0; x < W; x++) {
+            stack.push(x, (H - 1) * W + x);
+          }
+          for (let y = 0; y < H; y++) {
+            stack.push(y * W, y * W + W - 1);
+          }
+          while (stack.length) {
+            const i = stack.pop() as number;
+            if (ext[i] || ink(i)) continue;
+            ext[i] = 1;
+            const x = i % W;
+            const y = (i - x) / W;
+            if (x > 0) stack.push(i - 1);
+            if (x < W - 1) stack.push(i + 1);
+            if (y > 0) stack.push(i - W);
+            if (y < H - 1) stack.push(i + W);
+          }
+
+          // Ce qui n'est ni encre ni extérieur : le contrepoinçon.
+          const k = chasse / size; // canvas -> unités de viewBox
+          for (let y = 0; y < H; y++) {
+            let run = -1;
+            for (let x = 0; x <= W; x++) {
+              const i = y * W + x;
+              const inside = x < W && !ink(i) && !ext[i];
+              if (inside && run < 0) run = x;
+              if (!inside && run >= 0) {
+                out.push({
+                  x: rA + run * k,
+                  y: oy + (y - baseline + size * 0.36) * k,
+                  w: (x - run) * k + 0.5,
+                  h: k + 0.5,
+                });
+                run = -1;
+              }
+            }
+          }
+        }
+      } catch {
+        // Canvas indisponible : le contrepoinçon restera visible, sans plus.
+      }
+      setFills(out);
+
+      // Le trou fait maintenant toute la largeur du R : on plonge en son centre.
+      ox = rA + chasse * 0.5;
+      const demi = Math.max(chasse * 0.34, 1);
+      maxScale = Math.max(Math.max(ox, 1200 - ox) / demi, 12) * 1.5;
     };
 
     const clamp = (n: number) => Math.min(Math.max(n, 0), 1);
@@ -200,6 +241,12 @@ export function Hero() {
                 <text className={s.markText} x="600" y="500" textAnchor="middle" fill="#000">
                   VRD
                 </text>
+                {/* Bandes qui bouchent le contrepoinçon du R : sans elles il
+                    reste un îlot opaque au milieu du trou, qui balaie l'écran
+                    pendant la plongée. */}
+                {fills.map((f, i) => (
+                  <rect key={i} x={f.x} y={f.y} width={f.w} height={f.h} fill="#000" />
+                ))}
               </g>
             </mask>
           </defs>
