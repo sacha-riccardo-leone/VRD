@@ -23,14 +23,28 @@ import s from "./Hero.module.css";
  * un <text> placé dans <defs> n'est jamais mis en page, les API de mesure y
  * échouent, et le repli tombait sur le centre exact de « VRD » — c'est-à-dire
  * le contrepoinçon du R. L'anthracite grandissait alors au lieu du blanc, d'où
- * l'écran noir. La plaque s'efface en outre sur le dernier quart de la course :
- * quelle que soit la géométrie, elle ne peut plus recouvrir le contenu.
+ * l'écran noir. Aucun fondu n'est utilisé : l'ouverture grandit jusqu'à
+ * dépasser la fenêtre, puis la plaque est simplement retirée — invisible,
+ * puisqu'elle n'affichait déjà plus rien.
  *
  * Le champ thermique se dessine PAR-DESSUS la plaque : il appartient à
  * l'anthracite, pas aux lettres. Il s'efface dès que la plongée commence.
  */
 
-const MAX_SCALE = 60;
+/**
+ * Le fût du R est une barre étroite : environ 26 unités de viewBox sur 1200
+ * visibles. Pour que son ouverture couvre la fenêtre entière, il faut donc une
+ * échelle de l'ordre de 70 — d'où 200, qui laisse une marge confortable quel
+ * que soit le format d'écran. C'est parce que cette valeur était trop basse (60)
+ * qu'il restait de l'anthracite sur les bords, et qu'un fondu était nécessaire
+ * pour le masquer. Avec une ouverture qui dépasse vraiment l'écran, il n'y a
+ * plus rien à masquer : aucun fondu.
+ */
+const MAX_SCALE = 200;
+
+/** Au-delà, l'ouverture dépasse largement l'écran : la plaque ne montre plus
+ *  rien et peut être retirée sans que personne ne le voie. */
+const HIDE_AT = 0.85;
 
 export function Hero() {
   const plateRef = useRef<HTMLDivElement>(null);
@@ -91,11 +105,11 @@ export function Hero() {
       field.style.opacity = String(clamp(1 - p * 3));
       overlay.style.opacity = String(clamp(1 - p * 4));
 
-      // Filet de sécurité : quelle que soit la géométrie, la plaque s'efface
-      // sur le dernier quart. Sans cela, l'anthracite qui subsiste entre les
-      // lettres écartées finit par recouvrir le contenu.
-      plate.style.opacity = String(clamp((1 - p) / 0.25));
-      plate.style.visibility = p >= 0.999 ? "hidden" : "visible";
+      // Aucun fondu. À ce stade l'ouverture dépasse la fenêtre : la plaque
+      // n'affiche plus un seul pixel d'anthracite, on peut donc la retirer sans
+      // transition — personne ne peut voir disparaître ce qui ne se voyait déjà
+      // plus. Cela libère aussi le contenu de tout recouvrement.
+      plate.style.visibility = p >= HIDE_AT ? "hidden" : "visible";
     };
 
     const onScroll = () => {
