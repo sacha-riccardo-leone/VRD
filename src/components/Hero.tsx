@@ -62,18 +62,31 @@ import s from "./Hero.module.css";
 const ZONE = { x: -8, y: -8, w: 1216, h: 816 };
 
 /**
- * Corps maximal, en pixels d'écran, auquel le moteur accepte encore de
- * rastériser le glyphe. MESURÉ par dichotomie sur la construction réelle
- * (rect + mask + text mis à l'échelle) à quatre tailles de fenêtre : 10 892 /
- * 10 893 / 10 885 / 10 894 px pour 1280, 1920, 2560 et 3840 de large. La valeur
- * est invariante en PIXELS D'ÉCRAN, ce qui confirme une limite de rastérisation
- * et non un défaut de géométrie — et explique que le défaut empirait quand la
- * fenêtre grandissait.
+ * Corps maximal, en pixels d'écran, auquel le glyphe est encore rastérisé
+ * FIDÈLEMENT. Ce n'est pas le point où il disparaît : c'est celui où il
+ * commence à se déformer, et c'est le seul qui compte.
  *
- * Le seuil dépend de la fonte : la même mesure sur une sans-serif générique
- * donnait 11 840. Si la police du sigle change, il faut le reprendre.
+ * Protocole : on rend la même région utilisateur à deux résolutions — 1200×630,
+ * où le rendu est sûr, et 3840×2016, proche du seuil — puis on compare la
+ * surface d'ouverture. Tant que l'écart reste nul, le glyphe est juste.
+ *
+ *   9 600 px → écart 0,07 %   (fidèle)
+ *  10 080 px → écart 1,21 %   (la déformation commence)
+ *  10 560 px → écart 4,51 %   (glyphe faux)
+ *  10 890 px → le trou disparaît, la plaque devient un aplat noir
+ *
+ * On retient donc 9 600, dernier corps fidèle, et non 10 890. Chercher la
+ * disparition franche aurait laissé travailler le moteur en pleine zone de
+ * déformation — c'est là que naissaient les « boules pixelisées » et les
+ * morceaux de lettre manquants.
+ *
+ * La valeur est invariante en PIXELS D'ÉCRAN : l'échelle qu'elle autorise tombe
+ * donc quand la fenêtre et la densité grandissent, ce qui explique un défaut qui
+ * empirait en plein écran. Elle dépend aussi de la fonte — la même mesure sur
+ * une sans-serif générique donnait 11 840. Si la police du sigle change, il faut
+ * reprendre la mesure.
  */
-const GLYPHE_MAX_PX = 10890;
+const GLYPHE_MAX_PX = 9600;
 
 type Plage = [number, number];
 type Ligne = { y: number; a: Plage; b: Plage };
@@ -324,7 +337,7 @@ export function Hero() {
       const el = svg.getBoundingClientRect();
       const k =
         Math.max(el.width / 1200, el.height / 800) * (window.devicePixelRatio || 1);
-      const plafond = k > 0 ? (GLYPHE_MAX_PX / (corps * k)) * 0.88 : Infinity;
+      const plafond = k > 0 ? (GLYPHE_MAX_PX / (corps * k)) * 0.9 : Infinity;
       mark.style.display = scale >= Math.min(bascule, plafond) ? "none" : "";
 
       // Le dessin ne se lit qu'au repos ; il s'efface dès la plongée.
@@ -361,6 +374,12 @@ export function Hero() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       cancelAnimationFrame(raf.current);
+      // Sans cette remise à zéro, la garde `if (!raf.current)` de `onScroll`
+      // reste armée sur l'identifiant d'une image ANNULÉE : plus aucun
+      // défilement n'est traité, le sigle reste à l'échelle 1 et la plaque ne
+      // s'ouvre plus jamais. Le `ref` survit au remontage de l'effet, donc le
+      // cas se produit à chaque rechargement à chaud et sous StrictMode.
+      raf.current = 0;
     };
   }, []);
 
