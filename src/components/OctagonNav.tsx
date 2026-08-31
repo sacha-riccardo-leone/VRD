@@ -165,7 +165,9 @@ export function OctagonNav() {
                     ))}
                   </ul>
                 ) : null}
-                <span className={s.cardLink}>En savoir plus →</span>
+                <span className={s.cardHint} aria-hidden="true">
+                  Cliquez sur l’icône pour la section complète
+                </span>
               </div>
             )}
           </div>
