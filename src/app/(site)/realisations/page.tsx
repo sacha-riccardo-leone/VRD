@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
+import { CarteSuisse } from "@/components/carte/CarteSuisse";
 import { REALISATIONS, BUDGET_TOTAL_MIOS, CANTONS, CLIENTS } from "@/content/realisations";
 import s from "./page.module.css";
 
@@ -48,6 +49,11 @@ export default function RealisationsPage() {
         </dl>
       </section>
 
+      {/* La carte, entre les chiffres et l'index : elle situe ce que les
+          chiffres résument et que l'index détaille. Chaque épingle renvoie à
+          la fiche correspondante plus bas. */}
+      <CarteSuisse />
+
       {/* L'index : une ligne par référence, métadonnées en mono. */}
       <section className={s.index} aria-labelledby="index-titre">
         <h2 id="index-titre" className="label">
@@ -56,7 +62,7 @@ export default function RealisationsPage() {
 
         <ol className={s.list} role="list">
           {REALISATIONS.map((r, i) => (
-            <li key={r.slug} className={s.item}>
+            <li key={r.slug} id={r.slug} className={s.item}>
               <p className={s.num}>{String(i + 1).padStart(2, "0")}</p>
 
               <div className={s.body}>
