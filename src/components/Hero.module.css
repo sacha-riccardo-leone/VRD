@@ -74,22 +74,28 @@
   pointer-events: none;
 }
 
-/* Le sigle, en unités de viewBox : c'est lui qui fait le trou. */
-.markText {
-  font-family: var(--font-sans-stack);
-  font-size: 300px;
-  font-weight: 600;
-  letter-spacing: -0.04em;
+/* Corps du sigle, en unités de viewBox. Le script le LIT — il ne le duplique
+   pas — pour en déduire le repère de plongée et l'échelle finale : le point de
+   rupture n'est écrit qu'ici. */
+.panel {
+  --sigle: 300;
 }
 
 /* Sur un écran étroit, `slice` ne laisse voir qu'une bande verticale de la
    viewBox — environ la largeur de l'appareil en unités. À 300 le sigle, large
-   de 552 unités, en déborderait des deux côtés. Il n'y a rien d'autre à
-   ajuster : le relevé lit la taille réellement calculée, et le repère de
-   plongée, l'échelle finale et le seuil de relais en découlent tous. */
+   de 553 unités, en déborderait des deux côtés.
+   La pose est reprise ici en entier : la propriété CSS `transform` l'emporte
+   sur l'attribut du même nom, si bien que la mise en page est juste dès le
+   premier rendu, sans script. */
 @media (max-width: 767px) {
-  .markText {
-    font-size: 160px;
+  .panel {
+    --sigle: 160;
+  }
+
+  .sigle {
+    transform: translate(452.56px, 500px) scale(160);
+    transform-box: view-box;
+    transform-origin: 0 0;
   }
 }
 
