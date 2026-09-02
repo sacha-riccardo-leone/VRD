@@ -21,7 +21,10 @@ import s from "./CarteSuisse.module.css";
 const ZOOM_MAX = 6;
 /** Cible tactile : 44 px de diamètre, quelle que soit la largeur d'affichage. */
 const RAYON_CIBLE_PX = 22;
-const TAILLE_EPINGLE_PX = 13;
+const TAILLE_EPINGLE_PX = 22;
+/** Écartement voulu entre deux épingles, et bride, en pixels d'écran. */
+const ESPACEMENT_PX = 34;
+const DEPLACEMENT_MAX_PX = 48;
 
 type Fenetre = { x: number; y: number; w: number; h: number };
 
@@ -59,8 +62,17 @@ export function CarteSuisse() {
     return () => ro.disconnect();
   }, []);
 
-  // Fonction pure, mémoïsée sur le seul zoom.
-  const places = useMemo(() => ecarter(POINTS.map((p) => ({ id: p.slug, x: p.x, y: p.y })), zoom), [zoom]);
+  // Fonction pure. Elle dépend du nombre de pixels par unité, qui porte à la
+  // fois le zoom et la largeur d'affichage.
+  const places = useMemo(
+    () =>
+      ecarter(
+        POINTS.map((p) => ({ id: p.slug, x: p.x, y: p.y })),
+        ESPACEMENT_PX / pxParUnite,
+        DEPLACEMENT_MAX_PX / pxParUnite,
+      ),
+    [pxParUnite],
+  );
   const parSlug = useMemo(() => new Map(POINTS.map((p) => [p.slug, p])), []);
 
   /** Zoom ancré : le point sous le curseur reste sous le curseur. */

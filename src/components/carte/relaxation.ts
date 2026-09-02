@@ -12,27 +12,26 @@
  * les relie, et recommencer. Chaque déplacement est BRIDÉ, faute de quoi un
  * amas dense finit par expulser une épingle dans le canton voisin.
  *
- * Fonction PURE : à entrées identiques, sortie identique. Elle ne dépend que du
- * zoom, donc elle se mémoïse avec le zoom pour seule dépendance.
+ * Fonction PURE : à entrées identiques, sortie identique. Elle ne dépend que de
+ * l'échelle d'affichage, donc elle se mémoïse là-dessus.
  */
 
 export type Ancre = { id: string; x: number; y: number };
 export type Place = Ancre & { vraiX: number; vraiY: number; deplace: boolean };
 
-/** En unités de la zone de dessin, AVANT division par le zoom. */
-const ESPACEMENT = 36;
-const DEPLACEMENT_MAX = 70;
 const ITERATIONS = 40;
 /** En deçà, le déplacement ne mérite ni ligne de rappel ni mention. */
 const SEUIL_DEPLACE = 0.5;
 
-export function ecarter(points: Ancre[], zoom: number): Place[] {
-  // L'espacement voulu est constant À L'ÉCRAN : en unités de la zone de dessin
-  // il doit donc rétrécir quand on zoome. C'est ce qui fait que les amas se
-  // dénouent d'eux-mêmes au zoom, et que les lignes de rappel disparaissent
-  // sans qu'on ait à l'expliquer.
-  const espacement = ESPACEMENT / zoom;
-  const bride = DEPLACEMENT_MAX / zoom;
+/**
+ * `espacement` et `bride` sont reçus DÉJÀ convertis en unités de la zone de
+ * dessin. L'appelant les tient en pixels et les divise par le nombre de pixels
+ * par unité — lequel grandit avec le zoom. L'écartement est donc constant À
+ * L'ÉCRAN quels que soient le zoom ET la largeur d'affichage de la carte : c'est
+ * ce qui fait que les amas se dénouent d'eux-mêmes au zoom, et que rétrécir la
+ * carte ne colle pas les épingles entre elles.
+ */
+export function ecarter(points: Ancre[], espacement: number, bride: number): Place[] {
 
   // Ordre stable. Sans lui, l'accumulation en virgule flottante change d'un
   // rendu à l'autre et les épingles frémissent.
