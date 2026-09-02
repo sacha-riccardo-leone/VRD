@@ -350,6 +350,13 @@ export function ThermalField() {
     let mode: "idle" | "pointer" = "idle";
     const DELAI_DERIVE = 1500;
     let derive = 0;
+
+    // La dérive appartient à la composition MOBILE, au même titre que le hero
+    // statique : même seuil que le portail, et c'est le format qui décide, pas
+    // l'entrée. Sur un écran large le champ ne bouge que sous le curseur.
+    // La propriété de la cible reste la seconde garde : si une souris se
+    // manifeste sur une fenêtre étroite, la dérive rend la main pour de bon.
+    const etroit = window.matchMedia("(max-width: 1023px)");
     let visible = true;
     let derniere = 0;
 
@@ -362,8 +369,10 @@ export function ThermalField() {
     io.observe(wrap);
 
     function flotter(t: number) {
-      // Le lecteur a pris la main : la dérive rend la main pour de bon.
-      if (mode !== "idle") {
+      // Le lecteur a pris la main, ou l'on n'est plus au format mobile : la
+      // dérive s'arrête. `derive = 0` marque l'arrêt pour que le retour au
+      // format étroit puisse la relancer.
+      if (mode !== "idle" || !etroit.matches) {
         derive = 0;
         return;
       }
@@ -395,11 +404,19 @@ export function ThermalField() {
       });
     }
 
-    // Aucun pointeur ne s'est manifesté dans ce délai : il n'y en aura sans
-    // doute jamais. Le champ se donne alors sa propre source.
-    const attente = window.setTimeout(() => {
-      if (mode === "idle") derive = requestAnimationFrame(flotter);
-    }, DELAI_DERIVE);
+    // Au format mobile, et si aucun pointeur ne s'est manifesté dans ce délai,
+    // le champ se donne sa propre source.
+    const lancer = () => {
+      if (etroit.matches && mode === "idle" && !derive) {
+        derive = requestAnimationFrame(flotter);
+      }
+    };
+    const attente = window.setTimeout(lancer, DELAI_DERIVE);
+    // Franchir le seuil doit suffire à la lancer ou à l'arrêter, sans
+    // rechargement. `resize` en plus de la requête de média : le navigateur
+    // intégré n'émet ni l'un ni l'autre, mais un vrai navigateur émet les deux.
+    etroit.addEventListener("change", lancer);
+    window.addEventListener("resize", lancer);
 
     host.addEventListener("pointermove", onMove);
     host.addEventListener("pointerleave", onLeave);
@@ -411,6 +428,8 @@ export function ThermalField() {
       cancelAnimationFrame(raf);
       cancelAnimationFrame(derive);
       window.clearTimeout(attente);
+      etroit.removeEventListener("change", lancer);
+      window.removeEventListener("resize", lancer);
     };
   }, []);
 
