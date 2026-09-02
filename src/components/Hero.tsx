@@ -141,6 +141,9 @@ export function Hero() {
   const plateRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const maskRef = useRef<SVGGElement>(null);
+  const maskElRef = useRef<SVGMaskElement>(null);
+  const blancRef = useRef<SVGRectElement>(null);
+  const plaqueRef = useRef<SVGRectElement>(null);
   const markRef = useRef<SVGTextElement>(null);
   const futRef = useRef<SVGPolygonElement>(null);
   const measureRef = useRef<SVGTextElement>(null);
@@ -153,12 +156,18 @@ export function Hero() {
     const plate = plateRef.current;
     const svg = svgRef.current;
     const mask = maskRef.current;
+    const maskEl = maskElRef.current;
+    const blanc = blancRef.current;
+    const plaque = plaqueRef.current;
     const mark = markRef.current;
     const fut = futRef.current;
     const text = measureRef.current;
     const field = fieldRef.current;
     const overlay = overlayRef.current;
-    if (!spacer || !plate || !svg || !mask || !mark || !fut || !text || !field || !overlay) {
+    if (
+      !spacer || !plate || !svg || !mask || !maskEl || !blanc || !plaque ||
+      !mark || !fut || !text || !field || !overlay
+    ) {
       return;
     }
 
@@ -313,6 +322,24 @@ export function Hero() {
         const demiH = k > 0 ? el.height / k / 2 : 400;
         const vx = 600 - demiL;
         const vy = 400 - demiH;
+
+        // La région du masque est RASTÉRISÉE à chaque image, puisque son contenu
+        // se met à l'échelle. Elle n'a donc à couvrir que ce qui est visible, et
+        // non la viewBox entière : sous `slice` la fenêtre est une bande, et sur
+        // un téléphone cette bande fait le tiers de la viewBox. Trois fois moins
+        // de pixels à rastériser par image, là où c'est le plus cher.
+        const z = {
+          x: vx - 8,
+          y: vy - 8,
+          w: 2 * demiL + 16,
+          h: 2 * demiH + 16,
+        };
+        for (const el2 of [maskEl, blanc, plaque]) {
+          el2.setAttribute("x", String(z.x.toFixed(1)));
+          el2.setAttribute("y", String(z.y.toFixed(1)));
+          el2.setAttribute("width", String(z.w.toFixed(1)));
+          el2.setAttribute("height", String(z.h.toFixed(1)));
+        }
         const dxr = Math.max(ox - vx, vx + 2 * demiL - ox);
         const dyr = Math.max(oy - vy, vy + 2 * demiH - oy);
 
@@ -422,7 +449,15 @@ export function Hero() {
     // tous deux de la région réellement visible, il faut les reprendre avant de
     // repeindre.
     const onResize = () => {
-      cadrer();
+      // Le sigle change de corps au point de rupture. Tout le relevé — le
+      // polygone d'abord — est fait à un corps donné : le laisser tel quel après
+      // un changement de taille posait une ouverture taillée pour 300 par-dessus
+      // un sigle dessiné à 160, visible comme une lettre fantôme. On ne remesure
+      // que si le corps a bougé : un redimensionnement ordinaire n'en a pas
+      // besoin, et le relevé coûte deux cents lectures de pixels.
+      const size = parseFloat(getComputedStyle(text).fontSize) || 0;
+      if (Math.abs(size - corps) > 0.5) measure();
+      else cadrer();
       onScroll();
     };
 
@@ -470,6 +505,7 @@ export function Hero() {
         >
           <defs>
             <mask
+              ref={maskElRef}
               id="vrd-portal"
               maskUnits="userSpaceOnUse"
               x={ZONE.x}
@@ -477,7 +513,14 @@ export function Hero() {
               width={ZONE.w}
               height={ZONE.h}
             >
-              <rect x={ZONE.x} y={ZONE.y} width={ZONE.w} height={ZONE.h} fill="#fff" />
+              <rect
+                ref={blancRef}
+                x={ZONE.x}
+                y={ZONE.y}
+                width={ZONE.w}
+                height={ZONE.h}
+                fill="#fff"
+              />
               <g ref={maskRef}>
                 <text
                   ref={markRef}
@@ -515,6 +558,7 @@ export function Hero() {
             VRD
           </text>
           <rect
+            ref={plaqueRef}
             x={ZONE.x}
             y={ZONE.y}
             width={ZONE.w}

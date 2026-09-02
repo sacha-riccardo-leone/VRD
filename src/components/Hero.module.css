@@ -7,11 +7,16 @@
 /* La plaque est FIXE et couvre la fenêtre : la page défile derrière elle et se
    laisse voir au travers des lettres. `pointer-events: none` pour que rien ne
    soit intercepté ; seul le champ thermique reprend le curseur. */
+/* La hauteur vient des DEUX ancrages, pas d'un calcul. `100svh` est la hauteur
+   du viewport barre d'adresse DÉPLIÉE ; sur iOS, dès qu'elle se replie en cours
+   de défilement, le viewport grandit et une plaque taillée à `100svh` laissait
+   voir la section suivante sous son bord inférieur. Ancrée en haut ET en bas,
+   elle suit le viewport réel quoi que fasse le navigateur. */
 .plate {
   position: fixed;
   inset-block-start: var(--header-h);
+  inset-block-end: 0;
   inset-inline: 0;
-  block-size: calc(100svh - var(--header-h));
   z-index: 40;
   overflow: hidden;
   color: var(--ink);
@@ -22,6 +27,7 @@
    normale, en flux, et le sigle reste lisible au repos. */
 .plate[data-portal="off"] {
   position: static;
+  block-size: calc(100svh - var(--header-h));
   z-index: auto;
 }
 

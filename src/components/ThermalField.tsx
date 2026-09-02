@@ -171,15 +171,23 @@ export function ThermalField() {
       ctx.lineWidth = 1;
       const nx = 6;
       const ny = 4;
-      for (let i = 0; i <= nx; i++) {
+      // On balaie une ligne de plus de chaque côté, et on saute celles qui
+      // tombent SUR le bord. Une ligne d'un pixel centrée sur x = 0 n'est
+      // dessinée qu'à moitié : elle ne se lit plus comme une ligne de grille
+      // mais comme un filet clair collé au cadre. Au repos — donc sur mobile,
+      // faute de curseur — le décalage est nul et les lignes extrêmes tombaient
+      // pile sur les quatre bords.
+      for (let i = -1; i <= nx + 1; i++) {
         const x = (i / nx) * W + ox;
+        if (x < 1 || x > W - 1) continue;
         ctx.beginPath();
         ctx.moveTo(x, 0);
         ctx.lineTo(x, H);
         ctx.stroke();
       }
-      for (let j = 0; j <= ny; j++) {
+      for (let j = -1; j <= ny + 1; j++) {
         const y = (j / ny) * H + oy;
+        if (y < 1 || y > H - 1) continue;
         ctx.beginPath();
         ctx.moveTo(0, y);
         ctx.lineTo(W, y);
