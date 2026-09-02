@@ -86,16 +86,34 @@ export function CarteSuisse() {
     });
   }, []);
 
-  const surMolette = useCallback(
-    (e: React.WheelEvent<SVGSVGElement>) => {
+  // La molette NE capture PAS le défilement de la page.
+  //
+  // Deux raisons. La première est technique : React pose ses écouteurs `wheel`
+  // en mode passif, si bien qu'un `preventDefault()` dans un `onWheel` est
+  // ignoré — la carte zoomait ET la page descendait. La seconde est d'usage :
+  // la carte est un élément parmi d'autres dans une page longue, et confisquer
+  // la molette au survol piégerait le lecteur à chaque passage.
+  //
+  // On garde donc le zoom ancré à la molette, mais sous touche de commande, et
+  // c'est le seul cas où l'on retient l'évènement. Sans la touche, la page
+  // défile normalement. Les boutons, eux, marchent toujours : ils sont la voie
+  // principale, pas un repli.
+  const svgRef = useRef<SVGSVGElement>(null);
+  useEffect(() => {
+    const el = svgRef.current;
+    if (!el) return;
+    const surMolette = (e: WheelEvent) => {
+      if (!e.ctrlKey && !e.metaKey) return;
       e.preventDefault();
-      const r = e.currentTarget.getBoundingClientRect();
+      const r = el.getBoundingClientRect();
       const ax = fenetre.x + ((e.clientX - r.left) / r.width) * fenetre.w;
       const ay = fenetre.y + ((e.clientY - r.top) / r.height) * fenetre.h;
       zoomer(e.deltaY < 0 ? 1.2 : 1 / 1.2, ax, ay);
-    },
-    [fenetre, zoomer],
-  );
+    };
+    // `passive: false` est indispensable : c'est ce que React ne fait pas.
+    el.addEventListener("wheel", surMolette, { passive: false });
+    return () => el.removeEventListener("wheel", surMolette);
+  }, [fenetre, zoomer]);
 
   // L'état du glissement vit dans une référence : le stocker dans l'état
   // provoquerait un rendu à chaque mouvement de souris.
@@ -148,18 +166,19 @@ export function CarteSuisse() {
           <p className={s.legende}>
             {POINTS.length} références situées
             {MANQUANTS > 0 ? ` · ${MANQUANTS} sans localisation` : ""}
+            <span className={s.aide}> — zoom : boutons, ou ⌘/Ctrl + molette</span>
           </p>
         </div>
 
         <div className={s.scene} ref={sceneRef}>
           <svg
+            ref={svgRef}
             className={s.carte}
             viewBox={`${fenetre.x} ${fenetre.y} ${fenetre.w} ${fenetre.h}`}
             role="img"
             aria-label="Carte de Suisse situant les références documentées de VRD"
             data-glissable={zoom > 1.001 ? "oui" : "non"}
             data-glisse={enGlisse ? "oui" : "non"}
-            onWheel={surMolette}
             onPointerDown={surPointerDown}
             onPointerMove={surPointerMove}
             onPointerUp={surPointerUp}

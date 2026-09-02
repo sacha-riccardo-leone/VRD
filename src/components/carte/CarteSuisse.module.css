@@ -41,6 +41,10 @@
 /* La carte n'a pas besoin de toute la largeur : huit points dans un pays se
    lisent mieux serrés. Elle est centrée dans la bande, qui reste pleine
    largeur. */
+.aide {
+  opacity: 0.7;
+}
+
 .scene {
   position: relative;
   inline-size: 100%;
