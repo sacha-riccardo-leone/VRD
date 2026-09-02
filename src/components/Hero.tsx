@@ -326,13 +326,21 @@ export function Hero() {
         // La région du masque est RASTÉRISÉE à chaque image, puisque son contenu
         // se met à l'échelle. Elle n'a donc à couvrir que ce qui est visible, et
         // non la viewBox entière : sous `slice` la fenêtre est une bande, et sur
-        // un téléphone cette bande fait le tiers de la viewBox. Trois fois moins
-        // de pixels à rastériser par image, là où c'est le plus cher.
+        // un téléphone cette bande fait le tiers de la viewBox.
+        //
+        // La marge de 15 % n'est pas du confort. Hors de cette région le masque
+        // vaut zéro, donc le rectangle anthracite y est TRANSPARENT : une région
+        // trop courte laisse voir la section suivante par le bas. Or sur iOS le
+        // viewport grandit dès que la barre d'adresse se replie, sans qu'un
+        // `resize` soit garanti. La marge absorbe ce décalage, et le
+        // ResizeObserver plus bas le rattrape même quand l'évènement manque.
+        const mx = Math.max(8, demiL * 0.3);
+        const my = Math.max(8, demiH * 0.3);
         const z = {
-          x: vx - 8,
-          y: vy - 8,
-          w: 2 * demiL + 16,
-          h: 2 * demiH + 16,
+          x: vx - mx,
+          y: vy - my,
+          w: 2 * (demiL + mx),
+          h: 2 * (demiH + my),
         };
         for (const el2 of [maskEl, blanc, plaque]) {
           el2.setAttribute("x", String(z.x.toFixed(1)));
@@ -474,9 +482,21 @@ export function Hero() {
       apply();
     });
 
+    // La plaque est ancrée en haut et en bas : sa hauteur suit le viewport. Sur
+    // iOS ce viewport change quand la barre d'adresse se replie, en plein
+    // défilement, et `resize` ne se déclenche pas de façon fiable dans ce cas.
+    // On observe donc l'élément lui-même, qui, lui, ne peut pas mentir sur sa
+    // propre taille.
+    const ro = new ResizeObserver(() => {
+      cadrer();
+      onScroll();
+    });
+    ro.observe(plate);
+
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize);
     return () => {
+      ro.disconnect();
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       cancelAnimationFrame(raf.current);

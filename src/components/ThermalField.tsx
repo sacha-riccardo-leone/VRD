@@ -323,13 +323,63 @@ export function ThermalField() {
       return () => ro.disconnect();
     }
 
+    // --- Dérive autonome, faute de curseur --------------------------------
+    // Sur un écran tactile le champ resterait figé : il n'a personne à suivre.
+    // Il se donne donc une source mobile. Deux périodes sans rapport simple
+    // entre elles — 9 s et 14,3 s — pour que la trajectoire ne se referme
+    // jamais : on ne doit pas pouvoir lire une boucle.
+    let derive = 0;
+    let visible = true;
+    let derniere = 0;
+
+    const io = new IntersectionObserver(
+      (entrees) => {
+        visible = entrees[0].isIntersecting;
+      },
+      { threshold: 0 },
+    );
+    io.observe(wrap);
+
+    function flotter(t: number) {
+      derive = requestAnimationFrame(flotter);
+      if (!visible) return;
+      // La plaque efface le champ dès que la plongée commence ; le redessiner
+      // sous une opacité nulle ne coûterait que de la batterie, et c'est
+      // précisément le moment où le masque, lui, a besoin de la machine.
+      const o = host.style.opacity;
+      if (o !== "" && parseFloat(o) < 0.03) return;
+      // La dérive est lente : trente images par seconde suffisent, et c'est
+      // deux fois moins de rastérisation pendant le défilement.
+      if (t - derniere < 33) return;
+      derniere = t;
+
+      target.x = 0.5 + 0.34 * Math.sin(t / 9000) * Math.cos(t / 20400);
+      target.y = 0.5 + 0.28 * Math.sin(t / 14300);
+      cursorPx.x = target.x * W;
+      cursorPx.y = target.y * H;
+      active = true;
+
+      eased.x += (target.x - eased.x) * GRID_K;
+      eased.y += (target.y - eased.y) * GRID_K;
+      easedField.x += (target.x - easedField.x) * FIELD_K;
+      easedField.y += (target.y - easedField.y) * FIELD_K;
+      computeGrid();
+      render();
+    }
+
+    // Un appareil à curseur garde la version qui suit le lecteur.
+    const tactile = window.matchMedia("(hover: none)").matches;
+    if (tactile) derive = requestAnimationFrame(flotter);
+
     host.addEventListener("pointermove", onMove);
     host.addEventListener("pointerleave", onLeave);
     return () => {
       ro.disconnect();
+      io.disconnect();
       host.removeEventListener("pointermove", onMove);
       host.removeEventListener("pointerleave", onLeave);
       cancelAnimationFrame(raf);
+      cancelAnimationFrame(derive);
     };
   }, []);
 
