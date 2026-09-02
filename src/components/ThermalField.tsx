@@ -300,6 +300,10 @@ export function ThermalField() {
     }
 
     function onMove(e: PointerEvent) {
+      // Un doigt ne prend pas la main : iOS synthétise un pointermove au
+      // toucher, qui gèlerait la dérive sur l'appareil qui en a besoin.
+      if (e.pointerType !== "mouse" && e.pointerType !== "pen") return;
+      mode = "pointer";
       const r = canvas.getBoundingClientRect();
       cursorPx.x = e.clientX - r.left;
       cursorPx.y = e.clientY - r.top;
@@ -326,11 +330,25 @@ export function ThermalField() {
       return () => ro.disconnect();
     }
 
-    // --- Dérive autonome, faute de curseur --------------------------------
-    // Sur un écran tactile le champ resterait figé : il n'a personne à suivre.
-    // Il se donne donc une source mobile. Deux périodes sans rapport simple
-    // entre elles — 9 s et 14,3 s — pour que la trajectoire ne se referme
-    // jamais : on ne doit pas pouvoir lire une boucle.
+    // --- Qui écrit la cible : un seul auteur par image ---------------------
+    // Le défaut signalé — « la dérive se bat avec la souris, et le champ bouge
+    // tout seul sur un poste de bureau » — n'était pas un mauvais seuil, c'était
+    // DEUX auteurs écrivant la même cible sans règle de propriété.
+    //
+    //   idle    : la dérive écrit.
+    //   pointer : le lecteur écrit.
+    //
+    // Le passage se fait sur un pointermove réel — souris ou stylet — et il est
+    // DÉFINITIF pour la session : dès qu'un pointeur s'est manifesté, la dérive
+    // ne reprend plus. Elle ne démarre d'ailleurs qu'après un délai sans le
+    // moindre pointeur, de sorte qu'un poste à souris ne la voit jamais.
+    //
+    // Rien de tout cela ne repose sur une media query d'entrée : `(hover: none)`
+    // décrit l'entrée PRINCIPALE et se trompe sur les machines hybrides — c'est
+    // ce qui faisait dériver le champ sur un écran de bureau. Ici la décision
+    // vient d'un fait observé : un pointeur s'est-il manifesté, oui ou non.
+    let mode: "idle" | "pointer" = "idle";
+    const DELAI_DERIVE = 1500;
     let derive = 0;
     let visible = true;
     let derniere = 0;
@@ -344,6 +362,11 @@ export function ThermalField() {
     io.observe(wrap);
 
     function flotter(t: number) {
+      // Le lecteur a pris la main : la dérive rend la main pour de bon.
+      if (mode !== "idle") {
+        derive = 0;
+        return;
+      }
       derive = requestAnimationFrame(flotter);
       if (!visible) return;
       // La plaque efface le champ dès que la plongée commence ; le redessiner
@@ -372,9 +395,11 @@ export function ThermalField() {
       });
     }
 
-    // Un appareil à curseur garde la version qui suit le lecteur.
-    const tactile = window.matchMedia("(hover: none)").matches;
-    if (tactile) derive = requestAnimationFrame(flotter);
+    // Aucun pointeur ne s'est manifesté dans ce délai : il n'y en aura sans
+    // doute jamais. Le champ se donne alors sa propre source.
+    const attente = window.setTimeout(() => {
+      if (mode === "idle") derive = requestAnimationFrame(flotter);
+    }, DELAI_DERIVE);
 
     host.addEventListener("pointermove", onMove);
     host.addEventListener("pointerleave", onLeave);
@@ -385,6 +410,7 @@ export function ThermalField() {
       host.removeEventListener("pointerleave", onLeave);
       cancelAnimationFrame(raf);
       cancelAnimationFrame(derive);
+      window.clearTimeout(attente);
     };
   }, []);
 

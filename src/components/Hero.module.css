@@ -31,6 +31,29 @@
   z-index: auto;
 }
 
+/* Composition SANS portail : format étroit, ou mouvement réduit.
+   ------------------------------------------------------------------------
+   Elle est portée par le CSS et non par le script, pour deux raisons. Elle est
+   juste dès le PREMIER rendu, donc sans saut à l'hydratation. Et l'espaceur
+   doit disparaître avec le portail : il n'existe que pour donner sa course à la
+   plongée. Le laisser debout ferait défiler un écran vide avant d'atteindre le
+   hero, puisque la plaque redevient un élément de flux placé APRÈS lui.
+
+   Le seuil est le même que celui du script (1024 px, mouvement réduit). Les
+   deux doivent bouger ensemble : le script décide si l'animation tourne, le CSS
+   décide de la mise en page. */
+@media (max-width: 1023px), (prefers-reduced-motion: reduce) {
+  .spacer {
+    block-size: 0;
+  }
+
+  .plate {
+    position: static;
+    block-size: calc(100svh - var(--header-h));
+    z-index: auto;
+  }
+}
+
 /* --- Au-dessus de la plaque : le dessin ---------------------------------- */
 /* Le champ appartient à l'anthracite, pas aux lettres : il se dessine donc
    par-dessus la plaque, dans ses teintes sombres d'origine (aucun jeton n'est

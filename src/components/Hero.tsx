@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ThermalField } from "./ThermalField";
 import { HeroProbe } from "./hero/HeroProbe";
 import { mesure } from "./hero/probe";
@@ -153,6 +153,44 @@ export function Hero() {
   const overlayRef = useRef<HTMLDivElement>(null);
   const raf = useRef(0);
 
+  // Le portail est une composition de FORMAT BUREAU. Sur téléphone il est
+  // retiré, pas dégradé : les deux défauts iOS qui restaient — contenu visible
+  // trop tôt, défilement saccadé au doigt — sont des propriétés de la plaque
+  // fixe et de son repeint par image. Supprimer le mécanisme les supprime,
+  // là où deux correctifs successifs n'avaient fait que les déplacer.
+  //
+  // Le seuil porte sur la LARGEUR, pas sur l'entrée : un portable à écran
+  // tactile en 1440 garde le portail, et une fenêtre étroite sur un poste fixe
+  // ne l'a pas. C'est bien le format qui décide.
+  const [actif, setActif] = useState(false);
+
+  useEffect(() => {
+    const large = window.matchMedia("(min-width: 1024px)");
+    const calme = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const maj = () => setActif(large.matches && !calme.matches);
+    maj();
+    // Réévalué en direct : franchir le seuil, ou changer le réglage système,
+    // doit basculer la composition sans rechargement.
+    //
+    // On écoute la requête de média ET le redimensionnement. Les deux, parce
+    // que l'évènement `change` ne s'est pas déclenché lors d'un essai de
+    // redimensionnement, et que je ne peux pas distinguer d'ici un défaut de
+    // l'outil d'un défaut réel. S'il manque, le CSS bascule bien la mise en page
+    // mais le script continue de croire le portail actif : la boucle met alors
+    // le masque à l'échelle sur une plaque redevenue statique, et les lettres
+    // zooment pendant que le hero s'en va. `resize`, lui, se déclenche.
+    large.addEventListener("change", maj);
+    calme.addEventListener("change", maj);
+    window.addEventListener("resize", maj);
+    window.addEventListener("orientationchange", maj);
+    return () => {
+      large.removeEventListener("change", maj);
+      calme.removeEventListener("change", maj);
+      window.removeEventListener("resize", maj);
+      window.removeEventListener("orientationchange", maj);
+    };
+  }, []);
+
   useEffect(() => {
     const spacer = spacerRef.current;
     const plate = plateRef.current;
@@ -173,15 +211,11 @@ export function Hero() {
       return;
     }
 
-    // Le portail tourne aussi sur téléphone. Il n'y avait pas de raison
-    // technique au seuil de 1024 px : la géométrie est relevée, donc elle suit
-    // la taille du sigle, et celle-ci est réduite en CSS sur écran étroit.
-    // Seul le mouvement réduit le désactive.
-    const ok = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!ok) {
+    if (!actif) {
       plate.dataset.portal = "off";
       return;
     }
+    delete plate.dataset.portal;
 
     // ------------------------------------------------------------------
     // Tout ce qui suit est RELEVÉ sur le glyphe, jamais choisi à la main.
@@ -502,6 +536,16 @@ export function Hero() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       cancelAnimationFrame(raf.current);
+      // Retour à l'état de repos. Sans cela, franchir le seuil vers le mobile
+      // laisserait une échelle, une opacité ou une visibilité figées — la
+      // géométrie périmée que le changement de point de rupture avait déjà
+      // produite une fois.
+      mask.removeAttribute("transform");
+      fut.setAttribute("points", "");
+      mark.style.display = "";
+      field.style.opacity = "";
+      overlay.style.opacity = "";
+      plate.style.visibility = "";
       // Sans cette remise à zéro, la garde `if (!raf.current)` de `onScroll`
       // reste armée sur l'identifiant d'une image ANNULÉE : plus aucun
       // défilement n'est traité, le sigle reste à l'échelle 1 et la plaque ne
@@ -509,7 +553,7 @@ export function Hero() {
       // cas se produit à chaque rechargement à chaud et sous StrictMode.
       raf.current = 0;
     };
-  }, []);
+  }, [actif]);
 
   return (
     <>
