@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import s from "./ThermalField.module.css";
+import { mesure } from "./hero/probe";
 
 /**
  * Champ thermique réactif — prototype de la section technique.
@@ -259,8 +260,10 @@ export function ThermalField() {
       eased.y += (target.y - eased.y) * GRID_K;
       easedField.x += (target.x - easedField.x) * FIELD_K;
       easedField.y += (target.y - easedField.y) * FIELD_K;
-      computeGrid();
-      render();
+      mesure("champ", () => {
+        computeGrid();
+        render();
+      });
       const rest = Math.max(
         Math.hypot(target.x - eased.x, target.y - eased.y),
         Math.hypot(target.x - easedField.x, target.y - easedField.y),
@@ -363,8 +366,10 @@ export function ThermalField() {
       eased.y += (target.y - eased.y) * GRID_K;
       easedField.x += (target.x - easedField.x) * FIELD_K;
       easedField.y += (target.y - easedField.y) * FIELD_K;
-      computeGrid();
-      render();
+      mesure("champ", () => {
+        computeGrid();
+        render();
+      });
     }
 
     // Un appareil à curseur garde la version qui suit le lecteur.

@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { ThermalField } from "./ThermalField";
+import { HeroProbe } from "./hero/HeroProbe";
+import { mesure } from "./hero/probe";
 import s from "./Hero.module.css";
 
 /**
@@ -408,7 +410,7 @@ export function Hero() {
 
     const clamp = (n: number) => Math.min(Math.max(n, 0), 1);
 
-    const apply = () => {
+    const apply = () => mesure("portail", () => {
       raf.current = 0;
       // La course ne peut PAS venir de `window.innerHeight` : sur iOS cette
       // valeur change quand la barre d'adresse se replie, en plein défilement,
@@ -447,7 +449,7 @@ export function Hero() {
       // transition — personne ne peut voir disparaître ce qui ne se voyait déjà
       // plus.
       plate.style.visibility = p > 0.995 ? "hidden" : "visible";
-    };
+    });
 
     const onScroll = () => {
       if (!raf.current) raf.current = requestAnimationFrame(apply);
@@ -602,6 +604,7 @@ export function Hero() {
       </div>
 
       <h1 className="visuallyHidden">VRD — Ingénieurs conseils</h1>
+      <HeroProbe />
     </>
   );
 }

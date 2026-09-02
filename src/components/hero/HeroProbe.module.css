@@ -1,0 +1,25 @@
+/* Sonde de diagnostic. Posée en haut pour ne jamais masquer le bord inférieur,
+   qui est précisément l'endroit où la fuite se produit sur iPhone. */
+.probe {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 9999;
+  padding: 6px 8px;
+  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-size: 10px;
+  line-height: 1.35;
+  color: #0f0;
+  background: rgba(0, 0, 0, 0.86);
+  pointer-events: none;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.alerte {
+  color: #ff5f5f;
+}
+
+.bon {
+  color: #6fe36f;
+}
