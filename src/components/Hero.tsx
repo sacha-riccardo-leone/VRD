@@ -137,6 +137,7 @@ function plages(c: CanvasRenderingContext2D, largeur: number, y: number): Plage[
 }
 
 export function Hero() {
+  const spacerRef = useRef<HTMLDivElement>(null);
   const plateRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const maskRef = useRef<SVGGElement>(null);
@@ -148,6 +149,7 @@ export function Hero() {
   const raf = useRef(0);
 
   useEffect(() => {
+    const spacer = spacerRef.current;
     const plate = plateRef.current;
     const svg = svgRef.current;
     const mask = maskRef.current;
@@ -156,11 +158,15 @@ export function Hero() {
     const text = measureRef.current;
     const field = fieldRef.current;
     const overlay = overlayRef.current;
-    if (!plate || !svg || !mask || !mark || !fut || !text || !field || !overlay) return;
+    if (!spacer || !plate || !svg || !mask || !mark || !fut || !text || !field || !overlay) {
+      return;
+    }
 
-    const ok =
-      window.matchMedia("(min-width: 1024px)").matches &&
-      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Le portail tourne aussi sur téléphone. Il n'y avait pas de raison
+    // technique au seuil de 1024 px : la géométrie est relevée, donc elle suit
+    // la taille du sigle, et celle-ci est réduite en CSS sur écran étroit.
+    // Seul le mouvement réduit le désactive.
+    const ok = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!ok) {
       plate.dataset.portal = "off";
       return;
@@ -176,7 +182,7 @@ export function Hero() {
     let maxScale = 20;
     let bascule = Infinity; // échelle du relais texte → polygone
     let corps = 300; // taille de police, en unités de viewBox
-    let relais = () => {}; // recalcul du relais, posé à la mesure
+    let cadrer = () => {}; // recalcul de l'échelle finale et du relais
 
     const measure = (): boolean => {
       const cs = getComputedStyle(text);
@@ -288,15 +294,6 @@ export function Hero() {
       const demi = Math.max((droite - gauche) / 2, 1);
       const demiBande = (bande[bande.length - 1].y - bande[0].y) / 2;
 
-      // Sous `slice` la région visible est toujours incluse dans la viewBox :
-      // ces deux distances majorent donc le cas réel pour TOUTE fenêtre.
-      const dx = Math.max(ox, 1200 - ox);
-      const dy = Math.max(oy, 800 - oy);
-
-      // Échelle à laquelle le coin visible le plus lointain entre dans
-      // l'ouverture — calculée, jamais choisie.
-      maxScale = Math.max(Math.hypot(dx, dy) / demi, 8) * 1.35;
-
       // --- Échelle du relais, cherchée numériquement sur le relevé plutôt que
       //     posée en formule : à une échelle donnée on ramène la fenêtre dans le
       //     glyphe et on vérifie, ligne à ligne, qu'il n'y reste QUE la
@@ -309,7 +306,7 @@ export function Hero() {
       //     où elle ne coûte qu'un peu d'échelle ; ici elle coûterait un relais
       //     retardé, donc un glyphe poussé plus loin dans sa zone de déformation.
       //     Le relais est donc recalculé quand la fenêtre change.
-      relais = () => {
+      cadrer = () => {
         const el = svg.getBoundingClientRect();
         const k = Math.max(el.width / 1200, el.height / 800);
         const demiL = k > 0 ? el.width / k / 2 : 600;
@@ -318,6 +315,19 @@ export function Hero() {
         const vy = 400 - demiH;
         const dxr = Math.max(ox - vx, vx + 2 * demiL - ox);
         const dyr = Math.max(oy - vy, vy + 2 * demiH - oy);
+
+        // Échelle finale : celle où l'ouverture déborde la fenêtre. Le fût est
+        // VERTICAL, donc c'est sa largeur qui doit couvrir l'écart horizontal et
+        // sa hauteur l'écart vertical — deux conditions séparées, pas une
+        // diagonale. Prendre la diagonale, comme il le fallait pour un jambage
+        // oblique dont on ignorait l'orientation, surestimait ici d'un tiers.
+        //
+        // Le calcul porte sur la fenêtre RÉELLE. La majorer par la viewBox
+        // entière ne coûtait rien sur un écran large, où les deux se
+        // confondent ; sur un téléphone, où l'on ne voit qu'une bande verticale,
+        // elle triplait l'échelle finale — la plongée s'achevait aux trois
+        // quarts de la course et le dernier quart ne montrait plus rien.
+        maxScale = Math.max(dxr / demi, dyr / demiBande, 8) * 1.35;
 
         // Le critère est une AIRE, pas un test ligne à ligne. L'escalier rogne
         // d'une demi-ligne là où la composante s'élargit d'un coup : c'est un
@@ -357,7 +367,7 @@ export function Hero() {
           }
         }
       };
-      relais();
+      cadrer();
       return Number.isFinite(bascule);
     };
 
@@ -365,7 +375,13 @@ export function Hero() {
 
     const apply = () => {
       raf.current = 0;
-      const course = window.innerHeight;
+      // La course ne peut PAS venir de `window.innerHeight` : sur iOS cette
+      // valeur change quand la barre d'adresse se replie, en plein défilement,
+      // et la plongée sauterait. On la prend sur les éléments eux-mêmes —
+      // l'espaceur vaut `100svh - en-tête`, et le haut de la plaque vaut
+      // l'en-tête, puisqu'elle est fixe. Leur somme vaut `100svh`, qui est la
+      // hauteur PETITE du viewport : stable, elle, par définition.
+      const course = Math.max(spacer.offsetHeight + plate.getBoundingClientRect().top, 1);
       const p = clamp(window.scrollY / course);
 
       // Progression EXPONENTIELLE, pas quadratique : une interpolation en p²
@@ -402,10 +418,11 @@ export function Hero() {
       if (!raf.current) raf.current = requestAnimationFrame(apply);
     };
 
-    // La fenêtre a changé de forme : le relais dépend de la région réellement
-    // visible, il faut le reprendre avant de repeindre.
+    // La fenêtre a changé de forme : l'échelle finale et le relais dépendent
+    // tous deux de la région réellement visible, il faut les reprendre avant de
+    // repeindre.
     const onResize = () => {
-      relais();
+      cadrer();
       onScroll();
     };
 
@@ -440,7 +457,7 @@ export function Hero() {
   return (
     <>
       {/* Course de défilement : exactement un écran. */}
-      <div className={s.spacer} />
+      <div ref={spacerRef} className={s.spacer} />
 
       <div ref={plateRef} className={`technique ${s.plate}`}>
         <svg

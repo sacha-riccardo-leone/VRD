@@ -53,6 +53,17 @@
   letter-spacing: -0.04em;
 }
 
+/* Sur un écran étroit, `slice` ne laisse voir qu'une bande verticale de la
+   viewBox — environ la largeur de l'appareil en unités. À 300 le sigle, large
+   de 552 unités, en déborderait des deux côtés. Il n'y a rien d'autre à
+   ajuster : le relevé lit la taille réellement calculée, et le repère de
+   plongée, l'échelle finale et le seuil de relais en découlent tous. */
+@media (max-width: 767px) {
+  .markText {
+    font-size: 160px;
+  }
+}
+
 /* --- Textes secondaires -------------------------------------------------- */
 .overlay {
   position: absolute;
