@@ -173,7 +173,10 @@ export type Client = {
 export const CLIENTS: Client[] = [
   { nom: "Bulgari", logo: "/logos/bulgari.svg", site: "https://www.bulgari.com" },
   { nom: "TAG Heuer", logo: "/logos/tag-heuer.png", site: "https://www.tagheuer.com" },
-  { nom: "Swatch Group", logo: "/logos/swatch-group.png", site: "https://www.swatchgroup.com" },
+  // Le fichier precedent portait la marque « swatch » (la montre), pas le
+  // groupe : deux entites distinctes, et c'est le groupe que cite le
+  // portfolio. Remplace par le sigle SWATCH GROUP fourni par VRD.
+  { nom: "Swatch Group", logo: "/logos/swatch-group.webp", site: "https://www.swatchgroup.com" },
   { nom: "CFF", logo: "/logos/cff.webp", site: "https://www.sbb.ch" },
   { nom: "Coop", logo: "/logos/coop.webp", site: "https://www.coop.ch" },
   { nom: "Coop Restaurant", logo: "/logos/coop-restaurant.png", site: "https://www.coop-restaurant.ch" },
