@@ -6,16 +6,17 @@
    l'intérieur de `.technique`, `--paper` EST l'anthracite — même fond que le
    hero et que l'octogone des huit domaines. */
 .bande {
-  padding-block: var(--s-9);
+  padding-block: var(--s-5);
   background: var(--paper);
   color: var(--ink);
   border-block: 1px solid var(--rule-strong);
 }
 
+/* Les mentions vont AUX BORDS de la bande, pas dans la colonne de texte : la
+   planche se lit comme un plan, annotations dans les coins et dessin au milieu.
+   Seule la carte reste dans une largeur mesurée. */
 .cadre {
-  max-inline-size: var(--page-max);
-  margin-inline: auto;
-  padding-inline: var(--gutter);
+  padding-inline: var(--s-5);
 }
 
 .entete {
@@ -24,7 +25,7 @@
   align-items: baseline;
   justify-content: space-between;
   gap: var(--s-4);
-  margin-block-end: var(--s-6);
+  margin-block-end: var(--s-8);
 }
 
 .legende {
@@ -210,12 +211,15 @@
   cursor: default;
 }
 
+/* Empilées en bas à gauche, et non réparties d'un bord à l'autre : ce sont deux
+   réserves de lecture, pas deux colonnes. */
 .pied {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-start;
   gap: var(--s-3);
-  margin-block-start: var(--s-4);
+  margin-block-start: var(--s-8);
+  max-inline-size: 34rem;
   color: var(--ink-muted);
   font-family: var(--font-mono-stack);
   font-size: var(--fs-100);
