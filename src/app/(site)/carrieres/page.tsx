@@ -19,11 +19,13 @@ import s from "./page.module.css";
  *  - les trois intitulés de poste et l’adresse de candidature, repris tels
  *    quels de la page Carrières de VRD.
  *
- * Ce qui est REPRÉSENTATIF, et marqué comme tel À L’ÉCRAN (note de relecture
- * en tête de page, puis marqueur « contenu représentatif » AVANT chaque bloc
- * concerné — jamais en simple commentaire) : le déroulé des phases d’un
- * mandat, les descriptifs de poste et la marche à suivre pour candidater. VRD
- * ne publie rien de tout cela ; ces textes sont les nôtres.
+ * Ce qui est REPRÉSENTATIF, et marqué comme tel À L’ÉCRAN par un marqueur
+ * « contenu représentatif » placé AVANT chaque bloc concerné — jamais en
+ * simple commentaire : le déroulé des phases d’un mandat, les descriptifs de
+ * poste et la marche à suivre pour candidater. VRD ne publie rien de tout
+ * cela ; ces textes sont les nôtres. La note de relecture qui coiffait la
+ * page a été retirée à la demande du bureau ; les marqueurs de bloc, eux,
+ * restent la garantie que rien ne se lit comme une affirmation de VRD.
  *
  * Aucune offre datée, aucun avantage social, aucun logiciel nommé, aucune
  * certification, aucun client, aucun projet : rien de cela n’est vérifiable,
@@ -131,27 +133,6 @@ export default function CarrieresPage() {
         title="Rejoins l’aventure."
         lede="Nous sommes six à Sugiez, et nous concevons le chauffage, la ventilation et le sanitaire de bâtiments qui sortent de terre. Si le métier t’intéresse pour de vrai, écris-nous."
       />
-
-      {/* Marquage du contenu représentatif — visible à l’écran, en tête de
-          page, avant toute affirmation. Même dispositif que la planche 02. */}
-      <div className={s.noteWrap}>
-        <aside className={s.note} aria-label="Note de relecture">
-          <p className={`label ${s.noteLabel}`}>
-            Note de relecture{" "}
-            <span className={s.flag}>contenu représentatif</span>
-          </p>
-          <p className={s.noteText}>
-            L’effectif, les deux dirigeants, les cinq techniques et les trois
-            intitulés de poste ci-dessous viennent de VRD et du registre du
-            commerce. Les descriptifs de poste, le déroulé d’un mandat et la
-            marche à suivre pour candidater ont été rédigés pour cette
-            maquette&nbsp;: ils doivent être relus, corrigés ou remplacés par le
-            bureau avant publication. Aucun projet, aucun client, aucune
-            certification et aucun avantage social n’y figurent — rien de tout
-            cela n’est public à ce jour.
-          </p>
-        </aside>
-      </div>
 
       {/* --- Pourquoi nous rejoindre -------------------------------------- */}
       <section className={s.section} aria-labelledby="pourquoi-titre">

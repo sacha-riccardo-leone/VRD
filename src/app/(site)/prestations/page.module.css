@@ -22,63 +22,119 @@
   letter-spacing: 0;
 }
 
-@media (min-width: 60rem) {
-  .sommaireList {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .sommaireList li {
-    border-bottom: 0;
-    border-inline-start: 1px solid var(--rule);
-  }
-
-  .sommaireList li:first-child {
-    border-inline-start: 0;
-  }
-
-  .sommaireLink {
-    padding-inline: var(--s-4);
-  }
-
-  /* La première colonne reste alignée sur la marge de la page. */
-  .sommaireList li:first-child .sommaireLink {
-    padding-inline-start: 0;
-  }
-}
-
 /* --------------------------------------------------------------------------
-   Une technique = une section. Filet fort entre les techniques, filet fin à
-   l'intérieur : deux niveaux de séparation, aucune couleur.
+   Une technique = un dépliant, fermé au chargement.
+
+   `name="technique"` sur le <details> rend le groupe EXCLUSIF côté navigateur :
+   ouvrir l'un referme l'autre, sans une ligne de JavaScript et sans état
+   client. Le filet fort continue de séparer les techniques.
    -------------------------------------------------------------------------- */
 .tech {
   border-top: 1px solid var(--rule-strong);
 }
 
-.techInner {
-  display: grid;
-  gap: var(--s-6);
+/* Le triangle natif est retiré : le repère d'état est dessiné au trait plus
+   bas, dans la même langue graphique que le reste de la planche. */
+.resume {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-5);
   max-width: var(--page-max);
   margin-inline: auto;
-  padding: var(--s-8) var(--gutter);
+  padding: var(--s-6) var(--gutter);
+  list-style: none;
+  cursor: pointer;
 }
 
-/* Deux colonnes seulement quand le titre ET le texte tiennent leur mesure. */
-@media (min-width: 62rem) {
-  .techInner {
-    grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
-    gap: var(--s-8);
-  }
+.resume::-webkit-details-marker {
+  display: none;
+}
+
+/* Toute la ligne est actionnable, donc toute la ligne réagit — par la surface,
+   jamais par la teinte. */
+.resume:hover {
+  background: var(--paper-sunk);
+}
+
+.resume:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: -3px;
+}
+
+.resumeTexte,
+.techLabel {
+  display: block;
 }
 
 .techTitle {
   margin-top: var(--s-3);
 }
 
+/* Repère d'état : un plus qui devient un moins. Deux filets d'encre — pas une
+   icône rapportée — et la barre verticale se rétracte au lieu de s'effacer,
+   pour que le geste se lise. `--dur-fast` retombe à 1 ms sous
+   `prefers-reduced-motion` (tokens.css) : la réserve est déjà tenue, inutile
+   de répéter la requête média ici. */
+.marque {
+  position: relative;
+  flex: none;
+  inline-size: 20px;
+  block-size: 20px;
+  margin-block-start: 0.4rem;
+}
+
+.marque::before,
+.marque::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 50%;
+  block-size: 1px;
+  background: var(--ink);
+}
+
+.marque::after {
+  transform: rotate(90deg);
+  transition: transform var(--dur-fast) var(--ease);
+}
+
+.tech[open] .marque::after {
+  transform: rotate(90deg) scaleX(0);
+}
+
+/* Le corps déplié. Le pas supérieur est nul : le résumé l'a déjà donné.
+
+   `scroll-margin-block-start` : c'est ce corps qui porte l'ancre, donc c'est
+   sur lui qu'atterrit le défilement venu de l'octogone. Sans réserve, il se
+   collerait en haut de la fenêtre et le résumé — le titre de la technique
+   qu'on vient d'ouvrir — resterait juste au-dessus du bord. La valeur couvre
+   l'en-tête collant et la hauteur du résumé. */
+.techInner {
+  scroll-margin-block-start: 14rem;
+  display: grid;
+  gap: var(--s-6);
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: 0 var(--gutter) var(--s-8);
+}
+
+@media (min-width: 62rem) {
+  .techInner {
+    grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+    gap: var(--s-8);
+  }
+
+  /* Froid, Sprinkler et MCR n'ont pas encore de phrase-clé : leur corps prend
+     alors les deux colonnes plutôt que d'en laisser une vide. */
+  .techBody:only-child {
+    grid-column: 1 / -1;
+  }
+}
+
 /* La phrase-clé : filet d'encre à gauche, corps plus grand. L'emphase vient du
    trait et du corps, jamais d'une teinte. */
 .claim {
-  margin-top: var(--s-5);
   padding-inline-start: var(--s-4);
   border-inline-start: 2px solid var(--ink);
   font-size: var(--fs-500);
@@ -120,12 +176,6 @@
   letter-spacing: var(--ls-label);
   line-height: var(--lh-body);
   color: var(--ink-muted);
-}
-
-@media (min-width: 62rem) {
-  .figure {
-    grid-column: 1 / -1;
-  }
 }
 
 /* --------------------------------------------------------------------------

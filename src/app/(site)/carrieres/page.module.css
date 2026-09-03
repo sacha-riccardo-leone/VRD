@@ -32,40 +32,6 @@
   color: var(--ink-muted);
 }
 
-/* --------------------------------------------------------------------------
-   Note de relecture — le marquage du contenu représentatif, en tête de page.
-
-   Même dessin que la planche 02 : encadré tireté sur surface creusée, posé
-   AVANT toute affirmation. Le lecteur retrouve le même signe d'une page à
-   l'autre.
-   -------------------------------------------------------------------------- */
-.noteWrap {
-  max-width: var(--page-max);
-  margin-inline: auto;
-  padding: var(--s-6) var(--gutter) 0;
-}
-
-.note {
-  display: grid;
-  gap: var(--s-3);
-  padding: var(--s-5);
-  border: 1px dashed var(--rule-strong);
-  background: var(--paper-sunk);
-}
-
-.noteLabel {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--s-3);
-}
-
-.noteText {
-  max-width: 68ch;
-  font-size: var(--fs-300);
-  line-height: var(--lh-body);
-}
-
 /* --- Marqueur de contenu représentatif -----------------------------------
    Encadré tireté, jamais discret : une phrase que VRD n'a pas écrite doit se
    voir autant que celles qu'ils ont écrites. */

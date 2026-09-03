@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
 import { CarteSuisse } from "@/components/carte/CarteSuisse";
 import {
@@ -189,14 +188,6 @@ export default function RealisationsPage() {
         </svg>
       </section>
 
-      <section className={s.cta}>
-        <p className={s.ctaText}>
-          Un projet de même nature&nbsp;? Nous en discutons volontiers.
-        </p>
-        <Link href="/contact" className={s.ctaLink}>
-          Nous contacter
-        </Link>
-      </section>
     </main>
   );
 }

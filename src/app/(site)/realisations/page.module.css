@@ -242,39 +242,3 @@
   margin-inline: auto;
   padding: var(--s-7) var(--gutter) 0;
 }
-
-/* --- Appel à l'action ---------------------------------------------------- */
-.cta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--s-5);
-  max-width: var(--page-max);
-  margin-inline: auto;
-  padding: var(--s-8) var(--gutter);
-}
-
-.ctaText {
-  font-size: var(--fs-500);
-}
-
-.ctaLink {
-  display: inline-flex;
-  align-items: center;
-  min-height: 48px;
-  padding: var(--s-3) var(--s-5);
-  background: var(--ink);
-  color: var(--paper);
-  box-shadow: inset 0 0 0 2px var(--ink);
-  font-weight: 600;
-  text-decoration: none;
-  transition:
-    background var(--dur-fast) var(--ease),
-    color var(--dur-fast) var(--ease);
-}
-
-.ctaLink:hover,
-.ctaLink:focus-visible {
-  background: var(--paper);
-  color: var(--ink);
-}

@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
-import { FigureBackdrop } from "@/components/FigureBackdrop";
-import { Manifold } from "@/components/Manifold";
 import s from "./page.module.css";
 
 /**
@@ -16,9 +14,6 @@ import s from "./page.module.css";
  *  - Le paragraphe de confidentialité est une RÉDACTION D’EXEMPLE, écrite au
  *    conditionnel et marquée à l’écran : VRD n’a publié aucune politique de
  *    traitement des données. On ne lui en invente pas une.
- *  - La zone d’intervention est un PÉRIMÈTRE GÉOGRAPHIQUE indicatif, tracé
- *    depuis le siège et marqué comme tel AVANT la liste des secteurs — une
- *    réserve placée après ce qu’elle qualifie arrive trop tard.
  *  - Aucun mandat, aucune référence de projet, aucun nom de client, aucune
  *    certification, aucun chiffre : rien de tel n’est public.
  *
@@ -41,31 +36,8 @@ import s from "./page.module.css";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Coordonnées de VRD ingénieurs-conseils SA à Sugiez (Mont-Vully, FR) — adresse, téléphone, e-mail, formulaire de contact et zone d’intervention.",
+    "Coordonnées de VRD ingénieurs-conseils SA à Sugiez (Mont-Vully, FR) — adresse, téléphone, e-mail et formulaire de contact.",
 };
-
-/* --- Le périmètre géographique, tracé depuis le siège. -------------------- */
-
-type Secteur = { nom: string; detail: string };
-
-const ZONE: readonly Secteur[] = [
-  {
-    nom: "Fribourg",
-    detail: "Mont-Vully et district du Lac, Fribourg et sa couronne.",
-  },
-  {
-    nom: "Broye",
-    detail: "Broye fribourgeoise et vaudoise, d’Estavayer à Payerne.",
-  },
-  {
-    nom: "Vaud",
-    detail: "Rive sud du lac de Neuchâtel, Yverdon-les-Bains, Nord vaudois.",
-  },
-  {
-    nom: "Trois-Lacs",
-    detail: "Morat, Neuchâtel, Bienne et leurs rives.",
-  },
-];
 
 export default function ContactPage() {
   return (
@@ -297,42 +269,6 @@ export default function ContactPage() {
         </section>
       </div>
 
-      {/* --- Zone d’intervention : un périmètre, pas une liste de mandats. -- */}
-      <section className={s.zone} aria-labelledby="zone-titre">
-        <FigureBackdrop placement="right" size="min(56%, 38rem)">
-          <Manifold />
-        </FigureBackdrop>
-
-        <div className={s.zoneInner}>
-          <p className={`label ${s.kicker}`}>Depuis Sugiez</p>
-          <h2 id="zone-titre" className={s.h2}>
-            Zone d’intervention
-          </h2>
-          <p className={s.zoneLede}>
-            Le siège est sur le Mont-Vully, entre le lac de Morat et celui de
-            Neuchâtel.
-          </p>
-
-          {/* La réserve précède la liste : lue après, elle ne rattrape plus
-              rien — le lecteur a déjà pris les secteurs pour un engagement. */}
-          <p className={s.zoneNote}>
-            <span className={s.flag}>zone indicative</span>
-            Périmètre géographique proposé pour cette maquette, tracé depuis le
-            siège&nbsp;: il n’a pas été confirmé par le bureau. Ce n’est pas une
-            liste de mandats — VRD ne publie ni référence de projet ni nom de
-            client, et cette page n’en invente aucun.
-          </p>
-
-          <ul className={s.zoneList}>
-            {ZONE.map((secteur) => (
-              <li className={s.zoneItem} key={secteur.nom}>
-                <span className={`label ${s.zoneName}`}>{secteur.nom}</span>
-                <span className={s.zoneDetail}>{secteur.detail}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
     </main>
   );
 }

@@ -30,6 +30,19 @@ import s from "./page.module.css";
  * Une seule illustration sur la page — la boucle de chauffage, dans la section
  * qu’elle documente. Pas de motif en fond : la page est déjà longue, et un
  * substrat derrière cinq blocs de texte serait de la décoration sans fonction.
+ *
+ * Les huit domaines sont des accordéons `<details name="technique">`, fermés
+ * au chargement. L’attribut `name` suffit à les rendre EXCLUSIFS — ouvrir l’un
+ * referme l’autre — sans une ligne de JavaScript, sans état client et sans
+ * dépendance : la page reste un composant serveur.
+ *
+ * L’ancre (`id`) est portée par le CORPS du dépliant, pas par le `<details>`.
+ * C’est délibéré, et vérifié dans le navigateur : arriver sur `#bim` ne déplie
+ * l’élément QUE si la cible se trouve dans la partie repliée. Posée sur le
+ * `<details>` ou sur le titre du résumé, elle ne déplie rien, et les huit
+ * liens de l’octogone tomberaient sur des volets fermés. Le marqueur « contenu
+ * représentatif » demeure dans le résumé, donc visible AVANT d’ouvrir : une
+ * réserve cachée derrière un pli ne remplit pas son office.
  */
 export const metadata: Metadata = {
   title: "Prestations",
@@ -53,28 +66,23 @@ export default function PrestationsPage() {
         <OctagonNav />
       </section>
 
-
-
-      {/* --- 01 · Chauffage & froid ------------------------------------- */}
-      <section
-        id="chauffage"
-        className={s.tech}
-        aria-labelledby="chauffage-titre"
-      >
-        <div className={s.techInner}>
-          <div className={s.techHead}>
-            <p className={`label ${s.techLabel}`}>
+      <details className={s.tech} name="technique">
+        <summary className={s.resume}>
+          <span className={s.resumeTexte}>
+            <span className={`label ${s.techLabel}`}>
               Technique&nbsp;01&nbsp;/&nbsp;08{" "}
               <span className={s.flag}>contenu représentatif</span>
-            </p>
-            <h2 id="chauffage-titre" className={s.techTitle}>
-              Chauffage
-            </h2>
-            <p className={s.claim}>
-              Production, distribution, émission&nbsp;: des installations
-              dimensionnées au plus juste.
-            </p>
-          </div>
+            </span>
+            <h2 className={s.techTitle}>Chauffage</h2>
+          </span>
+          <span className={s.marque} aria-hidden="true" />
+        </summary>
+
+        <div id="chauffage" className={s.techInner}>
+          <p className={s.claim}>
+            Production, distribution, émission&nbsp;: des installations
+                          dimensionnées au plus juste.
+          </p>
 
           <div className={s.techBody}>
             <p>
@@ -111,27 +119,24 @@ export default function PrestationsPage() {
             </ul>
           </div>
         </div>
-      </section>
+      </details>
 
-      {/* --- 02 · Ventilation ------------------------------------------- */}
-      <section
-        id="ventilation"
-        className={s.tech}
-        aria-labelledby="ventilation-titre"
-      >
-        <div className={s.techInner}>
-          <div className={s.techHead}>
-            <p className={`label ${s.techLabel}`}>
+      <details className={s.tech} name="technique">
+        <summary className={s.resume}>
+          <span className={s.resumeTexte}>
+            <span className={`label ${s.techLabel}`}>
               Technique&nbsp;02&nbsp;/&nbsp;08{" "}
               <span className={s.flag}>contenu représentatif</span>
-            </p>
-            <h2 id="ventilation-titre" className={s.techTitle}>
-              Ventilation
-            </h2>
-            <p className={s.claim}>
-              Air neuf, confort et hygiène, sans surconsommation.
-            </p>
-          </div>
+            </span>
+            <h2 className={s.techTitle}>Ventilation</h2>
+          </span>
+          <span className={s.marque} aria-hidden="true" />
+        </summary>
+
+        <div id="ventilation" className={s.techInner}>
+          <p className={s.claim}>
+            Air neuf, confort et hygiène, sans surconsommation.
+          </p>
 
           <div className={s.techBody}>
             <p>
@@ -169,21 +174,21 @@ export default function PrestationsPage() {
             </ul>
           </div>
         </div>
-      </section>
+      </details>
 
-      <section id="froid" className={s.tech} aria-labelledby="froid-titre">
-        <div className={s.techInner}>
-          <div className={s.techHead}>
-            <p className={`label ${s.techLabel}`}>
+      <details className={s.tech} name="technique">
+        <summary className={s.resume}>
+          <span className={s.resumeTexte}>
+            <span className={`label ${s.techLabel}`}>
               Technique&nbsp;03&nbsp;/&nbsp;08{" "}
               <span className={s.flag}>contenu représentatif</span>
-            </p>
-            <h2 id="froid-titre" className={s.techTitle}>
-              Froid
-            </h2>
-            
-          </div>
+            </span>
+            <h2 className={s.techTitle}>Froid</h2>
+          </span>
+          <span className={s.marque} aria-hidden="true" />
+        </summary>
 
+        <div id="froid" className={s.techInner}>
           <div className={s.techBody}>
             <p>
               Le froid obéit à la même logique, avec ses charges d’été et sa
@@ -196,26 +201,24 @@ export default function PrestationsPage() {
             </p>
           </div>
         </div>
-      </section>
+      </details>
 
-
-      {/* --- 03 · Sanitaire --------------------------------------------- */}
-      <section
-        id="sanitaire"
-        className={s.tech}
-        aria-labelledby="sanitaire-titre"
-      >
-        <div className={s.techInner}>
-          <div className={s.techHead}>
-            <p className={`label ${s.techLabel}`}>
+      <details className={s.tech} name="technique">
+        <summary className={s.resume}>
+          <span className={s.resumeTexte}>
+            <span className={`label ${s.techLabel}`}>
               Technique&nbsp;04&nbsp;/&nbsp;08{" "}
               <span className={s.flag}>contenu représentatif</span>
-            </p>
-            <h2 id="sanitaire-titre" className={s.techTitle}>
-              Sanitaire
-            </h2>
-            <p className={s.claim}>Eau, évacuation et protection incendie.</p>
-          </div>
+            </span>
+            <h2 className={s.techTitle}>Sanitaire</h2>
+          </span>
+          <span className={s.marque} aria-hidden="true" />
+        </summary>
+
+        <div id="sanitaire" className={s.techInner}>
+          <p className={s.claim}>
+            Eau, évacuation et protection incendie.
+          </p>
 
           <div className={s.techBody}>
             <p>
@@ -257,21 +260,21 @@ export default function PrestationsPage() {
             </ul>
           </div>
         </div>
-      </section>
+      </details>
 
-      <section id="sprinkler" className={s.tech} aria-labelledby="sprinkler-titre">
-        <div className={s.techInner}>
-          <div className={s.techHead}>
-            <p className={`label ${s.techLabel}`}>
+      <details className={s.tech} name="technique">
+        <summary className={s.resume}>
+          <span className={s.resumeTexte}>
+            <span className={`label ${s.techLabel}`}>
               Technique&nbsp;05&nbsp;/&nbsp;08{" "}
               <span className={s.flag}>contenu représentatif</span>
-            </p>
-            <h2 id="sprinkler-titre" className={s.techTitle}>
-              Sprinkler
-            </h2>
-            
-          </div>
+            </span>
+            <h2 className={s.techTitle}>Sprinkler</h2>
+          </span>
+          <span className={s.marque} aria-hidden="true" />
+        </summary>
 
+        <div id="sprinkler" className={s.techInner}>
           <div className={s.techBody}>
             <p className={s.todo}>
               <strong>Contenu à fournir.</strong> Ce domaine figure parmi les huit
@@ -280,26 +283,24 @@ export default function PrestationsPage() {
             </p>
           </div>
         </div>
-      </section>
+      </details>
 
-
-      {/* --- 04 · Énergétique ------------------------------------------- */}
-
-      {/* --- 05 · BIM & coordination ------------------------------------ */}
-      <section id="bim" className={s.tech} aria-labelledby="bim-titre">
-        <div className={s.techInner}>
-          <div className={s.techHead}>
-            <p className={`label ${s.techLabel}`}>
+      <details className={s.tech} name="technique">
+        <summary className={s.resume}>
+          <span className={s.resumeTexte}>
+            <span className={`label ${s.techLabel}`}>
               Technique&nbsp;06&nbsp;/&nbsp;08{" "}
               <span className={s.flag}>contenu représentatif</span>
-            </p>
-            <h2 id="bim-titre" className={s.techTitle}>
-              BIM &amp; coordination
-            </h2>
-            <p className={s.claim}>
-              Une maquette unique, tous les corps d’état alignés.
-            </p>
-          </div>
+            </span>
+            <h2 className={s.techTitle}>BIM &amp; coordination</h2>
+          </span>
+          <span className={s.marque} aria-hidden="true" />
+        </summary>
+
+        <div id="bim" className={s.techInner}>
+          <p className={s.claim}>
+            Une maquette unique, tous les corps d’état alignés.
+          </p>
 
           <div className={s.techBody}>
             <p>
@@ -337,21 +338,21 @@ export default function PrestationsPage() {
             </ul>
           </div>
         </div>
-      </section>
+      </details>
 
-      <section id="mcr" className={s.tech} aria-labelledby="mcr-titre">
-        <div className={s.techInner}>
-          <div className={s.techHead}>
-            <p className={`label ${s.techLabel}`}>
+      <details className={s.tech} name="technique">
+        <summary className={s.resume}>
+          <span className={s.resumeTexte}>
+            <span className={`label ${s.techLabel}`}>
               Technique&nbsp;07&nbsp;/&nbsp;08{" "}
               <span className={s.flag}>contenu représentatif</span>
-            </p>
-            <h2 id="mcr-titre" className={s.techTitle}>
-              MCR
-            </h2>
-            
-          </div>
+            </span>
+            <h2 className={s.techTitle}>MCR</h2>
+          </span>
+          <span className={s.marque} aria-hidden="true" />
+        </summary>
 
+        <div id="mcr" className={s.techInner}>
           <div className={s.techBody}>
             <p className={s.todo}>
               <strong>Contenu à fournir.</strong> Ce domaine figure parmi les huit
@@ -360,26 +361,25 @@ export default function PrestationsPage() {
             </p>
           </div>
         </div>
-      </section>
-      <section
-        id="energetique"
-        className={s.tech}
-        aria-labelledby="energetique-titre"
-      >
-        <div className={s.techInner}>
-          <div className={s.techHead}>
-            <p className={`label ${s.techLabel}`}>
+      </details>
+
+      <details className={s.tech} name="technique">
+        <summary className={s.resume}>
+          <span className={s.resumeTexte}>
+            <span className={`label ${s.techLabel}`}>
               Technique&nbsp;08&nbsp;/&nbsp;08{" "}
               <span className={s.flag}>contenu représentatif</span>
-            </p>
-            <h2 id="energetique-titre" className={s.techTitle}>
-              Énergétique
-            </h2>
-            <p className={s.claim}>
-              Concevoir sobre&nbsp;: bilans, variantes et énergies
-              renouvelables.
-            </p>
-          </div>
+            </span>
+            <h2 className={s.techTitle}>Énergétique</h2>
+          </span>
+          <span className={s.marque} aria-hidden="true" />
+        </summary>
+
+        <div id="energetique" className={s.techInner}>
+          <p className={s.claim}>
+            Concevoir sobre&nbsp;: bilans, variantes et énergies
+                          renouvelables.
+          </p>
 
           <div className={s.techBody}>
             <p>
@@ -422,8 +422,7 @@ export default function PrestationsPage() {
             </ul>
           </div>
         </div>
-      </section>
-
+      </details>
 
       {/* --- Appel à l’action : inversion encre/papier ------------------- */}
       <section className={`technique ${s.cta}`} aria-labelledby="cta-titre">
