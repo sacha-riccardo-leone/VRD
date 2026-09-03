@@ -152,11 +152,17 @@
   background: var(--paper-sunk);
 }
 
+/* Disposition en flex et non en grille : une grille aligne la dernière rangée
+   à gauche quand elle est incomplète, et rien en CSS ne permet de recentrer la
+   seule dernière rangée — le nombre de colonnes dépend de la largeur. Le flex
+   centre chaque rangée, donc aussi la dernière, quel que soit le nombre de
+   logos. */
 .clientsList {
   --logo-h: 3.5rem;
 
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
   gap: var(--s-7) var(--s-6);
   max-width: var(--page-max);
@@ -166,6 +172,7 @@
 }
 
 .client {
+  flex: 0 1 10rem;
   display: grid;
   place-items: center;
   block-size: var(--logo-h);
