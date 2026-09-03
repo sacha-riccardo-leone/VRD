@@ -153,14 +153,50 @@
 }
 
 .clientsList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--s-3) var(--s-6);
+  --logo-h: 3.5rem;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  align-items: center;
+  gap: var(--s-7) var(--s-6);
   max-width: var(--page-max);
   margin: 0 auto;
-  padding: var(--s-5) var(--gutter) var(--s-8);
+  padding: var(--s-6) var(--gutter) var(--s-8);
   list-style: none;
-  font-size: var(--fs-500);
+}
+
+.client {
+  display: grid;
+  place-items: center;
+  block-size: var(--logo-h);
+}
+
+/* Double contrainte, hauteur ET largeur. Avec la seule hauteur, une marque
+   carrée devient minuscule pendant qu'un logotype très large remplit la case. */
+.clientLogo {
+  /* La hauteur est bornée en unités ABSOLUES, pas en pourcentage : dans une
+     case de grille, un pourcentage de hauteur ne se résout pas contre la case
+     et l'image reprenait ses proportions natives — le logo du canton de Vaud
+     montait à 522 px dans une case de 56. */
+  max-inline-size: 100%;
+  max-block-size: var(--logo-h);
+  inline-size: auto;
+  block-size: auto;
+  object-fit: contain;
+  /* Colorisation TSL exacte (voir la définition du filtre dans la page), puis
+     `multiply` pour que les fonds blancs opaques se fondent dans le papier
+     plutôt que d'y poser des rectangles. */
+  filter: url(#teinte-logo);
+  mix-blend-mode: multiply;
+}
+
+/* Le porteur du filtre n'a rien à afficher : il ne doit ni occuper de place ni
+   être annoncé. `display: none` désactiverait le filtre sur Safari. */
+.filtreDef {
+  position: absolute;
+  inline-size: 0;
+  block-size: 0;
+  pointer-events: none;
 }
 
 .clients h2 {

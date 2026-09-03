@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
 import { CarteSuisse } from "@/components/carte/CarteSuisse";
@@ -111,9 +112,55 @@ export default function RealisationsPage() {
         </h2>
         <ul className={s.clientsList} role="list">
           {CLIENTS.map((c) => (
-            <li key={c}>{c}</li>
+            <li key={c.nom} className={s.client}>
+              {/* Le nom passe dans `alt` : sans images, avec un lecteur d'écran
+                  ou à l'impression, la liste reste exactement celle d'avant. */}
+              <Image
+                className={s.clientLogo}
+                src={c.logo}
+                alt={c.nom}
+                width={160}
+                height={56}
+                loading="lazy"
+                /* Les SVG passent tels quels : les faire transiter par
+                   l'optimiseur demanderait `dangerouslyAllowSVG`, et un logo
+                   vectoriel n'a rien à y gagner. */
+                unoptimized={c.logo.endsWith(".svg")}
+              />
+            </li>
           ))}
         </ul>
+
+        {/* Le filtre de teinte, défini une fois. Un `feComponentTransfer` après
+            désaturation reproduit EXACTEMENT une colorisation TSL — teinte 45°,
+            saturation 23 % — en conservant la clarté de chaque pixel : le noir
+            reste noir, le blanc reste blanc, et deux aplats de marque aussi
+            éloignés qu'un vert et un rouge tombent sur le même kaki. Les
+            fonctions `sepia()` et `hue-rotate()` de CSS n'en donnent qu'une
+            approximation, avec une teinte qui dérive selon la couleur d'entrée.
+
+            Le dernier échelon est ramené à 1 pour que le blanc reste PUR :
+            combiné à `mix-blend-mode: multiply`, c'est ce qui fait disparaître
+            les fonds blancs opaques au lieu d'en laisser des rectangles. */}
+        <svg className={s.filtreDef} aria-hidden="true" focusable="false">
+          <filter id="teinte-logo" colorInterpolationFilters="sRGB">
+            <feColorMatrix type="saturate" values="0" />
+            <feComponentTransfer>
+              <feFuncR
+                type="table"
+                tableValues="0.0000 0.0400 0.1168 0.1937 0.2706 0.3475 0.4243 0.5012 0.5781 0.6400 0.6881 0.7363 0.7844 0.8325 0.8807 0.9288 1.0000"
+              />
+              <feFuncG
+                type="table"
+                tableValues="0.0000 0.0362 0.1059 0.1756 0.2453 0.3150 0.3847 0.4544 0.5241 0.5863 0.6416 0.6969 0.7522 0.8075 0.8628 0.9181 1.0000"
+              />
+              <feFuncB
+                type="table"
+                tableValues="0.0000 0.0250 0.0732 0.1213 0.1694 0.2175 0.2656 0.3138 0.3619 0.4250 0.5018 0.5787 0.6556 0.7325 0.8094 0.8862 1.0000"
+              />
+            </feComponentTransfer>
+          </filter>
+        </svg>
       </section>
 
       <section className={s.cta}>

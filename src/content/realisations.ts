@@ -143,31 +143,39 @@ export const CANTONS: string[] = [
 
 /**
  * Clients cités par VRD dans son portfolio (page « Ils nous font confiance »).
- * Reproduits en toutes lettres, sans logo : nous n'avons pas de droit d'usage
- * sur les marques, et un nom se vérifie mieux qu'une image.
+ *
+ * Le nom RESTE la donnée : il sert de texte alternatif à chaque logo, si bien
+ * qu'un lecteur d'écran, un flux sans images ou une impression en noir donnent
+ * la même liste qu'avant. Le logo s'ajoute par-dessus, il ne remplace rien.
+ *
+ * Les marques appartiennent à leurs titulaires. Elles figurent déjà sous cette
+ * forme dans le portfolio remis par VRD : la maquette reprend l'usage du
+ * client, elle ne l'invente pas.
  */
-export const CLIENTS: string[] = [
-  "Bulgari",
-  "TAG Heuer",
-  "Swatch Group",
-  "CFF",
-  "Coop",
-  "Coop Restaurant",
-  "Lidl",
-  "UNIL",
-  "Canton de Vaud",
-  "Ville de Nyon",
-  "tl — transports lausannois",
-  "eHnv — Étab. hospitaliers du Nord vaudois",
-  "Groupe COMINA Architecture",
-  "CCHE",
-  "a-rr.",
-  "Fondation St-George",
-  "Werthanor",
-  "APA",
-  "MOM Le Prélet SA",
-  "CHH Microtechnique",
-  "Monnin SA",
+export type Client = { nom: string; logo: string };
+
+export const CLIENTS: Client[] = [
+  { nom: "Bulgari", logo: "/logos/bulgari.svg" },
+  { nom: "TAG Heuer", logo: "/logos/tag-heuer.png" },
+  { nom: "Swatch Group", logo: "/logos/swatch-group.png" },
+  { nom: "CFF", logo: "/logos/cff.webp" },
+  { nom: "Coop", logo: "/logos/coop.webp" },
+  { nom: "Coop Restaurant", logo: "/logos/coop-restaurant.png" },
+  { nom: "Lidl", logo: "/logos/lidl.webp" },
+  { nom: "UNIL", logo: "/logos/unil.png" },
+  { nom: "Canton de Vaud", logo: "/logos/canton-de-vaud.webp" },
+  { nom: "Ville de Nyon", logo: "/logos/ville-de-nyon.webp" },
+  { nom: "tl — transports lausannois", logo: "/logos/tl.svg" },
+  { nom: "eHnv — Étab. hospitaliers du Nord vaudois", logo: "/logos/ehnv.svg" },
+  { nom: "Groupe COMINA Architecture", logo: "/logos/groupe-comina.webp" },
+  { nom: "CCHE", logo: "/logos/cche.png" },
+  { nom: "a-rr.", logo: "/logos/a-rr.png" },
+  { nom: "Fondation St-George", logo: "/logos/fondation-st-george.png" },
+  { nom: "Werthanor", logo: "/logos/werthanor.png" },
+  { nom: "APA", logo: "/logos/apa.webp" },
+  { nom: "MOM Le Prélet SA", logo: "/logos/mom-le-prelet.avif" },
+  { nom: "CHH Microtechnique", logo: "/logos/chh-microtechnique.webp" },
+  { nom: "Monnin SA", logo: "/logos/monnin.png" },
   // Un 22e logo du portfolio n'a pas pu être lu de façon fiable (« RemoveD ? »).
   // Omission assumée : demander la raison sociale exacte à VRD plutôt que de la deviner.
 ];
