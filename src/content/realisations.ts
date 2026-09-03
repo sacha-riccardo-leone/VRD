@@ -158,7 +158,17 @@ export const CANTONS: string[] = [
  * préférable à un lien deviné — une URL fausse envoie le lecteur chez un
  * homonyme, et sur une page de références clients cela se remarque.
  */
-export type Client = { nom: string; logo: string; site?: string };
+export type Client = {
+  nom: string;
+  logo: string;
+  site?: string;
+  /**
+   * Ce que le lien mène voir, quand ce n'est PAS le site propre de la société.
+   * Sert au libellé accessible : annoncer « site officiel » pour une fiche
+   * d'entreprise hébergée par une maison mère serait inexact.
+   */
+  siteLibelle?: string;
+};
 
 export const CLIENTS: Client[] = [
   { nom: "Bulgari", logo: "/logos/bulgari.svg", site: "https://www.bulgari.com" },
@@ -178,13 +188,20 @@ export const CLIENTS: Client[] = [
   { nom: "a-rr.", logo: "/logos/a-rr.png", site: "https://a-rr.ch" },
   { nom: "Fondation St-George", logo: "/logos/fondation-st-george.png", site: "https://www.fondationstgeorge.ch" },
   { nom: "Werthanor", logo: "/logos/werthanor.png", site: "https://werthanor.ch" },
-  // Adresse non trouvee : plusieurs APA existent (agence de presse
-  // autrichienne, autres societes), aucune identifiable avec certitude comme
-  // celle-ci. Le logo reste affiche, sans lien.
-  { nom: "APA", logo: "/logos/apa.webp" },
-  // Adresse non trouvee : « Le Prelet » designe aussi un lieu-dit et des
-  // etablissements aux Geneveys-sur-Coffrane. Le logo reste affiche, sans lien.
-  { nom: "MOM Le Prélet SA", logo: "/logos/mom-le-prelet.avif" },
+  // APA = Atelier Pulver Architectes — adresse fournie, confirmée en ouvrant
+  // la page (le titre du site porte la raison sociale en toutes
+  // lettres). Le sigle seul ne permettait pas de la retrouver.
+  { nom: "APA", logo: "/logos/apa.webp", site: "https://aparchitectes.ch/fr/" },
+  // MOM Le Prélet n'a pas de site propre : cette page est sa fiche sur le site
+  // du groupe Swatch, sa maison mère. Page vérifiée — titre « MOM Le Prélet —
+  // Swatch Group », sans redirection. Le libellé le dit, plutôt que de la
+  // faire passer pour le site de l'entreprise.
+  {
+    nom: "MOM Le Prélet SA",
+    logo: "/logos/mom-le-prelet.avif",
+    site: "https://www.swatchgroup.com/fr/entreprises-et-marques/production/mom-le-prelet",
+    siteLibelle: "fiche sur le site du groupe Swatch",
+  },
   { nom: "CHH Microtechnique", logo: "/logos/chh-microtechnique.webp", site: "https://chh-microtechnique.ch" },
   { nom: "Monnin SA", logo: "/logos/monnin.png", site: "https://www.monnin.ch" },
   // Un 22e logo du portfolio n'a pas pu être lu de façon fiable (« RemoveD ? »).

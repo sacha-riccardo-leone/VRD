@@ -146,7 +146,7 @@ export default function RealisationsPage() {
                   href={c.site}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`${c.nom} — site officiel, nouvel onglet`}
+                  aria-label={`${c.nom} — ${c.siteLibelle ?? "site officiel"}, nouvel onglet`}
                 >
                   <LogoClient client={c} />
                 </a>
