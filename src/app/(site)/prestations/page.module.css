@@ -7,10 +7,6 @@
    typographique. Aucune teinte, aucun hexadécimal.
    ========================================================================== */
 
-.page {
-  padding-bottom: var(--s-4);
-}
-
 /* Marqueur de réserve. Repris tel quel dans le cartouche de chaque technique
    et sur chaque liste de prestations, pour que le lecteur retrouve le même
    signe partout où le contenu est représentatif. */

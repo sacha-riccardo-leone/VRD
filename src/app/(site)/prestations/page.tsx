@@ -52,7 +52,7 @@ export const metadata: Metadata = {
 
 export default function PrestationsPage() {
   return (
-    <main id="contenu" className={s.page}>
+    <main id="contenu">
       <PageHeader
         planche="Planche 02 · Prestations"
         title="Cinq techniques, du concept à la mise en service."

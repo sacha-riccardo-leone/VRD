@@ -1,5 +1,13 @@
+/* Pas de `margin-top` : c'était une marge TRANSPARENTE, donc peinte par la
+   couleur de la page. Sous une bande pleine largeur en anthracite (l'appel à
+   l'action de Prestations, la clôture d'À propos), elle formait un liseré
+   clair orphelin entre le noir et le pied de page. Le pied porte déjà son
+   propre fond (`--paper-sunk`) et un filet haut : il se distingue sans cette
+   marge. L'air d'avant le pied passe donc DANS le pied, en tête de `.inner` —
+   coloré, il ne peut plus s'afficher comme un vide. Les pages qui finissent
+   sur du papier gardent le même souffle ; les pages sombres viennent au ras
+   du filet. */
 .footer {
-  margin-top: var(--s-10);
   background: var(--paper-sunk);
   border-top: 1px solid var(--rule-strong);
 }
@@ -10,7 +18,7 @@
   gap: var(--s-6);
   max-width: var(--page-max);
   margin-inline: auto;
-  padding: var(--s-8) var(--gutter) var(--s-6);
+  padding: var(--s-10) var(--gutter) var(--s-6);
 }
 
 @media (min-width: 48rem) {
