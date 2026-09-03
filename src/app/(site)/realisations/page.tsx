@@ -3,7 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
 import { CarteSuisse } from "@/components/carte/CarteSuisse";
-import { REALISATIONS, BUDGET_TOTAL_MIOS, CANTONS, CLIENTS } from "@/content/realisations";
+import {
+  REALISATIONS,
+  BUDGET_TOTAL_MIOS,
+  CANTONS,
+  CLIENTS,
+  type Client,
+} from "@/content/realisations";
 import s from "./page.module.css";
 
 /**
@@ -22,6 +28,23 @@ export const metadata: Metadata = {
 
 /** Le français écrit 22,1 — pas 22.1. */
 const budgetFr = BUDGET_TOTAL_MIOS.toFixed(1).replace(".", ",");
+
+function LogoClient({ client }: { client: Client }) {
+  return (
+    <Image
+      className={s.clientLogo}
+      src={client.logo}
+      alt={client.nom}
+      width={160}
+      height={56}
+      loading="lazy"
+      /* Les SVG passent tels quels : les faire transiter par l'optimiseur
+         demanderait `dangerouslyAllowSVG`, et un logo vectoriel n'a rien à y
+         gagner. */
+      unoptimized={client.logo.endsWith(".svg")}
+    />
+  );
+}
 
 export default function RealisationsPage() {
   return (
@@ -114,19 +137,22 @@ export default function RealisationsPage() {
           {CLIENTS.map((c) => (
             <li key={c.nom} className={s.client}>
               {/* Le nom passe dans `alt` : sans images, avec un lecteur d'écran
-                  ou à l'impression, la liste reste exactement celle d'avant. */}
-              <Image
-                className={s.clientLogo}
-                src={c.logo}
-                alt={c.nom}
-                width={160}
-                height={56}
-                loading="lazy"
-                /* Les SVG passent tels quels : les faire transiter par
-                   l'optimiseur demanderait `dangerouslyAllowSVG`, et un logo
-                   vectoriel n'a rien à y gagner. */
-                unoptimized={c.logo.endsWith(".svg")}
-              />
+                  ou à l'impression, la liste reste exactement celle d'avant.
+                  Le logo n'est un lien que si l'adresse a été vérifiée ; sinon
+                  il reste une image, ce qui vaut mieux qu'un lien deviné. */}
+              {c.site ? (
+                <a
+                  className={s.clientLien}
+                  href={c.site}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${c.nom} — site officiel, nouvel onglet`}
+                >
+                  <LogoClient client={c} />
+                </a>
+              ) : (
+                <LogoClient client={c} />
+              )}
             </li>
           ))}
         </ul>

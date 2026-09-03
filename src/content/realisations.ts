@@ -152,30 +152,41 @@ export const CANTONS: string[] = [
  * forme dans le portfolio remis par VRD : la maquette reprend l'usage du
  * client, elle ne l'invente pas.
  */
-export type Client = { nom: string; logo: string };
+/**
+ * `site` est FACULTATIF, et c'est voulu. Une adresse absente n'est pas un
+ * défaut : le logo s'affiche, il n'est simplement pas cliquable. C'est
+ * préférable à un lien deviné — une URL fausse envoie le lecteur chez un
+ * homonyme, et sur une page de références clients cela se remarque.
+ */
+export type Client = { nom: string; logo: string; site?: string };
 
 export const CLIENTS: Client[] = [
-  { nom: "Bulgari", logo: "/logos/bulgari.svg" },
-  { nom: "TAG Heuer", logo: "/logos/tag-heuer.png" },
-  { nom: "Swatch Group", logo: "/logos/swatch-group.png" },
-  { nom: "CFF", logo: "/logos/cff.webp" },
-  { nom: "Coop", logo: "/logos/coop.webp" },
-  { nom: "Coop Restaurant", logo: "/logos/coop-restaurant.png" },
-  { nom: "Lidl", logo: "/logos/lidl.webp" },
-  { nom: "UNIL", logo: "/logos/unil.png" },
-  { nom: "Canton de Vaud", logo: "/logos/canton-de-vaud.webp" },
-  { nom: "Ville de Nyon", logo: "/logos/ville-de-nyon.webp" },
-  { nom: "tl — transports lausannois", logo: "/logos/tl.svg" },
-  { nom: "eHnv — Étab. hospitaliers du Nord vaudois", logo: "/logos/ehnv.svg" },
-  { nom: "Groupe COMINA Architecture", logo: "/logos/groupe-comina.webp" },
-  { nom: "CCHE", logo: "/logos/cche.png" },
-  { nom: "a-rr.", logo: "/logos/a-rr.png" },
-  { nom: "Fondation St-George", logo: "/logos/fondation-st-george.png" },
-  { nom: "Werthanor", logo: "/logos/werthanor.png" },
+  { nom: "Bulgari", logo: "/logos/bulgari.svg", site: "https://www.bulgari.com" },
+  { nom: "TAG Heuer", logo: "/logos/tag-heuer.png", site: "https://www.tagheuer.com" },
+  { nom: "Swatch Group", logo: "/logos/swatch-group.png", site: "https://www.swatchgroup.com" },
+  { nom: "CFF", logo: "/logos/cff.webp", site: "https://www.sbb.ch" },
+  { nom: "Coop", logo: "/logos/coop.webp", site: "https://www.coop.ch" },
+  { nom: "Coop Restaurant", logo: "/logos/coop-restaurant.png", site: "https://www.coop-restaurant.ch" },
+  { nom: "Lidl", logo: "/logos/lidl.webp", site: "https://www.lidl.ch" },
+  { nom: "UNIL", logo: "/logos/unil.png", site: "https://www.unil.ch" },
+  { nom: "Canton de Vaud", logo: "/logos/canton-de-vaud.webp", site: "https://www.vd.ch" },
+  { nom: "Ville de Nyon", logo: "/logos/ville-de-nyon.webp", site: "https://www.nyon.ch" },
+  { nom: "tl — transports lausannois", logo: "/logos/tl.svg", site: "https://www.t-l.ch" },
+  { nom: "eHnv — Étab. hospitaliers du Nord vaudois", logo: "/logos/ehnv.svg", site: "https://www.ehnv.ch" },
+  { nom: "Groupe COMINA Architecture", logo: "/logos/groupe-comina.webp", site: "https://www.comina-architecture.ch/fr/" },
+  { nom: "CCHE", logo: "/logos/cche.png", site: "https://cche.com" },
+  { nom: "a-rr.", logo: "/logos/a-rr.png", site: "https://a-rr.ch" },
+  { nom: "Fondation St-George", logo: "/logos/fondation-st-george.png", site: "https://www.fondationstgeorge.ch" },
+  { nom: "Werthanor", logo: "/logos/werthanor.png", site: "https://werthanor.ch" },
+  // Adresse non trouvee : plusieurs APA existent (agence de presse
+  // autrichienne, autres societes), aucune identifiable avec certitude comme
+  // celle-ci. Le logo reste affiche, sans lien.
   { nom: "APA", logo: "/logos/apa.webp" },
+  // Adresse non trouvee : « Le Prelet » designe aussi un lieu-dit et des
+  // etablissements aux Geneveys-sur-Coffrane. Le logo reste affiche, sans lien.
   { nom: "MOM Le Prélet SA", logo: "/logos/mom-le-prelet.avif" },
-  { nom: "CHH Microtechnique", logo: "/logos/chh-microtechnique.webp" },
-  { nom: "Monnin SA", logo: "/logos/monnin.png" },
+  { nom: "CHH Microtechnique", logo: "/logos/chh-microtechnique.webp", site: "https://chh-microtechnique.ch" },
+  { nom: "Monnin SA", logo: "/logos/monnin.png", site: "https://www.monnin.ch" },
   // Un 22e logo du portfolio n'a pas pu être lu de façon fiable (« RemoveD ? »).
   // Omission assumée : demander la raison sociale exacte à VRD plutôt que de la deviner.
 ];

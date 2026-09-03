@@ -178,6 +178,36 @@
   block-size: var(--logo-h);
 }
 
+/* L'affordance ne passe pas par la teinte — c'est la règle du projet — mais
+   par la densité : le logo se pose légèrement en retrait et revient au contact
+   au survol. Un logo sans adresse ne bouge pas et n'est pas dans le parcours
+   de tabulation. */
+.clientLien {
+  display: grid;
+  place-items: center;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+/* Le retrait s'applique à TOUS les logos, pas aux seuls liens : sinon les deux
+   sans adresse ressortiraient comme les plus appuyés de la planche, ce qui
+   inverserait exactement la hiérarchie voulue. Seul le retour au contact au
+   survol distingue ceux qui mènent quelque part. */
+.clientLogo {
+  opacity: 0.72;
+  transition: opacity var(--dur-fast) ease-out;
+}
+
+.clientLien:hover .clientLogo,
+.clientLien:focus-visible .clientLogo {
+  opacity: 1;
+}
+
+.clientLien:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 4px;
+}
+
 /* Double contrainte, hauteur ET largeur. Avec la seule hauteur, une marque
    carrée devient minuscule pendant qu'un logotype très large remplit la case. */
 .clientLogo {
