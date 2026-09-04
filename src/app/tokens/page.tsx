@@ -29,12 +29,12 @@ type Pair = {
 };
 
 const ON_PAPER: Pair[] = [
-  { fg: "#141210", bg: "#f2efe9", use: "--ink sur --paper", limit: "corps de texte, titres" },
-  { fg: "#55504a", bg: "#f2efe9", use: "--ink-muted sur --paper", limit: "texte secondaire" },
-  { fg: "#8a8271", bg: "#f2efe9", use: "--rule-strong sur --paper", limit: "séparateurs porteurs de sens" },
+  { fg: "#141210", bg: "#f5f5f5", use: "--ink sur --paper", limit: "corps de texte, titres" },
+  { fg: "#55504a", bg: "#f5f5f5", use: "--ink-muted sur --paper", limit: "texte secondaire" },
+  { fg: "#8a8271", bg: "#f5f5f5", use: "--rule-strong sur --paper", limit: "séparateurs porteurs de sens" },
   {
     fg: "#d8d2c7",
-    bg: "#f2efe9",
+    bg: "#f5f5f5",
     use: "--rule sur --paper",
     limit: "filets décoratifs — jamais porteurs de sens",
     decorative: true,
@@ -42,7 +42,7 @@ const ON_PAPER: Pair[] = [
 ];
 
 const ON_DARK: Pair[] = [
-  { fg: "#f2efe9", bg: "#1c1c1c", use: "--on-dark sur --dark", limit: "corps de texte" },
+  { fg: "#f5f5f5", bg: "#1c1c1c", use: "--on-dark sur --dark", limit: "corps de texte" },
   { fg: "#b0aeab", bg: "#1c1c1c", use: "--on-dark-muted sur --dark", limit: "texte secondaire" },
   { fg: "#6e6e6e", bg: "#1c1c1c", use: "--rule-strong sur --dark", limit: "séparateurs porteurs de sens" },
   { fg: "#333333", bg: "#1c1c1c", use: "--dark-rule sur --dark", limit: "filets décoratifs", decorative: true },

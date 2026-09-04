@@ -4,14 +4,14 @@
    Contrast ratios in comments are measured, not estimated.
    Re-run `npm run audit:contrast` after changing any colour.
 
-   PAPER (#F2EFE9) and INK (#141210) are my values, not yours — the project
+   PAPER (#F5F5F5) and INK (#141210) are my values, not yours — the project
    brief specifies "off-white drafting paper" and "near-black ink" without
    hexes. Replace them from VRD-project-context.md when it is restored.
    ========================================================================== */
 
 :root {
   /* --- Surface: the drafting sheet ------------------------------------- */
-  --paper: #f2efe9;
+  --paper: #f5f5f5;
   --paper-raised: #faf8f4; /* insets, cards, the sheet lifted off the desk */
   --paper-sunk: #e9e5dc; /* wells, alternating table rows */
 
@@ -39,7 +39,7 @@
   --dark: #1c1c1c;
   --dark-raised: #262626;
   --dark-rule: #333333; /*  1.35:1 on dark — decorative hairlines           */
-  --on-dark: #f2efe9; /* 14.85:1 on dark — AAA                            */
+  --on-dark: #f5f5f5; /* 14.85:1 on dark — AAA                            */
   --on-dark-muted: #b0aeab; /*  7.70:1 on dark — AAA                            */
 
   /* --- Type ------------------------------------------------------------- */
