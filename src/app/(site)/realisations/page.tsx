@@ -49,9 +49,9 @@ export default function RealisationsPage() {
   return (
     <main id="contenu">
       <PageHeader
-        planche="Planche 03 · Réalisations"
-        title="Nos plans deviennent des bâtiments."
-        lede="Manufactures horlogères, gare CFF, surfaces commerciales et culturelles — en ingénierie CVCS et MCR, de l’étude au suivi d’exécution."
+        planche="Planche 03"
+        title="Réalisations"
+        lede="Nos plans deviennent des bâtiments."
       />
 
       {/* Chiffres d'ensemble, calculés depuis les références elles-mêmes. */}

@@ -129,9 +129,9 @@ export default function CarrieresPage() {
   return (
     <main id="contenu">
       <PageHeader
-        planche="Planche 06 · Carrières"
-        title="Rejoins l’aventure."
-        lede="Nous sommes six à Sugiez, et nous concevons le chauffage, la ventilation et le sanitaire de bâtiments qui sortent de terre. Si le métier t’intéresse pour de vrai, écris-nous."
+        planche="Planche 06"
+        title="Carrières"
+        lede="Rejoins l’aventure."
       />
 
       {/* --- Pourquoi nous rejoindre -------------------------------------- */}

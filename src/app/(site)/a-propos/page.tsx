@@ -133,9 +133,9 @@ export default function AProposPage() {
   return (
     <main id="contenu" className={s.page}>
       <PageHeader
-        planche="Planche 05 · À propos"
-        title="Six personnes à Sugiez, deux ingénieurs HES à la direction."
-        lede="VRD ingénieurs-conseils SA est inscrite au registre du commerce depuis le 30 octobre 2020. Son siège est au chemin du Chablais 46, sur la commune du Mont-Vully, dans le canton de Fribourg."
+        planche="Planche 05"
+        title="À propos"
+        lede="Six personnes à Sugiez, deux ingénieurs HES à la direction."
       />
 
       {/* ---------------------------------------------------------------- 01 */}

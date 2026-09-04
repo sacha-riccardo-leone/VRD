@@ -75,9 +75,9 @@ export default function PrestationsPage() {
   return (
     <main id="contenu">
       <PageHeader
-        planche="Planche 02 · Prestations"
-        title="Neuf techniques, du concept à la mise en service."
-        lede="Chauffage, ventilation, froid, sanitaire, sprinkler, BIM, MCR, énergétique, sécurité incendie. Voici ce que chacune recouvre dans une mission d’ingénierie-conseil, et à quel moment elle intervient."
+        planche="Planche 02"
+        title="Prestations"
+        lede="Neuf techniques, du concept à la mise en service."
       />
 
       <section className={`technique ${s.enneagone}`} aria-labelledby="enneagone-titre">

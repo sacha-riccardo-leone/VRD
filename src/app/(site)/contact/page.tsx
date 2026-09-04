@@ -43,9 +43,9 @@ export default function ContactPage() {
   return (
     <main id="contenu" className={s.page}>
       <PageHeader
-        planche="Planche 07 · Contact"
-        title="Parlons de votre projet."
-        lede="Le bureau est établi à Sugiez, sur le Mont-Vully. Téléphone, adresse, e-mail — ou le formulaire ci-dessous, si vous préférez écrire."
+        planche="Planche 07"
+        title="Contact"
+        lede="Parlons de votre projet."
       />
 
       <div className={s.grid}>
