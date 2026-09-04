@@ -67,6 +67,18 @@
   margin-top: var(--s-3);
 }
 
+/* Le responsable, sous le titre du volet. Il reprend la veine du cartouche —
+   mono, petit corps, encre atténuée — mais renonce aux capitales et à leur
+   interlettrage : ceux-ci sont faits pour une étiquette, pas pour un nom
+   propre, qu'ils rendraient plus difficile à lire qu'à repérer. La provenance
+   n'est pas répétée ici, elle est donnée une fois au-dessus du premier volet. */
+.responsable {
+  display: block;
+  margin-top: var(--s-2);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
 /* Repère d'état : un plus qui devient un moins. Deux filets d'encre — pas une
    icône rapportée — et la barre verticale se rétracte au lieu de s'effacer,
    pour que le geste se lise. `--dur-fast` retombe à 1 ms sous
@@ -102,7 +114,7 @@
 /* Le corps déplié. Le pas supérieur est nul : le résumé l'a déjà donné.
 
    `scroll-margin-block-start` : c'est ce corps qui porte l'ancre, donc c'est
-   sur lui qu'atterrit le défilement venu de l'octogone. Sans réserve, il se
+   sur lui qu'atterrit le défilement venu de l'ennéagone. Sans réserve, il se
    collerait en haut de la fenêtre et le résumé — le titre de la technique
    qu'on vient d'ouvrir — resterait juste au-dessus du bord. La valeur couvre
    l'en-tête collant et la hauteur du résumé. */
@@ -121,8 +133,8 @@
     gap: var(--s-8);
   }
 
-  /* Froid, Sprinkler et MCR n'ont pas encore de phrase-clé : leur corps prend
-     alors les deux colonnes plutôt que d'en laisser une vide. */
+  /* Froid, Sprinkler, MCR et Sécurité incendie n'ont pas encore de phrase-clé :
+     leur corps prend alors les deux colonnes plutôt que d'en laisser une vide. */
   .techBody:only-child {
     grid-column: 1 / -1;
   }
@@ -256,13 +268,23 @@
   text-decoration-color: var(--ink);
 }
 
-/* --- Octogone d'ouverture ------------------------------------------------ */
+/* --- Ennéagone d'ouverture ----------------------------------------------- */
 /* Pleine largeur, hors de la colonne de texte : la section porte `.technique`,
    donc tous les jetons d'encre y sont déjà inversés sur anthracite. */
-.octogone {
+.enneagone {
   background: var(--paper); /* = --dark sous .technique */
   color: var(--ink);
   border-block-end: 1px solid var(--rule-strong);
+}
+
+/* Provenance des responsables — une bande de cartouche entre l'ennéagone et le
+   premier volet. Elle n'a pas de filet à elle : le bord bas de l'ennéagone et
+   le bord haut du premier volet l'encadrent déjà, en ajouter un troisième
+   empilerait des traits pour une seule ligne de texte. */
+.sourceOrga {
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: var(--s-4) var(--gutter);
 }
 
 /* Réserve de contenu manquant — même traitement que les autres marqueurs de la

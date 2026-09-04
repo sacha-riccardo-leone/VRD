@@ -14,8 +14,8 @@ import s from "./page.module.css";
  *  - six collaborateurs (chiffre publié par VRD) ;
  *  - deux dirigeants, Dominique Rodrigues Fonseca et Ruben Varela Facal
  *    (registre du commerce, CHE-287.600.663) ;
- *  - cinq spécialités affichées (chauffage/froid, ventilation, sanitaire,
- *    énergétique, BIM) et le but inscrit au registre ;
+ *  - neuf domaines d’activité (organigramme VRD 2026) et le but inscrit au
+ *    registre ;
  *  - les trois intitulés de poste et l’adresse de candidature, repris tels
  *    quels de la page Carrières de VRD.
  *
@@ -59,11 +59,11 @@ const RAISONS: Raison[] = [
   },
   {
     num: "02",
-    titre: "Cinq techniques, pas une seule",
+    titre: "Neuf domaines, pas un seul",
     texte:
-      "Chauffage et froid, ventilation, sanitaire, énergétique, BIM. Le bureau couvre les cinq domaines, donc ton horizon ne se limite pas à un seul lot. C’est plus exigeant qu’une spécialisation — et c’est comme ça qu’on apprend vite.",
+      "Chauffage, ventilation, froid, sanitaire, sprinkler, BIM, MCR, énergétique, sécurité incendie. Le bureau couvre les neuf, donc ton horizon ne se limite pas à un seul lot. C’est plus exigeant qu’une spécialisation — et c’est comme ça qu’on apprend vite.",
     source:
-      "Spécialités affichées par VRD. But inscrit au registre : ingénierie-conseil en chauffage, ventilation, climatisation, sanitaire et énergies renouvelables.",
+      "Neuf domaines d’activité listés à l’organigramme VRD 2026. But inscrit au registre : ingénierie-conseil en chauffage, ventilation, climatisation, sanitaire et énergies renouvelables.",
   },
   {
     num: "03",

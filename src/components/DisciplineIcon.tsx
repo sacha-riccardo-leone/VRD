@@ -1,12 +1,13 @@
 /**
- * Les huit pictogrammes des domaines — dessinés ici, aucune bibliothèque
+ * Les neuf pictogrammes des domaines — dessinés ici, aucune bibliothèque
  * ajoutée (le projet n'en utilisait aucune).
  *
  * Un seul fichier, une seule spécification de trait : `stroke: currentColor`,
  * épaisseur 1.4, extrémités arrondies, viewBox 24×24, aucun remplissage. C'est
- * ce qui fait qu'ils se lisent comme un jeu et non comme huit dessins.
+ * ce qui fait qu'ils se lisent comme un jeu et non comme neuf dessins.
  * Ils reprennent l'iconographie du portfolio de VRD (flamme, hélice, flocon,
- * goutte, sprinkler, nœud BIM, courbe MCR, feuille) traduite au trait.
+ * goutte, sprinkler, nœud BIM, courbe MCR, issue de secours, feuille) traduite
+ * au trait.
  *
  * Purement décoratifs : le nom du domaine est toujours écrit à côté.
  */
@@ -76,6 +77,18 @@ export function DisciplineIcon({ name, className }: { name: string; className?: 
           <rect x="3.4" y="5.2" width="17.2" height="13.6" rx="1.2" />
           <path d="M6.4 15.4l3-3.4 2.6 2 4.6-5.2" />
           <path d="M16.6 8.8h-2.2M16.6 8.8v2.2" />
+        </svg>
+      );
+    case "securite-incendie": // issue de secours + flèche d'évacuation
+      // Le motif de l'évacuation plutôt que celui du feu : à 24 px une flamme
+      // barrée reste une flamme et se confondrait avec le chauffage, alors que
+      // le local ouvert et la flèche gardent une silhouette qui n'existe pas
+      // ailleurs dans le jeu.
+      return (
+        <svg {...common}>
+          <path d="M10.4 4.8H5.6A1.2 1.2 0 0 0 4.4 6v12a1.2 1.2 0 0 0 1.2 1.2h4.8" />
+          <path d="M9.2 12h10.4" />
+          <path d="m16.2 8.8 3.4 3.2-3.4 3.2" />
         </svg>
       );
     default: // energetique — feuille

@@ -11,13 +11,14 @@ import { ChaufferieIso } from "./ChaufferieIso";
 import { BatimentCoupeIso } from "./BatimentCoupeIso";
 import { ReseauSprinkler } from "./ReseauSprinkler";
 import { BilanEnergetique } from "./BilanEnergetique";
-import s from "./OctagonNav.module.css";
+import { PlanNiveauCote } from "./PlanNiveauCote";
+import s from "./EnneagonNav.module.css";
 
 /**
- * Octogone des huit domaines : image d'ouverture et navigation vers les
+ * Ennéagone des neuf domaines : image d'ouverture et navigation vers les
  * sections détaillées, plus bas dans la page.
  *
- * Géométrie — huit sommets d'un octogone régulier, sens horaire depuis midi.
+ * Géométrie — neuf sommets d'un ennéagone régulier, sens horaire depuis midi.
  * Repère normalisé (viewBox 0 0 100 100) partagé par les arêtes et les nœuds :
  * les arêtes peuvent donc suivre les nœuds déplacés.
  *
@@ -29,10 +30,11 @@ import s from "./OctagonNav.module.css";
  * Au-delà : rien.
  *
  * Repli — sous 640 px le CSS reflue le MÊME DOM en grille de deux colonnes.
- * Les huit noms sont écrits dans le document dès le premier rendu.
+ * Les neuf noms sont écrits dans le document dès le premier rendu.
  */
 
-const N = 8;
+/** Doit valoir DISCIPLINES.length : un sommet par domaine, sans reste. */
+const N = 9;
 const R = 50;
 const CX = 50;
 const CY = 50;
@@ -47,7 +49,7 @@ const VERTICES: [number, number][] = Array.from({ length: N }, (_, i) => vertex(
 /** Attraction en pixels, par distance au nœud survolé. */
 const PULL = [0, 12, 4] as const; // 0 = le nœud survolé lui-même (il ne bouge pas)
 
-/** Distance cyclique entre deux index sur l'anneau (0…4). */
+/** Distance cyclique entre deux index sur l'anneau : 0…⌊N/2⌋, soit 4 ici. */
 function ringGap(a: number, b: number): number {
   const d = Math.abs(a - b);
   return Math.min(d, N - d);
@@ -56,6 +58,12 @@ function ringGap(a: number, b: number): number {
 /**
  * Déplacement du nœud i lorsque `hover` est survolé — vecteur unitaire de i
  * vers le nœud survolé, multiplié par l'attraction de son rang.
+ *
+ * Le rang est borné à 2 avant toute lecture de PULL : les rangs 3 et 4, que
+ * neuf sommets rendent possibles, sortent donc avant de déborder du tableau.
+ * Aucun calcul ici ne suppose l'anneau pair — la direction est mesurée entre
+ * deux sommets réels, et non déduite d'une opposée diamétrale, qui n'existe pas
+ * sur un nombre impair de sommets.
  */
 function offsetFor(i: number, hover: number | null): { x: number; y: number } {
   if (hover === null || hover === i) return { x: 0, y: 0 };
@@ -87,12 +95,14 @@ function Schematic({ id }: { id: string }) {
       return <BatimentCoupeIso />;
     case "mcr":
       return <RampeGaz />; // vannes, détente, comptage : la chaîne de régulation
+    case "securite-incendie":
+      return <PlanNiveauCote />; // un plan de niveau coté se lit comme du compartimentage et des échappées
     default:
       return <BilanEnergetique />;
   }
 }
 
-export function OctagonNav() {
+export function EnneagonNav() {
   const ringRef = useRef<HTMLDivElement>(null);
   const [hover, setHover] = useState<number | null>(null);
   /** Largeur du disque, pour convertir des pixels en unités de viewBox.
@@ -116,7 +126,7 @@ export function OctagonNav() {
 
   return (
     <div className={s.stage}>
-      {/* Schémas : les huit sont montés en permanence et ne changent que
+      {/* Schémas : les neuf sont montés en permanence et ne changent que
           d'opacité — d'où un fondu croisé sans démontage, donc sans
           scintillement ni schéma resté affiché. Décor pur. */}
       <div className={s.asides} aria-hidden="true">
@@ -149,7 +159,7 @@ export function OctagonNav() {
         <div className={s.center}>
           <div className={s.centerInner} aria-live="polite">
             {card === null ? (
-              <p className={s.centerTitle}>Nos huit techniques</p>
+              <p className={s.centerTitle}>Nos neuf techniques</p>
             ) : (
               <div className={s.card}>
                 <p className={s.cardName}>{card.label}</p>

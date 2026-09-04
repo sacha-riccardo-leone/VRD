@@ -8,8 +8,10 @@ import s from "./ProofBar.module.css";
  * Âge 5, Collaborateurs 6, Projets réalisés +200. Deux corrections en découlent
  * par rapport à la version précédente :
  *  - le « 5 » désigne l'ÂGE du bureau, pas un nombre de techniques ;
- *  - les domaines sont au nombre de HUIT (chauffage, ventilation, froid,
- *    sanitaire, sprinkler, BIM, MCR, énergétique) et non cinq.
+ *  - les domaines sont au nombre de NEUF (chauffage, ventilation, froid,
+ *    sanitaire, sprinkler, BIM, MCR, énergétique, sécurité incendie) et non
+ *    cinq. Le neuvième vient de l'organigramme VRD 2026, qui les liste tous ;
+ *    le portfolio, plus ancien, n'en montrait que huit.
  * L'année de création disparaît d'ici : elle est portée par le hero.
  *
  * Le nombre de projets ouvre la section, seul, et se compte à l'arrivée dans le
@@ -43,7 +45,7 @@ export function ProofBar() {
           </div>
           <div className={s.stat}>
             <dt className={s.statLabel}>Domaines maîtrisés</dt>
-            <dd className={s.statValue}>8</dd>
+            <dd className={s.statValue}>9</dd>
           </div>
         </dl>
       </div>

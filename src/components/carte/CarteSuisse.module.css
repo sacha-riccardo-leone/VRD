@@ -1,10 +1,10 @@
 /* Carte des réalisations — bande pleine largeur, fond anthracite.
    La classe `technique` (globale) réassigne --paper, --ink et --rule ; tout
-   ici en hérite, comme le hero et l'octogone des prestations. */
+   ici en hérite, comme le hero et l'ennéagone des prestations. */
 /* `.technique` bascule les jetons mais ne peint rien : c'est ici qu'on pose la
    surface et l'encre, comme le fait la bande « Repères » d'À propos. À
    l'intérieur de `.technique`, `--paper` EST l'anthracite — même fond que le
-   hero et que l'octogone des huit domaines. */
+   hero et que l'ennéagone des neuf domaines. */
 .bande {
   padding-block: var(--s-5);
   background: var(--paper);

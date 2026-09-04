@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
-import { OctagonNav } from "@/components/OctagonNav";
+import { EnneagonNav } from "@/components/EnneagonNav";
+import { DISCIPLINES } from "@/content/disciplines";
 import s from "./page.module.css";
 
 /**
- * Planche 02 — Prestations. Les cinq techniques affichées par VRD, détaillées.
+ * Planche 02 — Prestations. Les neuf domaines de VRD, détaillés.
  *
  * Intégrité du contenu. Trois choses seulement sont vérifiées ici — le but
  * inscrit au registre du commerce (ingénierie-conseil en chauffage,
- * ventilation, climatisation, sanitaire et énergies renouvelables), les cinq
- * spécialités que le bureau affiche, et ses coordonnées. Le DÉTAIL de chaque
+ * ventilation, climatisation, sanitaire et énergies renouvelables), les neuf
+ * domaines d’activité listés à l’organigramme VRD 2026, et ses coordonnées. Le DÉTAIL de chaque
  * technique décrit une mission d’ingénierie-conseil type. C’est du contenu
  * REPRÉSENTATIF, étiqueté comme tel à l’écran — note de relecture en tête de
  * page, marqueur « contenu représentatif » dans le cartouche de chaque
@@ -29,9 +30,9 @@ import s from "./page.module.css";
  *
  * Une seule illustration sur la page — la boucle de chauffage, dans la section
  * qu’elle documente. Pas de motif en fond : la page est déjà longue, et un
- * substrat derrière cinq blocs de texte serait de la décoration sans fonction.
+ * substrat derrière neuf blocs de texte serait de la décoration sans fonction.
  *
- * Les huit domaines sont des accordéons `<details name="technique">`, fermés
+ * Les neuf domaines sont des accordéons `<details name="technique">`, fermés
  * au chargement. L’attribut `name` suffit à les rendre EXCLUSIFS — ouvrir l’un
  * referme l’autre — sans une ligne de JavaScript, sans état client et sans
  * dépendance : la page reste un composant serveur.
@@ -39,41 +40,69 @@ import s from "./page.module.css";
  * L’ancre (`id`) est portée par le CORPS du dépliant, pas par le `<details>`.
  * C’est délibéré, et vérifié dans le navigateur : arriver sur `#bim` ne déplie
  * l’élément QUE si la cible se trouve dans la partie repliée. Posée sur le
- * `<details>` ou sur le titre du résumé, elle ne déplie rien, et les huit
- * liens de l’octogone tomberaient sur des volets fermés. Le marqueur « contenu
- * représentatif » demeure dans le résumé, donc visible AVANT d’ouvrir : une
- * réserve cachée derrière un pli ne remplit pas son office.
+ * `<details>` ou sur le titre du résumé, elle ne déplie rien, et les neuf
+ * liens de l’ennéagone tomberaient sur des volets fermés. Le marqueur
+ * « contenu représentatif » demeure dans le résumé, donc visible AVANT
+ * d’ouvrir : une réserve cachée derrière un pli ne remplit pas son office.
+ *
+ * Les responsables viennent de l’organigramme VRD 2026 — une source primaire,
+ * donc hors du marqueur « contenu représentatif ». Ils ne sont pas recopiés
+ * ici mais lus dans `DISCIPLINES` : un nom corrigé à un seul endroit ne peut
+ * pas rester faux à moitié. Les portables et les courriels nominatifs du même
+ * document restent NON PUBLIÉS — décision non prise par le bureau.
  */
 export const metadata: Metadata = {
   title: "Prestations",
   description:
-    "Chauffage et froid, ventilation, sanitaire, énergétique et BIM — les cinq techniques du bureau, de l’étude et du dimensionnement à la mise en service.",
+    "Chauffage, ventilation, froid, sanitaire, sprinkler, BIM, MCR, énergétique et sécurité incendie — les neuf domaines du bureau, de l’étude et du dimensionnement à la mise en service.",
 };
+
+/**
+ * Le responsable d’un domaine, sous le titre de son volet.
+ *
+ * Rendu muet si le domaine n’en porte pas : mieux vaut ne rien afficher qu’une
+ * ligne vide qui laisserait croire à un poste vacant.
+ */
+function Responsable({ id }: { id: string }) {
+  const nom = DISCIPLINES.find((d) => d.id === id)?.responsable;
+  if (!nom) return null;
+  return (
+    <span className={`label ${s.responsable}`}>Responsable&nbsp;: {nom}</span>
+  );
+}
 
 export default function PrestationsPage() {
   return (
     <main id="contenu">
       <PageHeader
         planche="Planche 02 · Prestations"
-        title="Cinq techniques, du concept à la mise en service."
-        lede="Chauffage et froid, ventilation, sanitaire, énergétique, BIM. Voici ce que chacune recouvre dans une mission d’ingénierie-conseil, et à quel moment elle intervient."
+        title="Neuf techniques, du concept à la mise en service."
+        lede="Chauffage, ventilation, froid, sanitaire, sprinkler, BIM, MCR, énergétique, sécurité incendie. Voici ce que chacune recouvre dans une mission d’ingénierie-conseil, et à quel moment elle intervient."
       />
 
-      <section className={`technique ${s.octogone}`} aria-labelledby="octogone-titre">
-        <h2 id="octogone-titre" className="visuallyHidden">
-          Nos huit techniques
+      <section className={`technique ${s.enneagone}`} aria-labelledby="enneagone-titre">
+        <h2 id="enneagone-titre" className="visuallyHidden">
+          Nos neuf techniques
         </h2>
-        <OctagonNav />
+        <EnneagonNav />
       </section>
+
+      {/* Provenance des responsables, donnée UNE fois pour toute la planche.
+          La répéter sous chacun des neuf noms n’ajouterait rien — la source est
+          la même partout — et noierait le nom sous sa référence. */}
+      <p className={`label ${s.sourceOrga}`}>
+        Responsables des domaines — organigramme VRD&nbsp;2026
+      </p>
 
       <details className={s.tech} name="technique">
         <summary className={s.resume}>
           <span className={s.resumeTexte}>
             <span className={`label ${s.techLabel}`}>
-              Technique&nbsp;01&nbsp;/&nbsp;08{" "}
+              Technique&nbsp;01&nbsp;/&nbsp;09{" "}
               <span className={s.flag}>contenu représentatif</span>
             </span>
             <h2 className={s.techTitle}>Chauffage</h2>
+            <Responsable id="chauffage" />
           </span>
           <span className={s.marque} aria-hidden="true" />
         </summary>
@@ -125,10 +154,11 @@ export default function PrestationsPage() {
         <summary className={s.resume}>
           <span className={s.resumeTexte}>
             <span className={`label ${s.techLabel}`}>
-              Technique&nbsp;02&nbsp;/&nbsp;08{" "}
+              Technique&nbsp;02&nbsp;/&nbsp;09{" "}
               <span className={s.flag}>contenu représentatif</span>
             </span>
             <h2 className={s.techTitle}>Ventilation</h2>
+            <Responsable id="ventilation" />
           </span>
           <span className={s.marque} aria-hidden="true" />
         </summary>
@@ -180,10 +210,11 @@ export default function PrestationsPage() {
         <summary className={s.resume}>
           <span className={s.resumeTexte}>
             <span className={`label ${s.techLabel}`}>
-              Technique&nbsp;03&nbsp;/&nbsp;08{" "}
+              Technique&nbsp;03&nbsp;/&nbsp;09{" "}
               <span className={s.flag}>contenu représentatif</span>
             </span>
             <h2 className={s.techTitle}>Froid</h2>
+            <Responsable id="froid" />
           </span>
           <span className={s.marque} aria-hidden="true" />
         </summary>
@@ -207,10 +238,11 @@ export default function PrestationsPage() {
         <summary className={s.resume}>
           <span className={s.resumeTexte}>
             <span className={`label ${s.techLabel}`}>
-              Technique&nbsp;04&nbsp;/&nbsp;08{" "}
+              Technique&nbsp;04&nbsp;/&nbsp;09{" "}
               <span className={s.flag}>contenu représentatif</span>
             </span>
             <h2 className={s.techTitle}>Sanitaire</h2>
+            <Responsable id="sanitaire" />
           </span>
           <span className={s.marque} aria-hidden="true" />
         </summary>
@@ -266,10 +298,11 @@ export default function PrestationsPage() {
         <summary className={s.resume}>
           <span className={s.resumeTexte}>
             <span className={`label ${s.techLabel}`}>
-              Technique&nbsp;05&nbsp;/&nbsp;08{" "}
+              Technique&nbsp;05&nbsp;/&nbsp;09{" "}
               <span className={s.flag}>contenu représentatif</span>
             </span>
             <h2 className={s.techTitle}>Sprinkler</h2>
+            <Responsable id="sprinkler" />
           </span>
           <span className={s.marque} aria-hidden="true" />
         </summary>
@@ -277,9 +310,10 @@ export default function PrestationsPage() {
         <div id="sprinkler" className={s.techInner}>
           <div className={s.techBody}>
             <p className={s.todo}>
-              <strong>Contenu à fournir.</strong> Ce domaine figure parmi les huit
-              du portfolio de VRD, mais aucun descriptif n’existe à ce jour — ni
-              sur le site actuel, ni dans le portfolio. À rédiger avec le bureau.
+              <strong>Contenu à fournir.</strong> Ce domaine figure au portfolio de
+              VRD et à son organigramme 2026, mais aucun descriptif n’existe à
+              ce jour — ni sur le site actuel, ni dans le portfolio. À rédiger
+              avec le bureau.
             </p>
           </div>
         </div>
@@ -289,10 +323,11 @@ export default function PrestationsPage() {
         <summary className={s.resume}>
           <span className={s.resumeTexte}>
             <span className={`label ${s.techLabel}`}>
-              Technique&nbsp;06&nbsp;/&nbsp;08{" "}
+              Technique&nbsp;06&nbsp;/&nbsp;09{" "}
               <span className={s.flag}>contenu représentatif</span>
             </span>
             <h2 className={s.techTitle}>BIM &amp; coordination</h2>
+            <Responsable id="bim" />
           </span>
           <span className={s.marque} aria-hidden="true" />
         </summary>
@@ -344,10 +379,11 @@ export default function PrestationsPage() {
         <summary className={s.resume}>
           <span className={s.resumeTexte}>
             <span className={`label ${s.techLabel}`}>
-              Technique&nbsp;07&nbsp;/&nbsp;08{" "}
+              Technique&nbsp;07&nbsp;/&nbsp;09{" "}
               <span className={s.flag}>contenu représentatif</span>
             </span>
             <h2 className={s.techTitle}>MCR</h2>
+            <Responsable id="mcr" />
           </span>
           <span className={s.marque} aria-hidden="true" />
         </summary>
@@ -355,9 +391,10 @@ export default function PrestationsPage() {
         <div id="mcr" className={s.techInner}>
           <div className={s.techBody}>
             <p className={s.todo}>
-              <strong>Contenu à fournir.</strong> Ce domaine figure parmi les huit
-              du portfolio de VRD, mais aucun descriptif n’existe à ce jour — ni
-              sur le site actuel, ni dans le portfolio. À rédiger avec le bureau.
+              <strong>Contenu à fournir.</strong> Ce domaine figure au portfolio de
+              VRD et à son organigramme 2026, mais aucun descriptif n’existe à
+              ce jour — ni sur le site actuel, ni dans le portfolio. À rédiger
+              avec le bureau.
             </p>
           </div>
         </div>
@@ -367,10 +404,11 @@ export default function PrestationsPage() {
         <summary className={s.resume}>
           <span className={s.resumeTexte}>
             <span className={`label ${s.techLabel}`}>
-              Technique&nbsp;08&nbsp;/&nbsp;08{" "}
+              Technique&nbsp;08&nbsp;/&nbsp;09{" "}
               <span className={s.flag}>contenu représentatif</span>
             </span>
             <h2 className={s.techTitle}>Énergétique</h2>
+            <Responsable id="energetique" />
           </span>
           <span className={s.marque} aria-hidden="true" />
         </summary>
@@ -420,6 +458,31 @@ export default function PrestationsPage() {
               <li>Récupération de chaleur et sobriété d’exploitation</li>
               <li>Suivi des consommations sur la première saison de chauffe</li>
             </ul>
+          </div>
+        </div>
+      </details>
+
+      <details className={s.tech} name="technique">
+        <summary className={s.resume}>
+          <span className={s.resumeTexte}>
+            <span className={`label ${s.techLabel}`}>
+              Technique&nbsp;09&nbsp;/&nbsp;09{" "}
+              <span className={s.flag}>contenu représentatif</span>
+            </span>
+            <h2 className={s.techTitle}>Sécurité incendie</h2>
+            <Responsable id="securite-incendie" />
+          </span>
+          <span className={s.marque} aria-hidden="true" />
+        </summary>
+
+        <div id="securite-incendie" className={s.techInner}>
+          <div className={s.techBody}>
+            <p className={s.todo}>
+              <strong>Contenu à fournir.</strong> Ce domaine figure à
+              l’organigramme VRD&nbsp;2026, avec son responsable, mais aucun
+              descriptif n’existe à ce jour — ni sur le site actuel, ni dans le
+              portfolio. À rédiger avec le bureau.
+            </p>
           </div>
         </div>
       </details>

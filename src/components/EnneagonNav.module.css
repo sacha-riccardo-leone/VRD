@@ -13,7 +13,7 @@
 }
 
 /* --- Schémas latéraux ---------------------------------------------------- */
-/* Les huit sont montés en permanence : on ne fait varier que l'opacité, ce qui
+/* Les neuf sont montés en permanence : on ne fait varier que l'opacité, ce qui
    donne un fondu croisé sans démontage. Décor pur, derrière tout le contenu. */
 .asides {
   position: absolute;
@@ -264,7 +264,7 @@
   outline-offset: var(--focus-offset);
 }
 
-/* --- Repli mobile : plus d'octogone, une grille de deux colonnes ---------- */
+/* --- Repli mobile : plus d'ennéagone, une grille de deux colonnes --------- */
 /* Le DOM ne change pas : seul le CSS reflue. `transform: none` neutralise le
    déplacement calculé en ligne, qui n'a plus de sens hors de l'anneau. */
 @media (max-width: 39.99rem) {
@@ -297,6 +297,14 @@
     padding: var(--s-5) var(--s-4);
     border: 1px solid var(--rule-strong);
     transform: none !important;
+  }
+
+  /* Neuf est impair : la dernière carte se retrouverait seule à gauche, la
+     colonne de droite vide. Elle occupe donc toute la largeur — la grille se
+     termine sur une rangée pleine plutôt que sur un trou. À retirer si le
+     nombre de domaines redevient pair. */
+  .node:last-child {
+    grid-column: 1 / -1;
   }
 
   .nodeIcon {

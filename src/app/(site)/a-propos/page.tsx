@@ -12,26 +12,27 @@ import s from "./page.module.css";
  * parce que c’est la page où l’envie d’inventer est la plus forte :
  *
  *  - Tout ce qui figure dans « Le bureau » vient du registre du commerce
- *    (CHE-287.600.663, inscription du 30.10.2020) ou d’un chiffre publié par
- *    VRD, et chaque ligne porte sa source à l’écran. L’effectif n’est PAS une
- *    donnée de registre : sa ligne le dit en toutes lettres, et le sur-titre de
- *    la section annonce « faits et sources », pas « faits de registre ».
- *  - Deux personnes seulement sont nommées : les organes inscrits au registre.
- *    Les autres fiches sont REPRÉSENTATIVES, marquées comme telles à l’écran
- *    (puce « à compléter », filet tireté, surface non surélevée) et ne portent
- *    AUCUN nom : ni réel, ni fictif.
- *  - Aucune répartition de l’effectif n’est avancée. Nous savons que VRD
- *    annonce six collaborateurs et que deux personnes figurent au registre ;
- *    nous ignorons si les six incluent les deux. La page ne fait donc pas la
- *    soustraction, et le nombre de fiches représentatives ne prétend rien.
- *  - Les rôles génériques sont repris des métiers que VRD dit rechercher sur sa
- *    page Carrières — ce sont des intitulés de poste, pas des personnes.
+ *    (CHE-287.600.663, inscription du 30.10.2020) ou de l’organigramme VRD
+ *    2026, et chaque ligne porte sa source à l’écran. La fondation et
+ *    l’effectif ne sont PAS des données de registre : leurs lignes le disent en
+ *    toutes lettres, et le sur-titre de la section annonce « faits et sources »,
+ *    pas « faits de registre ».
+ *  - Les six personnes sont nommées, et chaque fiche porte d’où vient son nom :
+ *    deux du registre du commerce (les organes inscrits), quatre de
+ *    l’organigramme. Aucun nom n’est inventé, et rien ne s’y ajoute — ni
+ *    portrait, ni parcours, ni courriel, ni portable : le PDF en contient, leur
+ *    publication n’est pas tranchée, la page n’en publie donc aucun.
+ *  - Aucune arithmétique sur l’effectif : l’organigramme dit six personnes,
+ *    direction incluse, donc les deux organes sont deux des six. Six fiches
+ *    pour six personnes, sans addition ni soustraction.
  *  - Portraits et biographies : explicitement annoncés comme à fournir par VRD.
  *  - Aucune certification, aucun client, aucune référence de projet : rien de
  *    tout cela n’est public, donc rien de tout cela n’est écrit.
  *
- * L’écart « fondée en 2021 » (site actuel) contre 30.10.2020 (registre) est
- * signalé à l’écran plutôt que masqué : c’est à VRD de trancher.
+ * Date de fondation : l’organigramme donne le 1er janvier 2021, et le cartouche
+ * porte cette ligne. La ligne « Inscription — 30 octobre 2020 » reste juste
+ * au-dessous : c’est la date d’INSCRIPTION au registre, un fait distinct de la
+ * fondation, et les deux ne se contredisent pas.
  *
  * Typographie — les espaces insécables du français (avant « : », à l’intérieur
  * des guillemets, dans le numéro de téléphone) sont posées en entités
@@ -47,8 +48,8 @@ export const metadata: Metadata = {
     "Le bureau et l’équipe de VRD ingénieurs-conseils SA — registre du commerce 2020, siège à Sugiez (Mont-Vully, FR), direction, effectif et coordonnées.",
 };
 
-/* --- Faits sourcés. Chaque ligne porte sa provenance à l’écran, y compris la
-   seule qui ne vienne PAS du registre : l’effectif. ------------------------ */
+/* --- Faits sourcés. Chaque ligne porte sa provenance à l’écran, y compris les
+   deux qui ne viennent PAS du registre : la fondation et l’effectif. ------- */
 
 type Ligne = { terme: string; valeur: string; source: string };
 
@@ -62,6 +63,11 @@ const REGISTRE: readonly Ligne[] = [
     terme: "Numéro IDE",
     valeur: "CHE-287.600.663",
     source: "Registre du commerce",
+  },
+  {
+    terme: "Fondation",
+    valeur: "1er janvier 2021",
+    source: "Organigramme VRD 2026",
   },
   {
     terme: "Inscription",
@@ -88,11 +94,12 @@ const REGISTRE: readonly Ligne[] = [
     terme: "Effectif",
     valeur: "6 collaborateurs",
     source:
-      "Hors registre — chiffre publié par VRD ; LinkedIn indique une fourchette de 2 à 10",
+      "Hors registre — chiffre publié par VRD, confirmé par l’organigramme VRD 2026, qui nomme six personnes, direction comprise",
   },
 ];
 
-/* --- Équipe : deux personnes nommées, parce qu’elles sont au registre. ---- */
+/* --- Les deux organes inscrits au registre du commerce. Ils sont deux des six
+   personnes de l’équipe, pas deux de plus. ---------------------------------- */
 
 type Organe = { nom: string; role: string; note: string };
 
@@ -109,17 +116,17 @@ const ORGANES: readonly Organe[] = [
   },
 ];
 
-/* --- Fiches représentatives : un rôle, jamais un nom. ---------------------
-   Les intitulés sont ceux des métiers que VRD dit rechercher (page Carrières),
-   plus la coordination BIM, spécialité affichée par le bureau. Ce sont des
-   postes, pas des personnes : aucune de ces fiches ne décrit quelqu’un, et
-   leur nombre ne dit rien de l’effectif réel. */
+/* --- Les quatre autres personnes de l’équipe, nommées par l’organigramme. ---
+   Nom et rôle, rien de plus : les intitulés sont ceux du document, non
+   développés, parce que les développer serait déjà écrire à la place de VRD. */
 
-const ROLES_REPRESENTATIFS: readonly string[] = [
-  "Projeteur en techniques du bâtiment",
-  "Technicien ES en techniques du bâtiment",
-  "Ingénieur HES en techniques du bâtiment",
-  "Coordination BIM",
+type Collaborateur = { nom: string; role: string };
+
+const EQUIPE: readonly Collaborateur[] = [
+  { nom: "J. Suarez", role: "Administration" },
+  { nom: "Fabio Soares", role: "DT CVS" },
+  { nom: "Cloé Fabrizio", role: "Projeteuse CVS" },
+  { nom: "Maxime Allemann", role: "Projeteur CVS" },
 ];
 
 export default function AProposPage() {
@@ -127,7 +134,7 @@ export default function AProposPage() {
     <main id="contenu" className={s.page}>
       <PageHeader
         planche="Planche 05 · À propos"
-        title="Deux ingénieurs HES, six collaborateurs, un bureau à Sugiez."
+        title="Six personnes à Sugiez, deux ingénieurs HES à la direction."
         lede="VRD ingénieurs-conseils SA est inscrite au registre du commerce depuis le 30 octobre 2020. Son siège est au chemin du Chablais 46, sur la commune du Mont-Vully, dans le canton de Fribourg."
       />
 
@@ -143,81 +150,43 @@ export default function AProposPage() {
             Le bureau
           </h2>
 
-          <div className={s.grille}>
-            <div className={s.prose}>
-              <p>
-                VRD est né de deux amis ingénieurs HES. Ils dirigent le bureau
-                ensemble&nbsp;: Dominique Rodrigues Fonseca en préside le
-                conseil d’administration, Ruben Varela Facal y siège comme
-                administrateur, l’un et l’autre avec signature collective à
-                deux.
-              </p>
-              <p>
-                La société est inscrite au registre du commerce depuis le 30
-                octobre 2020, sous le numéro CHE-287.600.663. Le siège est au
-                chemin du Chablais 46, à 1786 Sugiez, commune du Mont-Vully,
-                canton de Fribourg.
-              </p>
-              <p>
-                Le but inscrit au registre tient en une phrase&nbsp;:
-                ingénierie-conseil en chauffage, ventilation, climatisation,
-                sanitaire et énergies renouvelables. C’est le périmètre du
-                bureau — rien de plus, et c’est déjà l’essentiel de ce qui fait
-                fonctionner un bâtiment.
-              </p>
-              <p>
-                VRD annonce six collaborateurs. Ce chiffre ne vient pas du
-                registre&nbsp;: il vient du bureau lui-même. Le profil LinkedIn
-                affiche la fourchette «&nbsp;2-10&nbsp;», qui le contient sans
-                le contredire.
-              </p>
-            </div>
+          <p className={s.intro}>
+            VRD est né de deux amis ingénieurs HES, qui dirigent le bureau
+            ensemble. Tout ce qui suit vient du registre du commerce, sauf la
+            fondation et l’effectif&nbsp;: chaque ligne porte sa source.
+          </p>
 
-            <dl className={s.registre}>
-              {REGISTRE.map((l) => (
-                <div className={s.ligne} key={l.terme}>
-                  <dt className={s.terme}>{l.terme}</dt>
-                  <dd className={s.valeur}>
-                    {l.valeur}
-                    <span className={s.source}>{l.source}</span>
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-
-          <aside className={s.reserve} aria-labelledby="reserve-titre">
-            <p className={`label ${s.reserveTitre}`} id="reserve-titre">
-              Écart relevé <span className={s.flag}>à trancher avec VRD</span>
-            </p>
-            <p className={s.reserveTexte}>
-              Le site actuel de VRD indique une fondation en 2021. Le registre
-              du commerce date l’inscription du 30 octobre 2020. L’écart est
-              signalé ici plutôt que corrigé en silence&nbsp;: c’est au bureau
-              de dire laquelle des deux dates il souhaite publier.
-            </p>
-          </aside>
+          <dl className={s.registre}>
+            {REGISTRE.map((l) => (
+              <div className={s.ligne} key={l.terme}>
+                <dt className={s.terme}>{l.terme}</dt>
+                <dd className={s.valeur}>
+                  {l.valeur}
+                  <span className={s.source}>{l.source}</span>
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </section>
 
       {/* ---------------------------------------------------------------- 02 */}
       <section className={s.equipe} aria-labelledby="equipe-titre">
         <div className={s.inner}>
-          <p className={`label ${s.kicker}`}>02 · Organes et fiches</p>
+          <p className={`label ${s.kicker}`}>02 · Organes et collaborateurs</p>
           <h2 id="equipe-titre" className={s.h2}>
             L’équipe
           </h2>
 
           <p className={s.intro}>
-            Deux noms sont publics, parce qu’ils figurent au registre du
-            commerce. Le reste de l’équipe n’y figure pas, et nous n’inventerons
-            personne&nbsp;: les fiches ci-dessous tiennent leur place avec un
-            intitulé de poste, sans nom ni parcours.
+            Les six personnes du bureau sont nommées&nbsp;: deux par le registre
+            du commerce, quatre par l’organigramme 2026. Restent à fournir les
+            portraits et les biographies.
           </p>
 
           <ul className={s.cartes}>
             {ORGANES.map((m) => (
-              <li className={`${s.carte} ${s.carteVerifiee}`} key={m.nom}>
+              <li className={`${s.carte} ${s.carteRegistre}`} key={m.nom}>
                 <p className={`label ${s.carteFlag}`}>Registre du commerce</p>
                 <h3 className={s.carteNom}>{m.nom}</h3>
                 <p className={s.carteRole}>{m.role}</p>
@@ -225,32 +194,14 @@ export default function AProposPage() {
               </li>
             ))}
 
-            {ROLES_REPRESENTATIFS.map((role) => (
-              <li className={`${s.carte} ${s.carteRepresentative}`} key={role}>
-                <p className={`label ${s.carteFlag}`}>
-                  Fiche représentative{" "}
-                  <span className={s.flag}>à compléter</span>
-                </p>
-                <h3 className={s.carteNom}>{role}</h3>
-                <dl className={s.champs}>
-                  <div className={s.champ}>
-                    <dt className={s.champTerme}>Nom</dt>
-                    <dd className={s.champValeur}>à compléter</dd>
-                  </div>
-                  <div className={s.champ}>
-                    <dt className={s.champTerme}>Parcours</dt>
-                    <dd className={s.champValeur}>à compléter</dd>
-                  </div>
-                  <div className={s.champ}>
-                    <dt className={s.champTerme}>Portrait</dt>
-                    <dd className={s.champValeur}>à fournir</dd>
-                  </div>
-                </dl>
-                <p className={s.carteNote}>
-                  Intitulé de poste générique, repris des métiers que VRD
-                  recherche. Aucune personne réelle n’est décrite ici, et le
-                  nombre de fiches ne dit rien de l’effectif.
-                </p>
+            {EQUIPE.map((membre) => (
+              <li
+                className={`${s.carte} ${s.carteOrganigramme}`}
+                key={membre.nom}
+              >
+                <p className={`label ${s.carteFlag}`}>Organigramme VRD 2026</p>
+                <h3 className={s.carteNom}>{membre.nom}</h3>
+                <p className={s.carteRole}>{membre.role}</p>
               </li>
             ))}
           </ul>
@@ -260,15 +211,14 @@ export default function AProposPage() {
               Contenu à fournir par VRD
             </p>
             <p className={s.encadreTexte}>
-              Les portraits et les biographies de l’équipe seront fournis par
-              VRD. Tant qu’ils ne le sont pas, cette page ne publie ni photo, ni
-              texte de présentation, ni nom de collaborateur&nbsp;: les fiches
-              représentatives ci-dessus sont du contenu de démonstration, marqué
-              comme tel, et seront remplacées une par une à la remise des
-              éléments.
+              Les noms et les rôles sont fournis. Restent les portraits et les
+              biographies&nbsp;: tant qu’ils ne sont pas remis, aucune fiche ne
+              porte de photo ni de texte de présentation. Les courriels et les
+              portables nominatifs ne sont pas publiés non plus — c’est une
+              décision qui appartient à VRD, elle n’est pas prise.
             </p>
             <p className={s.encadreTexte}>
-              VRD indique rechercher ces mêmes métiers — voir{" "}
+              Les métiers que le bureau recherche sont listés sur{" "}
               <Link className={s.lienProse} href="/carrieres">
                 la page Carrières
               </Link>
