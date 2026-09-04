@@ -36,17 +36,62 @@
 }
 
 /* --- La barre ------------------------------------------------------------ */
+/* `overflow: visible` a été retiré : il venait de l'ancienne barre horizontale,
+   dont la cote sortait du cadre. Avec des colonnes, tout tient dans le viewBox,
+   et une boîte fermée garantit qu'un texte trop long ne pourra plus élargir la
+   page entière. */
 .chart {
   display: block;
   inline-size: 100%;
   block-size: auto;
-  overflow: visible;
 }
 
 .seg {
   stroke: currentColor;
   stroke-width: 0.4;
   vector-effect: non-scaling-stroke;
+}
+
+/* Ligne de sol : la seule règle du graphique. Les deux colonnes y posent, donc
+   leurs hauteurs se comparent à l'œil sans qu'aucune graduation soit
+   nécessaire — c'est tout l'intérêt d'une comparaison à deux barres. */
+.sol {
+  stroke: currentColor;
+  stroke-width: 0.8;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Le total, en tête de colonne : c'est le chiffre que le lecteur retient. */
+.total {
+  font-family: var(--font-mono-stack);
+  font-size: 7px;
+  font-weight: 500;
+  fill: currentColor;
+  text-anchor: middle;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Les corps sont MESURÉS, pas choisis : les deux colonnes sont centrées à
+   38 unités l'une de l'autre, donc une étiquette plus large que 38 se
+   télescope avec sa voisine quelle que soit la taille de l'écran — le SVG
+   scalant tout ensemble. « Surdimensionnée » faisait 41,6 unités à 4,2 px ;
+   à 3,4 px elle en fait 33,7, ce qui laisse 7,8 unités de blanc. */
+.colTitre {
+  font-family: var(--font-mono-stack);
+  font-size: 3.4px;
+  fill: currentColor;
+  text-anchor: middle;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Idem : « sur les besoins mesurés » chevauchait sa voisine de 2 unités et
+   touchait le bord gauche du viewBox. Raccourcie ET réduite. */
+.colSous {
+  font-family: var(--font-mono-stack);
+  font-size: 3px;
+  fill: var(--ink-muted);
+  text-anchor: middle;
 }
 
 /* Ligne de cote : le vocabulaire de la planche, jusque dans un graphique. */
@@ -81,8 +126,8 @@
   border-block-end: 1px solid var(--rule);
 }
 
-/* Les pastilles reprennent les trois remplissages de la barre : aplat,
-   hachures serrées, hachures espacées. Aucune teinte en jeu. */
+/* Les pastilles reprennent les remplissages des colonnes : aplat pour
+   l'investissement, hachures pour l'entretien. Aucune teinte en jeu. */
 .swatch {
   inline-size: 1.25rem;
   block-size: 0.9rem;
@@ -101,14 +146,6 @@
   );
 }
 
-.swatch[data-fill="light"] {
-  background-image: repeating-linear-gradient(
-    45deg,
-    currentColor 0 0.9px,
-    transparent 0.9px 5.4px
-  );
-}
-
 .legLabel {
   font-size: var(--fs-300);
 }
@@ -120,7 +157,30 @@
   color: var(--ink-muted);
 }
 
+/* Le mécanisme, énoncé en clair : c'est l'hypothèse de la figure, elle se
+   montre au lieu de se cacher dans un calcul. */
+.mecanisme {
+  max-width: 54ch;
+  margin-block-start: var(--s-5);
+  font-size: var(--fs-300);
+  line-height: var(--lh-body);
+}
+
+/* La réserve : ce que la figure NE dit pas, et pourquoi. Tiretée en tête pour
+   la distinguer de la source — l'une atteste, l'autre limite. */
+.reserve {
+  max-width: 54ch;
+  margin-block-start: var(--s-4);
+  padding-block-start: var(--s-4);
+  border-block-start: 1px dashed var(--rule-strong);
+  font-family: var(--font-mono-stack);
+  font-size: var(--fs-100);
+  line-height: var(--lh-snug);
+  color: var(--ink-muted);
+}
+
 .source {
+  max-width: 54ch;
   margin-block-start: var(--s-5);
   font-family: var(--font-mono-stack);
   font-size: var(--fs-100);
