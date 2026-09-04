@@ -277,16 +277,6 @@
   border-block-end: 1px solid var(--rule-strong);
 }
 
-/* Provenance des responsables — une bande de cartouche entre l'ennéagone et le
-   premier volet. Elle n'a pas de filet à elle : le bord bas de l'ennéagone et
-   le bord haut du premier volet l'encadrent déjà, en ajouter un troisième
-   empilerait des traits pour une seule ligne de texte. */
-.sourceOrga {
-  max-width: var(--page-max);
-  margin-inline: auto;
-  padding: var(--s-4) var(--gutter);
-}
-
 /* Réserve de contenu manquant — même traitement que les autres marqueurs de la
    page : encadré tireté, jamais discret. */
 .todo {

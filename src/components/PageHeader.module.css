@@ -69,6 +69,12 @@
   /* Seul l'écart grandit avec le titre ; le chapô lui-même ne bouge pas. */
   margin-top: clamp(var(--s-5), 1rem + 1.6vw, var(--s-7));
   max-width: 52ch;
+
+  /* Monospace, comme les étiquettes et les cotes de la planche. Le titre est
+     désormais une masse de sans en grand corps ; lui répondre en mono creuse
+     l'écart entre les deux registres au lieu de le laisser reposer sur la
+     seule taille. C'est aussi la voix que le dossier réserve à la donnée. */
+  font-family: var(--font-mono-stack);
   font-size: var(--fs-500);
   line-height: var(--lh-snug);
   color: var(--ink-muted);

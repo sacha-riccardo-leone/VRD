@@ -86,13 +86,6 @@ export default function PrestationsPage() {
         <EnneagonNav />
       </section>
 
-      {/* Provenance des responsables, donnée UNE fois pour toute la planche.
-          La répéter sous chacun des neuf noms n’ajouterait rien — la source est
-          la même partout — et noierait le nom sous sa référence. */}
-      <p className={`label ${s.sourceOrga}`}>
-        Responsables des domaines — organigramme VRD&nbsp;2026
-      </p>
-
       <details className={s.tech} name="technique">
         <summary className={s.resume}>
           <span className={s.resumeTexte}>
