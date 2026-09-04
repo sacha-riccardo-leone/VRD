@@ -1,19 +1,73 @@
+/* ==========================================================================
+   En-tête de page — « l'échelle pure ».
+
+   Un mot seul supporte un corps qu'une phrase ne supporte pas : c'est le seul
+   levier employé ici. Aucun filet, aucun cartouche, aucune capitale, aucune
+   seconde police. Ce que le texte ne fournit plus en surface, le corps le rend.
+   ========================================================================== */
+
 .head {
+  /* Le plafond double exactement celui de --fs-800 (3,75rem → 7,5rem) : la
+     décision est un rapport, pas un chiffre trouvé à l'œil.
+     Le plancher n'est pas un choix de goût mais une mesure : à 320 px (seuil de
+     reflow WCAG 1.4.10) la colonne fait 280 px, et « Réalisations » — le plus
+     long des cinq titres — y tient sur 249 px à 48 px de corps, police réelle
+     et interlettrage compris. En dessous, le mot déborderait : sur téléphone
+     c'est la mesure qui fixe le corps, pas le goût. */
+  --corps: clamp(3rem, 1.7rem + 6.45vw, 7.5rem);
+
   border-bottom: 1px solid var(--rule);
 }
 
 .inner {
   max-width: var(--page-max);
   margin-inline: auto;
-  padding: var(--s-8) var(--gutter);
+
+  /* Le blanc est la seule chose qui accompagne le mot : il doit donc croître
+     avec lui. Dissymétrique — plus d'air au-dessus qu'en dessous — pour que le
+     chapô reste visiblement attaché au titre, et non flottant entre deux vides. */
+  padding-block: clamp(var(--s-7), 2rem + 5vw, var(--s-9))
+    clamp(var(--s-6), 1.5rem + 4vw, var(--s-8));
+  padding-inline: var(--gutter);
 }
 
 .title {
-  max-width: 20ch;
+  font-size: var(--corps);
+
+  /* 400, pas 600. À ce corps la graisse apparente augmente d'elle-même : un
+     semi-gras de 120 px fait un aplat, pas un titre. Descendre à 400 rend au
+     mot son dessin — et la hiérarchie repose alors sur la SEULE échelle, les
+     h2 restant en 600 : le h1 les domine par sa taille, pas deux fois. */
+  font-weight: 400;
+
+  /* L'interlettrage se creuse à mesure que le corps grandit : les chasses sont
+     dessinées pour du texte courant, à 120 px les blancs entre lettres
+     deviennent des trous. Bornée aux deux bouts pour qu'aucune largeur d'écran
+     inattendue ne colle ni ne disloque les lettres. */
+  letter-spacing: clamp(-0.042em, -0.004em - 0.28vw, -0.022em);
+
+  /* Un seul mot : l'interligne ne sert plus à espacer des lignes mais à cadrer
+     le bloc. Pas moins de 1 — « À propos » porte un accent au-dessus de la
+     hauteur de capitale. */
+  line-height: 1;
+
+  /* Alignement optique. `--approche` est posée par le composant, d'après la
+     première lettre du titre : le mot est retiré de sa propre approche gauche
+     pour que son ENCRE tombe sur la marge, comme le chapô et le filet. Sans
+     cela les titres démarrent à trois retraits différents selon leur initiale,
+     ce qui à ce corps se voit. Le repli à 0 vaut « pas de correction », jamais
+     une valeur invalide. */
+  margin-inline-start: calc(-1 * var(--approche, 0em));
+
+  /* Filet de sécurité, jamais déclenché par les cinq titres réels : si un titre
+     plus long arrivait, mieux vaut une coupure laide qu'un défilement
+     horizontal de toute la page. */
+  overflow-wrap: break-word;
 }
 
 .lede {
-  margin-top: var(--s-5);
+  /* Seul l'écart grandit avec le titre ; le chapô lui-même ne bouge pas. */
+  margin-top: clamp(var(--s-5), 1rem + 1.6vw, var(--s-7));
   max-width: 52ch;
   font-size: var(--fs-500);
   line-height: var(--lh-snug);
