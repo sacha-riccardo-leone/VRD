@@ -192,36 +192,6 @@
   color: var(--ink-muted);
 }
 
-/* Encadré : ce que VRD doit fournir. Filet d’encre plein et épais — c’est la
-   note la plus importante de la page, elle est donc la plus lourde. */
-.encadre {
-  margin-top: var(--s-7);
-  padding: var(--s-6);
-  border: 2px solid var(--ink);
-  background: var(--paper-raised);
-}
-
-.encadreTitre {
-  margin-bottom: var(--s-4);
-}
-
-.encadreTexte + .encadreTexte {
-  margin-top: var(--s-4);
-}
-
-.lienProse {
-  color: var(--ink);
-  font-weight: 600;
-  text-decoration: underline;
-  text-decoration-color: var(--ink-muted);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.25em;
-}
-
-.lienProse:hover {
-  text-decoration-color: var(--ink);
-}
-
 /* --- 03 · Repères -------------------------------------------------------- */
 
 /* La section porte aussi la classe globale `.technique`, qui bascule les jetons

@@ -172,26 +172,6 @@ export default function AProposPage() {
               </li>
             ))}
           </ul>
-
-          <aside className={s.encadre} aria-labelledby="encadre-titre">
-            <p className={`label ${s.encadreTitre}`} id="encadre-titre">
-              Contenu à fournir par VRD
-            </p>
-            <p className={s.encadreTexte}>
-              Les noms et les rôles sont fournis. Restent les portraits et les
-              biographies&nbsp;: tant qu’ils ne sont pas remis, aucune fiche ne
-              porte de photo ni de texte de présentation. Les courriels et les
-              portables nominatifs ne sont pas publiés non plus — c’est une
-              décision qui appartient à VRD, elle n’est pas prise.
-            </p>
-            <p className={s.encadreTexte}>
-              Les métiers que le bureau recherche sont listés sur{" "}
-              <Link className={s.lienProse} href="/carrieres">
-                la page Carrières
-              </Link>
-              .
-            </p>
-          </aside>
         </div>
       </section>
 
