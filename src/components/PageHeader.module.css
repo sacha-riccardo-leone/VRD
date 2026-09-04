@@ -66,16 +66,23 @@
 }
 
 .lede {
-  /* Seul l'écart grandit avec le titre ; le chapô lui-même ne bouge pas. */
-  margin-top: clamp(var(--s-5), 1rem + 1.6vw, var(--s-7));
+  /* Serré contre le titre : le chapô en est la légende, pas un paragraphe
+     indépendant. L'écart suit tout de même le corps du titre — il ne peut pas
+     rester fixe quand le mot passe de 48 à 120 px — mais il vaut désormais
+     environ la moitié de ce qu'il valait, borné à 12 px sur téléphone. */
+  margin-top: clamp(var(--s-3), 0.5rem + 0.9vw, var(--s-5));
   max-width: 52ch;
 
   /* Monospace, comme les étiquettes et les cotes de la planche. Le titre est
      désormais une masse de sans en grand corps ; lui répondre en mono creuse
      l'écart entre les deux registres au lieu de le laisser reposer sur la
-     seule taille. C'est aussi la voix que le dossier réserve à la donnée. */
+     seule taille. C'est aussi la voix que le dossier réserve à la donnée.
+
+     Un cran plus bas que le pas de chapô (--fs-400 et non --fs-500) : à corps
+     égal une chasse fixe paraît plus grosse qu'une proportionnelle, et sous un
+     titre de 120 px la légende n'a pas à peser autant qu'un chapô courant. */
   font-family: var(--font-mono-stack);
-  font-size: var(--fs-500);
+  font-size: var(--fs-400);
   line-height: var(--lh-snug);
   color: var(--ink-muted);
 }
