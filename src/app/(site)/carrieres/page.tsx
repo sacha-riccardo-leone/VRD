@@ -10,7 +10,9 @@ import s from "./page.module.css";
  * Ton : celui de leur page actuelle, conservé — tutoiement, « rejoins
  * l’aventure », deux amis ingénieurs HES à l’origine du bureau.
  *
- * Intégrité du contenu — ce qui est FACTUEL et sourcé à l’écran :
+ * Intégrité du contenu — ce qui est FACTUEL (les lignes de provenance qui
+ * suivaient chaque raison ont été retirées à la demande du bureau ; les
+ * sources restent affichées sur la planche À propos) :
  *  - six collaborateurs (chiffre publié par VRD) ;
  *  - deux dirigeants, Dominique Rodrigues Fonseca et Ruben Varela Facal
  *    (registre du commerce, CHE-287.600.663) ;
@@ -41,7 +43,6 @@ type Raison = {
   num: string;
   titre: string;
   texte: string;
-  source: string;
   representatif?: boolean;
 };
 
@@ -54,24 +55,18 @@ const RAISONS: Raison[] = [
     titre: "Une équipe où l’on se parle",
     texte:
       "Six collaborateurs. À la direction, deux amis ingénieurs HES qui sont à l’origine du bureau. Pour poser une question, tu traverses la pièce — pas trois niveaux hiérarchiques. Ce que tu proposes se discute le jour même.",
-    source:
-      "Effectif : chiffre publié par VRD. Direction : Dominique Rodrigues Fonseca et Ruben Varela Facal, registre du commerce (CHE-287.600.663).",
   },
   {
     num: "02",
     titre: "Neuf domaines, pas un seul",
     texte:
       "Chauffage, ventilation, froid, sanitaire, sprinkler, BIM, MCR, énergétique, sécurité incendie. Le bureau couvre les neuf, donc ton horizon ne se limite pas à un seul lot. C’est plus exigeant qu’une spécialisation — et c’est comme ça qu’on apprend vite.",
-    source:
-      "Neuf domaines d’activité listés à l’organigramme VRD 2026. But inscrit au registre : ingénierie-conseil en chauffage, ventilation, climatisation, sanitaire et énergies renouvelables.",
   },
   {
     num: "03",
     titre: "Le projet, du concept à la mise en service",
     texte:
       "Tu ne lâches pas le dossier après l’avant-projet : dimensionnement, appel d’offres, suivi d’exécution, mise en service. Voir tourner une installation qu’on a dessinée reste la meilleure école du métier.",
-    source:
-      "Déroulé type d’un mandat d’ingénierie en techniques du bâtiment. Le partage exact des phases et des outils chez VRD n’est pas public.",
     representatif: true,
   },
 ];
@@ -142,8 +137,7 @@ export default function CarrieresPage() {
           </h2>
           <p className={s.intro}>
             Trois raisons, et ce qu’elles impliquent vraiment&nbsp;: une petite
-            structure, ce n’est pas que des avantages. Chaque raison porte sa
-            source.
+            structure, ce n’est pas que des avantages.
           </p>
 
           <ol className={s.raisons}>
@@ -157,7 +151,6 @@ export default function CarrieresPage() {
                 </div>
                 <h3 className={s.raisonTitle}>{r.titre}</h3>
                 <p className={s.raisonText}>{r.texte}</p>
-                <p className={s.source}>{r.source}</p>
               </li>
             ))}
           </ol>

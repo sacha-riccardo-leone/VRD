@@ -112,18 +112,6 @@
   margin-top: var(--s-4);
 }
 
-/* Note de source : mono, sous un filet fin — le cartouche d'une figure. */
-.source {
-  max-width: 34ch;
-  margin-top: var(--s-5);
-  padding-top: var(--s-3);
-  border-top: 1px solid var(--rule);
-  font-family: var(--font-mono-stack);
-  font-size: var(--fs-100);
-  line-height: var(--lh-snug);
-  color: var(--ink-muted);
-}
-
 /* --- Section 02 · Nos métiers (anthracite) -------------------------------
    `.technique` réassigne les jetons ; on redéclare seulement fond et encre
    pour que la surface s'applique à la section entière. */
