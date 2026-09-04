@@ -23,6 +23,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
+  /* Doit valoir --paper (src/styles/tokens.css). Ecrit en dur parce qu'une
+     variable CSS ne se lit pas depuis les metadonnees : le navigateur teinte
+     sa barre AVANT d'avoir la moindre feuille de style. C'est la seule copie
+     d'un jeton dans le depot ; si --paper change, cette ligne change avec. */
   themeColor: "#f5f5f5",
   colorScheme: "light",
 };

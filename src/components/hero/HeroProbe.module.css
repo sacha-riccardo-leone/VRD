@@ -6,7 +6,7 @@
   inset-inline: 0;
   z-index: 9999;
   padding: 6px 8px;
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-family: var(--font-mono-stack);
   font-size: 10px;
   line-height: 1.35;
   color: #0f0;
@@ -16,6 +16,16 @@
   overflow-wrap: anywhere;
 }
 
+/* EXCEPTION ASSUMEE a la regle monochrome du projet — la seule du depot.
+   Ces deux couleurs ne decorent pas : elles PORTENT l'etat. Rouge = un piege
+   s'est declenche, vert = la mesure est saine ; c'est la lecture d'un
+   instrument, pas d'une interface. Les neutraliser rendrait `.alerte` et
+   `.bon` identiques, donc supprimerait le signal au nom de la proprete.
+
+   Elle ne touche jamais un visiteur : la sonde est fermee derriere
+   `?debug=hero` (voir SONDE dans ./probe.ts) et le composant rend `null` sans
+   lui. La charte s'applique au site ; ceci est un appareil de mesure pose
+   dessus. */
 .alerte {
   color: #ff5f5f;
 }
