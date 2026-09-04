@@ -38,7 +38,7 @@ export function ThermalField() {
     const host = wrap.parentElement ?? wrap;
 
     const cs = getComputedStyle(wrap);
-    const C_LINE = cs.getPropertyValue("--on-dark-muted").trim() || "#b0aeab";
+    const C_LINE = cs.getPropertyValue("--on-dark-muted").trim() || "#aeaeae";
     const C_FRAME = cs.getPropertyValue("--dark-rule").trim() || "#333333";
 
     // --- champ ------------------------------------------------------------

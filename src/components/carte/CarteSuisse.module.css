@@ -72,7 +72,7 @@
 /* --- Couche 1 : les cantons ---------------------------------------------- */
 /* Le trait est un anthracite ÉCLAIRCI, pas un blanc : `--rule-strong` (#6e6e6e)
    est le jeton prévu pour les séparateurs porteurs de sens sur fond sombre, ce
-   que sont des frontières. `--ink-muted` (#b0aeab), employé auparavant, se lit
+   que sont des frontières. `--ink-muted` (#aeaeae), employé auparavant, se lit
    comme du blanc et faisait passer le découpage administratif avant les
    épingles, qui sont le sujet. */
 .canton {

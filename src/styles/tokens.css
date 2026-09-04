@@ -7,21 +7,29 @@
    PAPER (#F5F5F5) and INK (#141210) are my values, not yours — the project
    brief specifies "off-white drafting paper" and "near-black ink" without
    hexes. Replace them from VRD-project-context.md when it is restored.
+
+   2026-09-04 — the light family was NEUTRALISED at the client's request.
+   Paper went from the warm #F2EFE9 to #F5F5F5, which left every neighbour
+   (raised, sunk, rules, muted ink) yellow against it: the sunk band read as
+   a different paper. Lightness steps are preserved, hue is not — each token
+   keeps its old perceived lightness and drops its warmth. INK stays #141210:
+   its 4/255 of warmth is invisible at 7 % lightness, and neutralising it
+   would repaint every glyph on the site for no visible gain.
    ========================================================================== */
 
 :root {
   /* --- Surface: the drafting sheet ------------------------------------- */
   --paper: #f5f5f5;
-  --paper-raised: #faf8f4; /* insets, cards, the sheet lifted off the desk */
-  --paper-sunk: #e9e5dc; /* wells, alternating table rows */
+  --paper-raised: #fcfcfc; /* insets, cards, the sheet lifted off the desk */
+  --paper-sunk: #e8e8e8; /* wells, alternating table rows */
 
   /* --- Rules: the sheet's structure ------------------------------------ */
-  --rule: #d8d2c7; /*  1.31:1 — decorative hairlines only               */
-  --rule-strong: #8a8271; /*  3.32:1 — separators that carry meaning          */
+  --rule: #d0d0d0; /*  1.41:1 — decorative hairlines only               */
+  --rule-strong: #7f7f7f; /*  3.67:1 — separators that carry meaning          */
 
   /* --- Ink -------------------------------------------------------------- */
-  --ink: #141210; /* 16.28:1 on paper — AAA                            */
-  --ink-muted: #55504a; /*  6.95:1 on paper — AA body                       */
+  --ink: #141210; /* 17.14:1 on paper — AAA                            */
+  --ink-muted: #505050; /*  7.40:1 on paper — AA body                       */
 
   /* --- Emphasis: MONOCHROME ---------------------------------------------
      No accent colour (decision 2026-08-28). The client's own materials —
@@ -39,8 +47,8 @@
   --dark: #1c1c1c;
   --dark-raised: #262626;
   --dark-rule: #333333; /*  1.35:1 on dark — decorative hairlines           */
-  --on-dark: #f5f5f5; /* 14.85:1 on dark — AAA                            */
-  --on-dark-muted: #b0aeab; /*  7.70:1 on dark — AAA                            */
+  --on-dark: #f5f5f5; /* 15.63:1 on dark — AAA                            */
+  --on-dark-muted: #aeaeae; /*  7.68:1 on dark — AAA                            */
 
   /* --- Type ------------------------------------------------------------- */
   --font-sans-stack: var(--font-sans), "Segoe UI", "Helvetica Neue", arial, sans-serif;
