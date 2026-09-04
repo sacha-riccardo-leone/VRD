@@ -129,7 +129,6 @@ export default function CarrieresPage() {
   return (
     <main id="contenu">
       <PageHeader
-        planche="Planche 06"
         title="Carrières"
         lede="Rejoins l’aventure."
       />

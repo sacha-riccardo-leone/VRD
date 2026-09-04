@@ -75,7 +75,6 @@ export default function PrestationsPage() {
   return (
     <main id="contenu">
       <PageHeader
-        planche="Planche 02"
         title="Prestations"
         lede="Neuf techniques, du concept à la mise en service."
       />

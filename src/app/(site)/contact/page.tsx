@@ -43,7 +43,6 @@ export default function ContactPage() {
   return (
     <main id="contenu" className={s.page}>
       <PageHeader
-        planche="Planche 07"
         title="Contact"
         lede="Parlons de votre projet."
       />

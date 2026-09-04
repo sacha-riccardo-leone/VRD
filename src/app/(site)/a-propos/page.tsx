@@ -133,47 +133,14 @@ export default function AProposPage() {
   return (
     <main id="contenu" className={s.page}>
       <PageHeader
-        planche="Planche 05"
         title="À propos"
         lede="Six personnes à Sugiez, deux ingénieurs HES à la direction."
       />
 
-      {/* ---------------------------------------------------------------- 01 */}
-      <section className={s.bureau} aria-labelledby="bureau-titre">
-        <FigureBackdrop placement="right" size="min(52%, 34rem)">
-          <PlanNiveauCote />
-        </FigureBackdrop>
-
-        <div className={s.inner}>
-          <p className={`label ${s.kicker}`}>01 · Faits et sources</p>
-          <h2 id="bureau-titre" className={s.h2}>
-            Le bureau
-          </h2>
-
-          <p className={s.intro}>
-            VRD est né de deux amis ingénieurs HES, qui dirigent le bureau
-            ensemble. Tout ce qui suit vient du registre du commerce, sauf la
-            fondation et l’effectif&nbsp;: chaque ligne porte sa source.
-          </p>
-
-          <dl className={s.registre}>
-            {REGISTRE.map((l) => (
-              <div className={s.ligne} key={l.terme}>
-                <dt className={s.terme}>{l.terme}</dt>
-                <dd className={s.valeur}>
-                  {l.valeur}
-                  <span className={s.source}>{l.source}</span>
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </section>
-
       {/* ---------------------------------------------------------------- 02 */}
       <section className={s.equipe} aria-labelledby="equipe-titre">
         <div className={s.inner}>
-          <p className={`label ${s.kicker}`}>02 · Organes et collaborateurs</p>
+          <p className={`label ${s.kicker}`}>01 · Organes et collaborateurs</p>
           <h2 id="equipe-titre" className={s.h2}>
             L’équipe
           </h2>
@@ -225,6 +192,38 @@ export default function AProposPage() {
               .
             </p>
           </aside>
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------------------- 01 */}
+      <section className={s.bureau} aria-labelledby="bureau-titre">
+        <FigureBackdrop placement="right" size="min(52%, 34rem)">
+          <PlanNiveauCote />
+        </FigureBackdrop>
+
+        <div className={s.inner}>
+          <p className={`label ${s.kicker}`}>02 · Faits et sources</p>
+          <h2 id="bureau-titre" className={s.h2}>
+            Le bureau
+          </h2>
+
+          <p className={s.intro}>
+            VRD est né de deux amis ingénieurs HES, qui dirigent le bureau
+            ensemble. Tout ce qui suit vient du registre du commerce, sauf la
+            fondation et l’effectif&nbsp;: chaque ligne porte sa source.
+          </p>
+
+          <dl className={s.registre}>
+            {REGISTRE.map((l) => (
+              <div className={s.ligne} key={l.terme}>
+                <dt className={s.terme}>{l.terme}</dt>
+                <dd className={s.valeur}>
+                  {l.valeur}
+                  <span className={s.source}>{l.source}</span>
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </section>
 

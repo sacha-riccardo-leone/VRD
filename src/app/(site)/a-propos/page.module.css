@@ -43,6 +43,7 @@
 .bureau {
   position: relative; /* ancre le substrat de planche */
   overflow: hidden;
+  border-top: 1px solid var(--rule-strong);
 }
 
 /* Sous 62rem, le substrat n’a plus la place de se tenir à l’écart du texte :
@@ -104,8 +105,9 @@
 
 /* --- 02 · L’équipe ------------------------------------------------------- */
 
+/* Première section de la page : le filet bas de l'en-tête suffit à la
+   détacher, elle n'en porte donc pas elle-même. */
 .equipe {
-  border-top: 1px solid var(--rule-strong);
   background: var(--paper-sunk);
 }
 

@@ -49,7 +49,6 @@ export default function RealisationsPage() {
   return (
     <main id="contenu">
       <PageHeader
-        planche="Planche 03"
         title="Réalisations"
         lede="Nos plans deviennent des bâtiments."
       />
