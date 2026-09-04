@@ -83,9 +83,14 @@ const MAX = Math.max(...COLONNES.map((c) => c.total));
 const H = 100; // hauteur utile des barres
 const L = 26; // largeur d'une barre
 const X = [12, 50]; // abscisse de chaque barre
-const SOL = 108; // ligne de sol
+const SOL = 116; // ligne de sol
 const COTE_X = 79; // axe de la ligne de cote
-const VB = "0 0 108 128";
+/* Le viewBox reserve du CIEL au-dessus de la plus haute colonne : le total y
+   est ecrit, et une hampe qui sort du cadre est coupee net depuis que la boite
+   ne laisse plus rien deborder. 116 - 100 (hauteur utile) = 16 unites de marge
+   haute, contre 8 auparavant — la ligne de base du total passe de y=4 a y=11,
+   ses hampes rentrent. */
+const VB = "0 0 108 136";
 
 export function CoutCycleVie() {
   const echelle = (v: number) => (v / MAX) * H;
