@@ -28,16 +28,17 @@ export function Approche() {
           Notre approche <span className={s.flag}>à valider par VRD</span>
         </p>
 
-        {/* L'argument du bureau, dans l'ordre où il se vit : d'abord l'achat,
-            puis les années. La figure en dessous montre le croisement — la
-            moins chère le premier jour n'est pas la moins chère à la fin. */}
+        {/* Le bureau parle de lui, à la première personne : c'est sa manière
+            de choisir. « Pour vingt ans » est l'horizon de la figure en
+            dessous, qui montre le croisement — la moins chère le premier jour
+            n'est pas la moins chère à la fin. */}
         <h2 id="approche-titre" className={s.statement}>
-          Un peu plus à l’achat. Beaucoup moins ensuite.
+          Nous choisissons avec discernement, pour vingt ans.
         </h2>
 
         <p className={s.body}>
-          Nous ne choisissons pas une installation sur son prix d’achat. Nous
-          regardons ce qu’elle coûtera pendant toute sa vie&nbsp;: l’énergie,
+          Le prix d’achat ne décide pas seul. Nous regardons ce qu’une
+          installation coûtera pendant toute sa vie&nbsp;: l’énergie,
           l’entretien, les réparations. Celle qui coûte le moins le premier
           jour n’est pas toujours celle qui coûte le moins sur vingt ans
           — c’est ce coût-là que nous faisons baisser.
