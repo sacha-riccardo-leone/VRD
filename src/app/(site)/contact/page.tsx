@@ -21,10 +21,13 @@ import s from "./page.module.css";
  * Correction de revue (29.08.2026) : le bouton d’envoi ne SOUMET plus. Un
  * <form> sans `action` ni `method` se soumet en GET vers l’URL courante, ce qui
  * aurait recopié nom, e-mail, téléphone et message dans la barre d’adresse —
- * puis dans l’historique, les journaux du serveur et l’en-tête Referer. La page
- * affirme que rien n’est transmis ; il fallait que ce soit vrai. Le bouton est
- * donc `type="button"` + `aria-disabled` : il reste focusable, annonce son état
- * et ne déclenche rien. Sans bouton de soumission et avec plusieurs champs
+ * puis dans l’historique, les journaux du serveur et l’en-tête Referer. Rien ne
+ * doit être transmis, et il fallait que ce soit vrai. Le bouton est donc
+ * `type="button"` + `aria-disabled` : il reste focusable, annonce son état
+ * (« inactif ») et ne déclenche rien. La mention « Démonstration » qui le
+ * disait à l’écran, l’intro du formulaire et la ligne « champs requis » ont
+ * été retirées le 14.09.2026, à la demande de Sacha — le bouton reste inerte,
+ * l’état « inactif » reste affiché. Sans bouton de soumission et avec plusieurs champs
  * texte, la soumission implicite (touche Entrée) est elle aussi neutralisée.
  *
  * Les `required` et `type="email"` restent : ils portent l’état « requis » dans
@@ -136,30 +139,7 @@ export default function ContactPage() {
           <h2 id="ecrire-titre" className={s.h2}>
             Écrire au bureau
           </h2>
-          <p className={s.intro}>
-            Quelques lignes suffisent&nbsp;: la nature du bâtiment, la phase du
-            projet, l’échéance visée. C’est ce qui permet d’orienter la réponse
-            vers la bonne personne.
-          </p>
-
-          {/* Mention de démonstration — visible à l’écran et placée AVANT le
-              formulaire : une réserve qu’on ne lit qu’après avoir tout saisi ne
-              sert à rien. C’est la seule chose qui empêche ce formulaire de
-              mentir au lecteur. */}
-          <p id="note-demo" className={s.demo}>
-            <span className={s.demoTag}>Démonstration</span>
-            Ce formulaire n’est relié à aucun service. Le bouton d’envoi est
-            volontairement inactif&nbsp;: aucune donnée n’est transmise, ni
-            enregistrée, ni recopiée dans l’adresse de la page. Pour joindre
-            réellement le bureau, utilisez le téléphone ou l’adresse e-mail qui
-            figurent sur cette page.
-          </p>
-
           <form className={s.form} aria-labelledby="ecrire-titre">
-            <p className={s.hint}>
-              Les champs marqués «&nbsp;requis&nbsp;» sont obligatoires.
-            </p>
-
             <div className={s.field}>
               <label className={s.fieldLabel} htmlFor="nom">
                 Nom et prénom <span className={s.req}>requis</span>
@@ -246,12 +226,7 @@ export default function ContactPage() {
             {/* `type="button"` : aucune soumission, donc aucune donnée dans
                 l’URL. `aria-disabled` plutôt que `disabled` — le bouton reste
                 atteignable au clavier et annonce pourquoi il ne fait rien. */}
-            <button
-              className={s.submit}
-              type="button"
-              aria-disabled="true"
-              aria-describedby="note-demo"
-            >
+            <button className={s.submit} type="button" aria-disabled="true">
               Envoyer le message
               <span className={s.submitState}>inactif</span>
             </button>

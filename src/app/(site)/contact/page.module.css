@@ -154,24 +154,11 @@
 
 /* --- Formulaire ----------------------------------------------------------- */
 
-.intro {
-  margin-top: var(--s-4);
-  max-width: 52ch;
-  color: var(--ink-muted);
-}
-
 .form {
   display: grid;
   gap: var(--s-5);
   max-width: 42rem;
   margin-top: var(--s-6);
-}
-
-.hint {
-  font-family: var(--font-mono-stack);
-  font-size: var(--fs-200);
-  line-height: var(--lh-snug);
-  color: var(--ink-muted);
 }
 
 .field {
@@ -288,33 +275,6 @@
 }
 
 /* --- Mentions ------------------------------------------------------------- */
-
-/* La mention de démonstration : filet tireté ÉPAIS, surface creusée. Elle
-   précède le formulaire et doit se voir autant que lui. */
-.demo {
-  max-width: 42rem;
-  margin-top: var(--s-6);
-  padding: var(--s-4) var(--s-5);
-  background: var(--paper-sunk);
-  border: 2px dashed var(--rule-strong);
-  font-size: var(--fs-300);
-  line-height: var(--lh-body);
-}
-
-/* Aplat d’encre : le seul de la page. Réservé au mot qui ne doit pas passer
-   inaperçu (14.87:1 — papier sur encre). */
-.demoTag {
-  display: inline-block;
-  margin-inline-end: var(--s-3);
-  padding: 0.15em 0.5em;
-  background: var(--ink);
-  color: var(--paper);
-  font-family: var(--font-mono-stack);
-  font-size: var(--fs-100);
-  font-weight: 500;
-  letter-spacing: var(--ls-label);
-  text-transform: uppercase;
-}
 
 .privacy {
   max-width: 58ch;
