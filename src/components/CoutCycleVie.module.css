@@ -166,19 +166,6 @@
   line-height: var(--lh-body);
 }
 
-/* La réserve : ce que la figure NE dit pas, et pourquoi. Tiretée en tête pour
-   la distinguer de la source — l'une atteste, l'autre limite. */
-.reserve {
-  max-width: 54ch;
-  margin-block-start: var(--s-4);
-  padding-block-start: var(--s-4);
-  border-block-start: 1px dashed var(--rule-strong);
-  font-family: var(--font-mono-stack);
-  font-size: var(--fs-100);
-  line-height: var(--lh-snug);
-  color: var(--ink-muted);
-}
-
 .source {
   max-width: 54ch;
   margin-block-start: var(--s-5);

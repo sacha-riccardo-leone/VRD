@@ -57,14 +57,14 @@ const entretien = (invest: number) =>
 const COLONNES = [
   {
     key: "juste",
-    titre: "Dimensionnée",
-    sous: "besoins mesurés",
+    titre: "Adaptée",
+    sous: "puissance juste",
     invest: INVEST_JUSTE,
   },
   {
     key: "surdim",
-    titre: "Surdimensionnée",
-    sous: "facteur 2",
+    titre: "Trop grosse",
+    sous: "puissance doublée",
     invest: INVEST_SURDIM,
   },
 ].map((c) => ({
@@ -98,12 +98,12 @@ export function CoutCycleVie() {
   return (
     <figure className={s.figure}>
       <figcaption className={s.head}>
-        <p className={`label ${s.kicker}`}>Le coût d’un mauvais dimensionnement</p>
+        <p className={`label ${s.kicker}`}>Ce que coûte vraiment une installation</p>
         <p className={s.lead}>
           <span className={s.leadValue}>2,1×</span>
           <span className={s.leadLabel}>
-            ce qu’une installation surdimensionnée coûte sur 25 ans — dont le
-            surcoût est déjà là <strong>le jour de l’achat</strong>
+            plus cher sur 25&nbsp;ans quand l’installation est trop grosse.
+            Et le surcoût commence <strong>le jour de l’achat</strong>.
           </span>
         </p>
       </figcaption>
@@ -113,10 +113,10 @@ export function CoutCycleVie() {
         viewBox={VB}
         role="img"
         aria-label={
-          `Comparaison du coût sur 25 ans, en base 100. Installation dimensionnée sur les besoins mesurés : ` +
-          `${COLONNES[0].invest} d’investissement et ${COLONNES[0].entretien} d’entretien, total ${COLONNES[0].total}. ` +
-          `Installation surdimensionnée d’un facteur 2 : ${COLONNES[1].invest} d’investissement et ` +
-          `${COLONNES[1].entretien} d’entretien, total ${COLONNES[1].total}. Le surcoût porte sur les deux postes.`
+          `Deux colonnes comparent le coût sur 25 ans. Installation adaptée, à la puissance juste : ` +
+          `prix d’achat ${COLONNES[0].invest}, entretien et réparations ${COLONNES[0].entretien}, total ${COLONNES[0].total}. ` +
+          `Installation trop grosse, à la puissance doublée : prix d’achat ${COLONNES[1].invest}, entretien et réparations ` +
+          `${COLONNES[1].entretien}, total ${COLONNES[1].total}. Elle coûte plus cher à l’achat et à l’entretien.`
         }
       >
         <defs>
@@ -204,7 +204,7 @@ export function CoutCycleVie() {
             +115 %
           </tspan>
           <tspan x={COTE_X + 5} dy="4.4">
-            dès l’achat
+            à l’achat
           </tspan>
         </text>
       </svg>
@@ -212,14 +212,14 @@ export function CoutCycleVie() {
       <ul className={s.legend}>
         <li>
           <span className={s.swatch} data-fill="solid" aria-hidden="true" />
-          <span className={s.legLabel}>Investissement</span>
+          <span className={s.legLabel}>Prix d’achat</span>
           <span className={s.legValue}>
             100 → {INVEST_SURDIM}
           </span>
         </li>
         <li>
           <span className={s.swatch} data-fill="hatch" aria-hidden="true" />
-          <span className={s.legLabel}>Entretien sur {ANNEES}&nbsp;ans</span>
+          <span className={s.legLabel}>Entretien et réparations, {ANNEES}&nbsp;ans</span>
           <span className={s.legValue}>
             {COLONNES[0].entretien} → {COLONNES[1].entretien}
           </span>
@@ -227,33 +227,18 @@ export function CoutCycleVie() {
       </ul>
 
       <p className={s.mecanisme}>
-        L’entretien se calcule sur la valeur à neuf&nbsp;: une installation qui
-        vaut deux fois plus coûte deux fois plus à entretenir, chaque année.
-        Le surcoût d’investissement ne se rattrape pas — il se reproduit.
+        Plus une installation est grosse, plus elle coûte à acheter — et plus
+        elle coûte à entretenir, chaque année, pendant toute sa vie.
       </p>
 
+      {/* La source tient en deux lignes. Le détail — périmètre, réserves sur
+          l'énergie et la durée de vie, ce qui a été écarté — vit dans le
+          commentaire d'en-tête de ce fichier, pas à l'écran : une figure
+          d'accueil se lit en une seconde ou ne se lit pas. */}
       <p className={s.source}>
-        Base 100&nbsp;: l’investissement de l’installation dimensionnée. Le
-        surcoût de&nbsp;115&nbsp;% est un cas calculé sur un immeuble de bureaux
-        (OST-FZ, Rapperswil) — OST, Instituts SPF et IET, sur mandat de l’Office
-        fédéral de l’énergie, des cantons de Bâle-Ville et Zurich et de la Ville
-        de Zurich, projet OptiPower, 2023. Ce n’est pas une moyenne. Le
-        surdimensionnement, lui, est la situation courante&nbsp;: médiane
-        de&nbsp;+40&nbsp;% sur plus de 500&nbsp;immeubles d’habitation suisses,
-        sur données de mesure. Taux d’entretien&nbsp;: 1,94&nbsp;% par an de la
-        valeur à neuf des installations techniques, extrêmes de 0,5 à
-        9&nbsp;%&nbsp;— Bahr et Bossmann, 136&nbsp;bâtiments publics allemands,
-        2013. Ordres de grandeur, non transposables tels quels à un projet.
-      </p>
-
-      <p className={s.reserve}>
-        L’énergie et la durée de vie ne figurent pas dans les barres. Les seules
-        valeurs publiées — un surdimensionnement réduit «&nbsp;parfois&nbsp;» la
-        durée de vie de 20 à 40&nbsp;% et «&nbsp;peut&nbsp;» augmenter la
-        consommation de 30&nbsp;% — portent sur une pompe à chaleur air-eau à
-        onduleur et viennent d’une simulation&nbsp;; la même source publie le
-        contre-exemple pour les pompes saumure-eau. Une barre affirme une
-        quantité, ces valeurs n’en sont pas.
+        Surcoût d’achat&nbsp;: cas calculé par la haute école OST pour l’Office
+        fédéral de l’énergie, 2023. Entretien&nbsp;: 1,94&nbsp;% par an de la
+        valeur à neuf, 136&nbsp;bâtiments, 2013. Ordres de grandeur.
       </p>
     </figure>
   );

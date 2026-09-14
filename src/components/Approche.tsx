@@ -28,16 +28,18 @@ export function Approche() {
           Notre approche <span className={s.flag}>à valider par VRD</span>
         </p>
 
+        {/* Le titre suit la figure : les données disent qu'une installation
+            trop grosse coûte plus cher à l'achat AUSSI, pas seulement à l'usage.
+            L'ancienne formule (« le moins cher à l'achat… ») disait l'inverse. */}
         <h2 id="approche-titre" className={s.statement}>
-          Le moins cher à l’achat est rarement le moins cher à l’usage.
+          Une installation trop grosse se paie deux fois.
         </h2>
 
         <p className={s.body}>
-          Nos choix d’investissement ne reposent pas sur le seul coût initial.
-          Nous prenons en compte les coûts d’exploitation sur le long terme et la
-          durée de vie de l’installation, en nous concentrant sur le coût réel
-          d’exploitation&nbsp;: coût d’entretien, coût énergétique et pérennité
-          du fournisseur.
+          Nous ne choisissons pas une installation sur son prix d’achat. Nous
+          regardons ce qu’elle coûtera pendant toute sa vie&nbsp;: l’entretien,
+          l’énergie, et la solidité du fournisseur. C’est ce coût-là que nous
+          cherchons à réduire.
         </p>
 
 
