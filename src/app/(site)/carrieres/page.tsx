@@ -23,8 +23,8 @@ import s from "./page.module.css";
  *
  * Ce qui est REPRÉSENTATIF, et marqué comme tel À L’ÉCRAN par un marqueur
  * « contenu représentatif » placé AVANT chaque bloc concerné — jamais en
- * simple commentaire : le déroulé des phases d’un mandat, les descriptifs de
- * poste et la marche à suivre pour candidater. VRD ne publie rien de tout
+ * simple commentaire : le déroulé des phases d’un mandat et les descriptifs
+ * de poste. VRD ne publie rien de tout
  * cela ; ces textes sont les nôtres. La note de relecture qui coiffait la
  * page a été retirée à la demande du bureau ; les marqueurs de bloc, eux,
  * restent la garantie que rien ne se lit comme une affirmation de VRD.
@@ -92,29 +92,6 @@ const METIERS: Metier[] = [
     intitule: "Ingénieur HES en techniques du bâtiment",
     texte:
       "Tu portes le concept technique et énergétique, tu discutes d’égal à égal avec l’architecte et le maître d’ouvrage, et tu réponds du projet.",
-  },
-];
-
-type Etape = { num: string; titre: string; texte: string };
-
-const ETAPES: Etape[] = [
-  {
-    num: "01",
-    titre: "Ton CV",
-    texte:
-      "En PDF, avec ton parcours, tes formations et tes années de pratique. Deux pages suffisent.",
-  },
-  {
-    num: "02",
-    titre: "Deux ou trois choses que tu as faites",
-    texte:
-      "Extraits de plans, schémas de principe, une note de dimensionnement. Ça montre comment tu travailles, bien mieux qu’une liste de logiciels.",
-  },
-  {
-    num: "03",
-    titre: "Ce que tu cherches",
-    texte:
-      "Quelques lignes sur le poste qui t’intéresse, ton taux d’activité et la date à partir de laquelle tu es disponible.",
   },
 ];
 
@@ -213,7 +190,7 @@ export default function CarrieresPage() {
       {/* --- Candidature spontanée ----------------------------------------- */}
       <section className={s.section} aria-labelledby="candidature-titre">
         <div className={s.inner}>
-          <p className="label">Section 03 · Marche à suivre</p>
+          <p className="label">Section 03 · Postuler</p>
           <h2 id="candidature-titre" className={s.title}>
             Candidature spontanée
           </h2>
@@ -223,25 +200,6 @@ export default function CarrieresPage() {
             Envoie la tienne quand même.
           </p>
 
-          <p className={s.flagLine}>
-            <span className={s.flag}>contenu représentatif</span>
-            <span className={s.flagText}>
-              VRD demande simplement d’envoyer sa candidature à
-              info@vrd-ingenieurs.ch. Les trois étapes ci-dessous sont une
-              proposition de notre part, pas une exigence du bureau.
-            </span>
-          </p>
-
-          <ol className={s.etapes}>
-            {ETAPES.map((e) => (
-              <li className={s.etape} key={e.num}>
-                <p className="label">Étape {e.num}</p>
-                <h3 className={s.etapeTitle}>{e.titre}</h3>
-                <p className={s.etapeText}>{e.texte}</p>
-              </li>
-            ))}
-          </ol>
-
           <div className={s.actions}>
             <a className={s.cta} href={MAILTO}>
               Envoyer ta candidature par courriel
@@ -249,25 +207,6 @@ export default function CarrieresPage() {
             <a className={s.link} href="mailto:info@vrd-ingenieurs.ch">
               info@vrd-ingenieurs.ch
             </a>
-          </div>
-
-          <div className={s.contact}>
-            <div>
-              <p className="label">Une question avant d’écrire&nbsp;?</p>
-              <p>
-                <a className={s.link} href="tel:+41265520100">
-                  026&nbsp;552&nbsp;01&nbsp;00
-                </a>
-              </p>
-            </div>
-            <div>
-              <p className="label">Le bureau</p>
-              <address className={s.address}>
-                Chemin du Chablais 46
-                <br />
-                1786 Sugiez, commune du Mont-Vully (FR)
-              </address>
-            </div>
           </div>
         </div>
       </section>

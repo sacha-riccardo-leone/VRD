@@ -223,40 +223,6 @@
   line-height: var(--lh-snug);
 }
 
-/* --- Section 03 · Candidature spontanée ---------------------------------- */
-.etapes {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--s-6);
-  margin-top: var(--s-6);
-  padding: 0;
-  list-style: none;
-}
-
-@media (min-width: 52rem) {
-  .etapes {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--s-7);
-  }
-}
-
-.etape {
-  max-width: none; /* la mesure est portée par les paragraphes internes */
-  padding-top: var(--s-4);
-  border-top: 1px solid var(--rule-strong);
-}
-
-.etapeTitle {
-  margin-top: var(--s-3);
-  font-size: var(--fs-500);
-  line-height: var(--lh-snug);
-}
-
-.etapeText {
-  margin-top: var(--s-3);
-  color: var(--ink-muted);
-}
-
 .actions {
   display: flex;
   flex-wrap: wrap;
@@ -305,23 +271,3 @@
   text-decoration-color: var(--ink);
 }
 
-.contact {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--s-5);
-  margin-top: var(--s-7);
-  padding-top: var(--s-5);
-  border-top: 1px solid var(--rule);
-}
-
-@media (min-width: 52rem) {
-  .contact {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--s-6);
-  }
-}
-
-.address {
-  margin-top: var(--s-2);
-  font-style: normal;
-}
