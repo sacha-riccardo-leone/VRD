@@ -29,18 +29,19 @@ export function Approche() {
         </p>
 
         {/* Le bureau parle de lui, à la première personne : c'est sa manière
-            de choisir. « Pour vingt ans » est l'horizon de la figure en
-            dessous, qui montre le croisement — la moins chère le premier jour
-            n'est pas la moins chère à la fin. */}
+            de choisir. « Long terme », pas « vingt ans » : les vingt ans sont
+            l'horizon de l'EXEMPLE en dessous, pas du principe. La figure
+            montre le croisement — la moins chère le premier jour n'est pas la
+            moins chère à la fin. */}
         <h2 id="approche-titre" className={s.statement}>
-          Nous choisissons avec discernement, pour vingt ans.
+          Nous choisissons avec discernement, pour le long terme.
         </h2>
 
         <p className={s.body}>
           Le prix d’achat ne décide pas seul. Nous regardons ce qu’une
           installation coûtera pendant toute sa vie&nbsp;: l’énergie,
           l’entretien, les réparations. Celle qui coûte le moins le premier
-          jour n’est pas toujours celle qui coûte le moins sur vingt ans
+          jour n’est pas toujours celle qui coûte le moins sur la durée
           — c’est ce coût-là que nous faisons baisser.
         </p>
 
