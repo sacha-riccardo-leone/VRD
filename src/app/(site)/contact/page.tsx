@@ -114,7 +114,8 @@ export default function ContactPage() {
                 <dd className={s.value}>
                   CHE-287.600.663
                   <span className={s.sub}>
-                    Inscrite au registre du commerce le 30.10.2020
+                    Inscrite au registre du commerce du canton de Fribourg le
+                    30.10.2020
                   </span>
                 </dd>
               </div>

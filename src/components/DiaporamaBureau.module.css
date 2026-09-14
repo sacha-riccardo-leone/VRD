@@ -1,0 +1,134 @@
+/* ==========================================================================
+   Le diaporama des locaux — des emplacements vides, pour l'instant.
+
+   Un cadre au rapport 3:2, tireté (la convention du site pour ce qui est
+   représentatif), barré de deux diagonales (la surface non définie d'un
+   plan). Monochrome : papier creusé, filets, encre atténuée.
+   ========================================================================== */
+
+.diaporama {
+  max-width: 52rem;
+  margin-block-start: var(--s-6);
+}
+
+/* --- La scène : la piste, et la surface cliquable par-dessus ------------- */
+/* Rapport fixe, débordement caché : la vue change, la boîte jamais. */
+.scene {
+  position: relative;
+  inline-size: 100%;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  border: 1px solid var(--rule-strong);
+  background: var(--paper-sunk);
+}
+
+/* La piste : toutes les vues côte à côte, une largeur chacune ; on la fait
+   glisser d'une largeur par vue. `transform` seul, en --dur, --ease. */
+.piste {
+  display: flex;
+  block-size: 100%;
+  inline-size: 100%;
+  transition: transform var(--dur) var(--ease);
+}
+
+.vue {
+  flex: 0 0 100%;
+  block-size: 100%;
+  padding: var(--s-4);
+}
+
+/* La surface cliquable : un bouton vide, posé sur toute la scène. Le bouton
+   est réinitialisé par globals.css (fond nul, bordure nulle) ; il ne reste
+   qu'à le tendre et à lui donner son curseur. L'anneau de focus, à
+   l'intérieur — la scène cache ce qui dépasse. */
+.surface {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  padding: 0;
+  cursor: pointer;
+}
+
+.surface:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: -3px;
+}
+
+/* Le cadre réservé. `isolation: isolate` ouvre un contexte d'empilement pour
+   que la croix, en z-index négatif, passe SOUS le texte mais SUR le fond. */
+.cadre {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  block-size: 100%;
+  inline-size: 100%;
+  border: 2px dashed var(--rule-strong);
+  text-align: center;
+}
+
+.croix {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  inline-size: 100%;
+  block-size: 100%;
+  stroke: var(--rule);
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+/* Le texte se pose sur un aplat de papier creusé, pour que les diagonales ne
+   viennent pas le toucher. */
+.cadreNum,
+.cadreTexte {
+  padding: 0.15em 0.5em;
+  background: var(--paper-sunk);
+}
+
+.cadreNum {
+  color: var(--ink);
+}
+
+.cadreTexte {
+  font-size: var(--fs-300);
+  color: var(--ink-muted);
+}
+
+/* --- Les commandes -------------------------------------------------------- */
+.commandes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  margin-block-start: var(--s-3);
+}
+
+/* 44 px, un filet, l'inversion au survol — le vocabulaire exact des boutons
+   de la carte de /realisations (CarteSuisse.module.css, .bouton). */
+.bouton {
+  inline-size: 44px;
+  block-size: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--rule-strong);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-mono-stack);
+  font-size: var(--fs-200);
+  line-height: 1;
+}
+
+.bouton:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* Chiffres à chasse fixe : le compteur ne bouge pas d'une vue à l'autre. */
+.compteur {
+  font-variant-numeric: tabular-nums;
+}

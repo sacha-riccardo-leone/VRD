@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { DiaporamaBureau } from "@/components/DiaporamaBureau";
 import { PageHeader } from "@/components/PageHeader";
-import { FigureBackdrop } from "@/components/FigureBackdrop";
-import { PlanNiveauCote } from "@/components/PlanNiveauCote";
 import s from "./page.module.css";
 
 /**
@@ -11,12 +9,21 @@ import s from "./page.module.css";
  * Intégrité du contenu — la règle dure du projet s’applique ici plus qu’ailleurs,
  * parce que c’est la page où l’envie d’inventer est la plus forte :
  *
- *  - Tout ce qui figure dans « Le bureau » vient du registre du commerce
- *    (CHE-287.600.663, inscription du 30.10.2020) ou de l’organigramme VRD
- *    2026, et chaque ligne porte sa source à l’écran. La fondation et
- *    l’effectif ne sont PAS des données de registre : leurs lignes le disent en
- *    toutes lettres, et le sur-titre de la section annonce « faits et sources »,
- *    pas « faits de registre ».
+ *  - « Le bureau » (14.09.2026, demande de Sacha) : le cartouche de faits de
+ *    registre a été retiré et remplacé par le diaporama des locaux, dont les
+ *    cinq cadres sont VIDES et le disent : VRD n’a fourni aucune photo. Ce que
+ *    le cartouche doublait avec /contact (raison sociale, IDE, inscription du
+ *    30.10.2020, siège) y reste ; la signature collective à deux reste ici,
+ *    dans les deux fiches d’organes. Trois choses ne sont plus affichées
+ *    nulle part : la date exacte de fondation (1er janvier 2021, organigramme
+ *    — l’accueil ne porte que l’année, dans le tampon du hero, et un âge
+ *    « 5 ans d’existence » dont la source est le portfolio), le but inscrit
+ *    au registre (libellé verbatim), et la SOURCE de l’effectif (le chiffre 6
+ *    reste sur l’accueil, plus sa provenance « hors registre, confirmée par
+ *    l’organigramme »). Signalé à Sacha, non réinséré d’office.
+ *    La section « Coordonnées » a été retirée de même ; ce qu’elle avait en
+ *    plus (le registre du commerce du canton de Fribourg) est passé dans
+ *    « Nous joindre » sur /contact.
  *  - Les six personnes sont nommées, et chaque fiche porte d’où vient son nom :
  *    deux du registre du commerce (les organes inscrits), quatre de
  *    l’organigramme. Aucun nom n’est inventé, et rien ne s’y ajoute — ni
@@ -29,11 +36,6 @@ import s from "./page.module.css";
  *  - Aucune certification, aucun client, aucune référence de projet : rien de
  *    tout cela n’est public, donc rien de tout cela n’est écrit.
  *
- * Date de fondation : l’organigramme donne le 1er janvier 2021, et le cartouche
- * porte cette ligne. La ligne « Inscription — 30 octobre 2020 » reste juste
- * au-dessous : c’est la date d’INSCRIPTION au registre, un fait distinct de la
- * fondation, et les deux ne se contredisent pas.
- *
  * Typographie — les espaces insécables du français (avant « : », à l’intérieur
  * des guillemets, dans le numéro de téléphone) sont posées en entités
  * `&nbsp;`, jamais en caractère U+00A0 littéral : un caractère invisible se
@@ -45,58 +47,8 @@ import s from "./page.module.css";
 export const metadata: Metadata = {
   title: "À propos",
   description:
-    "Le bureau et l’équipe de VRD ingénieurs-conseils SA — registre du commerce 2020, siège à Sugiez (Mont-Vully, FR), direction, effectif et coordonnées.",
+    "L’équipe et le bureau de VRD ingénieurs-conseils SA — six personnes à Sugiez (Mont-Vully, FR), deux ingénieurs HES à la direction.",
 };
-
-/* --- Faits sourcés. Chaque ligne porte sa provenance à l’écran, y compris les
-   deux qui ne viennent PAS du registre : la fondation et l’effectif. ------- */
-
-type Ligne = { terme: string; valeur: string; source: string };
-
-const REGISTRE: readonly Ligne[] = [
-  {
-    terme: "Raison sociale",
-    valeur: "VRD ingénieurs-conseils SA",
-    source: "Registre du commerce",
-  },
-  {
-    terme: "Numéro IDE",
-    valeur: "CHE-287.600.663",
-    source: "Registre du commerce",
-  },
-  {
-    terme: "Fondation",
-    valeur: "1er janvier 2021",
-    source: "Organigramme VRD 2026",
-  },
-  {
-    terme: "Inscription",
-    valeur: "30 octobre 2020",
-    source: "Registre du commerce",
-  },
-  {
-    terme: "Siège",
-    valeur: "Chemin du Chablais 46, 1786 Sugiez — commune du Mont-Vully (FR)",
-    source: "Registre du commerce",
-  },
-  {
-    terme: "But inscrit",
-    valeur:
-      "Ingénierie-conseil en chauffage, ventilation, climatisation, sanitaire et énergies renouvelables",
-    source: "Registre du commerce",
-  },
-  {
-    terme: "Signature",
-    valeur: "Collective à deux",
-    source: "Registre du commerce",
-  },
-  {
-    terme: "Effectif",
-    valeur: "6 collaborateurs",
-    source:
-      "Hors registre — chiffre publié par VRD, confirmé par l’organigramme VRD 2026, qui nomme six personnes, direction comprise",
-  },
-];
 
 /* --- Les deux organes inscrits au registre du commerce. Ils sont deux des six
    personnes de l’équipe, pas deux de plus. ---------------------------------- */
@@ -137,7 +89,7 @@ export default function AProposPage() {
         lede="Six personnes à Sugiez, deux ingénieurs HES à la direction."
       />
 
-      {/* ---------------------------------------------------------------- 02 */}
+      {/* ---------------------------------------------------------------- 01 */}
       <section className={s.equipe} aria-labelledby="equipe-titre">
         <div className={s.inner}>
           <p className={`label ${s.kicker}`}>01 · Organes et collaborateurs</p>
@@ -175,131 +127,23 @@ export default function AProposPage() {
         </div>
       </section>
 
-      {/* ---------------------------------------------------------------- 01 */}
+      {/* ---------------------------------------------------------------- 02 */}
       <section className={s.bureau} aria-labelledby="bureau-titre">
-        <FigureBackdrop placement="right" size="min(52%, 34rem)">
-          <PlanNiveauCote />
-        </FigureBackdrop>
-
         <div className={s.inner}>
-          <p className={`label ${s.kicker}`}>02 · Faits et sources</p>
+          <p className={`label ${s.kicker}`}>02 · Les locaux</p>
           <h2 id="bureau-titre" className={s.h2}>
             Le bureau
           </h2>
 
           <p className={s.intro}>
-            VRD est né de deux amis ingénieurs HES, qui dirigent le bureau
-            ensemble. Tout ce qui suit vient du registre du commerce, sauf la
-            fondation et l’effectif&nbsp;: chaque ligne porte sa source.
+            Chemin du Chablais 46, à Sugiez. Les photos des locaux sont à
+            fournir par VRD&nbsp;: cinq emplacements les attendent.
           </p>
 
-          <dl className={s.registre}>
-            {REGISTRE.map((l) => (
-              <div className={s.ligne} key={l.terme}>
-                <dt className={s.terme}>{l.terme}</dt>
-                <dd className={s.valeur}>
-                  {l.valeur}
-                  <span className={s.source}>{l.source}</span>
-                </dd>
-              </div>
-            ))}
-          </dl>
+          <DiaporamaBureau />
         </div>
       </section>
 
-      {/* ---------------------------------------------------------------- 03 */}
-      <section
-        className={`technique ${s.reperes}`}
-        aria-labelledby="reperes-titre"
-      >
-        <div className={s.inner}>
-          <p className={`label ${s.kicker}`}>03 · Coordonnées</p>
-          <h2 id="reperes-titre" className={s.h2}>
-            Repères
-          </h2>
-
-          <div className={s.colonnes}>
-            <div className={s.colonne}>
-              <p className="label">Adresse</p>
-              <address className={s.adresse}>
-                VRD ingénieurs-conseils SA
-                <br />
-                Chemin du Chablais 46
-                <br />
-                1786&nbsp;Sugiez
-                <br />
-                Commune du Mont-Vully
-                <br />
-                Canton de Fribourg
-              </address>
-            </div>
-
-            <div className={s.colonne}>
-              <p className="label">Contact</p>
-              <ul className={s.liens}>
-                <li>
-                  <a className={s.lien} href="tel:+41265520100">
-                    026&nbsp;552&nbsp;01&nbsp;00
-                  </a>
-                </li>
-                <li>
-                  <a className={s.lien} href="mailto:info@vrd-ingenieurs.ch">
-                    info@vrd-ingenieurs.ch
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className={s.lien}
-                    href="https://www.linkedin.com/company/vrd-ing%C3%A9nieurs"
-                    rel="noopener noreferrer"
-                  >
-                    LinkedIn · /company/vrd-ingénieurs
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div className={s.colonne}>
-              <p className="label">Identification</p>
-              <dl className={s.identite}>
-                <div className={s.champ}>
-                  <dt className={s.champTerme}>IDE</dt>
-                  <dd className={s.champValeur}>CHE-287.600.663</dd>
-                </div>
-                <div className={s.champ}>
-                  <dt className={s.champTerme}>Inscription</dt>
-                  <dd className={s.champValeur}>30.10.2020</dd>
-                </div>
-                <div className={s.champ}>
-                  <dt className={s.champTerme}>Registre</dt>
-                  <dd className={s.champValeur}>Canton de Fribourg</dd>
-                </div>
-              </dl>
-            </div>
-
-            <div className={s.colonne}>
-              <p className="label">Aller plus loin</p>
-              <ul className={s.liens}>
-                <li>
-                  <Link className={s.lien} href="/prestations">
-                    Les prestations
-                  </Link>
-                </li>
-                <li>
-                  <Link className={s.lien} href="/carrieres">
-                    Les métiers recherchés
-                  </Link>
-                </li>
-                <li>
-                  <Link className={s.lien} href="/contact">
-                    Écrire au bureau
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
     </main>
   );
 }

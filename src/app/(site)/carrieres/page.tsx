@@ -11,8 +11,13 @@ import s from "./page.module.css";
  * l’aventure », deux amis ingénieurs HES à l’origine du bureau.
  *
  * Intégrité du contenu — ce qui est FACTUEL (les lignes de provenance qui
- * suivaient chaque raison ont été retirées à la demande du bureau ; les
- * sources restent affichées sur la planche À propos) :
+ * suivaient chaque raison ont été retirées à la demande du bureau. Où les
+ * sources restent visibles : les deux dirigeants et les six personnes sont
+ * étiquetés sur /a-propos, fiche par fiche ; l’IDE et l’inscription au
+ * registre sont sur /contact ; les neuf domaines et leur origine sur
+ * /prestations. Depuis le retrait du cartouche de registre d’À propos
+ * (14.09.2026), le but inscrit et la mention « chiffre publié par VRD » de
+ * l’effectif ne sont plus affichés nulle part) :
  *  - six collaborateurs (chiffre publié par VRD) ;
  *  - deux dirigeants, Dominique Rodrigues Fonseca et Ruben Varela Facal
  *    (registre du commerce, CHE-287.600.663) ;

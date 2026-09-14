@@ -1,30 +1,28 @@
 /* ==========================================================================
    À propos — planche 05.
 
-   Trois surfaces, trois degrés d’emphase, aucune teinte : papier (le bureau),
-   papier creusé (l’équipe), anthracite (les repères, via la classe globale
-   `.technique`). La hiérarchie vient de l’inversion encre/papier, de
-   l’épaisseur des filets et du tireté opposé au plein — jamais de la couleur.
+   Deux surfaces, deux degrés d’emphase, aucune teinte : papier creusé
+   (l’équipe), papier (le bureau). La hiérarchie vient de l’inversion
+   encre/papier, de l’épaisseur des filets et du tireté opposé au plein —
+   jamais de la couleur.
 
-   Convention de marquage, valable pour toute la page : plus rien n’est
-   représentatif ici, tout est sourcé — mais les sources n’ont pas le même
-   poids, et le filet qui coiffe chaque fiche le dit. Filet d’ENCRE pour le
-   registre du commerce, acte public ; filet plus CLAIR pour l’organigramme,
-   document fourni par le bureau. Le lecteur hiérarchise les deux sans lire une
-   seule étiquette — et la distinction tient à l’impression noir et blanc,
-   puisqu’elle ne repose sur aucune teinte.
+   Convention de marquage de l’équipe : tout y est sourcé, mais les sources
+   n’ont pas le même poids, et le filet qui coiffe chaque fiche le dit. Filet
+   d’ENCRE pour le registre du commerce, acte public ; filet plus CLAIR pour
+   l’organigramme, document fourni par le bureau. Le lecteur hiérarchise les
+   deux sans lire une seule étiquette — et la distinction tient à l’impression
+   noir et blanc, puisqu’elle ne repose sur aucune teinte.
+
+   Le diaporama de « Le bureau » est la seule chose non sourcée de la page :
+   des emplacements vides, marqués au tireté, à fournir par VRD.
    ========================================================================== */
 
 .page {
   padding-bottom: var(--s-9);
 }
 
-/* Gabarit commun : la même colonne de texte que le reste du dossier.
-   `position: relative` + `z-index` font passer le contenu devant le substrat
-   de planche posé par FigureBackdrop. */
+/* Gabarit commun : la même colonne de texte que le reste du dossier. */
 .inner {
-  position: relative;
-  z-index: 1;
   max-width: var(--page-max);
   margin-inline: auto;
   padding: var(--s-8) var(--gutter);
@@ -38,72 +36,7 @@
   max-width: 16ch;
 }
 
-/* --- 01 · Le bureau ------------------------------------------------------ */
-
-.bureau {
-  position: relative; /* ancre le substrat de planche */
-  overflow: hidden;
-  border-top: 1px solid var(--rule-strong);
-}
-
-/* Sous 62rem, le substrat n’a plus la place de se tenir à l’écart du texte :
-   il passerait dessous. Un fond illisible vaut moins que pas de fond. */
-@media (max-width: 62rem) {
-  .bureau > [aria-hidden="true"] {
-    display: none;
-  }
-}
-
-/* Le cartouche de faits : filet fort en tête pour dire que tout ce qui suit est
-   sourcé. La provenance est portée ligne à ligne par `.source`, jamais par le
-   titre du bloc — deux des lignes ne viennent pas du registre. */
-.registre {
-  margin-top: var(--s-6);
-  border-top: 2px solid var(--ink);
-}
-
-.ligne {
-  display: grid;
-  gap: var(--s-1);
-  padding: var(--s-4) 0;
-  border-bottom: 1px solid var(--rule);
-}
-
-@media (min-width: 34rem) {
-  .ligne {
-    grid-template-columns: 9rem minmax(0, 1fr);
-    gap: var(--s-4);
-  }
-}
-
-.terme {
-  font-family: var(--font-mono-stack);
-  font-size: var(--fs-100);
-  font-weight: 500;
-  letter-spacing: var(--ls-label);
-  line-height: var(--lh-snug);
-  text-transform: uppercase;
-  color: var(--ink-muted);
-  padding-top: 0.2em; /* aligne la ligne de base sur la valeur */
-}
-
-.valeur {
-  font-size: var(--fs-300);
-  line-height: var(--lh-snug);
-}
-
-/* La source est aussi lisible que la donnée : une valeur sans provenance n’a
-   pas sa place sur cette page. */
-.source {
-  display: block;
-  margin-top: var(--s-2);
-  font-family: var(--font-mono-stack);
-  font-size: var(--fs-100);
-  line-height: var(--lh-snug);
-  color: var(--ink-muted);
-}
-
-/* --- 02 · L’équipe ------------------------------------------------------- */
+/* --- 01 · L’équipe ------------------------------------------------------- */
 
 /* Première section de la page : le filet bas de l'en-tête suffit à la
    détacher, elle n'en porte donc pas elle-même. */
@@ -192,103 +125,9 @@
   color: var(--ink-muted);
 }
 
-/* --- 03 · Repères -------------------------------------------------------- */
-
-/* La section porte aussi la classe globale `.technique`, qui bascule les jetons
-   sur l’anthracite. Elle ne peint rien : c’est ici qu’on applique la surface et
-   l’encre, pour que le basculement soit visible. */
-.reperes {
+/* --- 02 · Le bureau ------------------------------------------------------ */
+/* Plus de substrat de planche derrière : le diaporama occupe la colonne, un
+   plan en fond passerait dessous. */
+.bureau {
   border-top: 1px solid var(--rule-strong);
-  background: var(--paper);
-  color: var(--ink);
-}
-
-.colonnes {
-  display: grid;
-  gap: var(--s-6);
-  margin-top: var(--s-6);
-}
-
-@media (min-width: 46rem) {
-  .colonnes {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--s-6) var(--s-7);
-  }
-}
-
-@media (min-width: 72rem) {
-  .colonnes {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-.colonne {
-  padding-top: var(--s-4);
-  border-top: 1px solid var(--rule-strong);
-}
-
-.adresse {
-  margin-top: var(--s-3);
-  font-style: normal;
-  font-size: var(--fs-300);
-  line-height: var(--lh-body);
-}
-
-.liens {
-  margin-top: var(--s-2);
-  padding: 0;
-  list-style: none;
-}
-
-.identite {
-  margin-top: var(--s-3);
-}
-
-/* Paire terme/valeur du bloc « Identification » : deux colonnes poussées aux
-   extrémités, filet de séparation sauf sur la dernière — la lecture se fait en
-   diagonale, comme sur un cartouche de plan. */
-.champ {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: var(--s-3);
-  padding: var(--s-2) 0;
-  border-bottom: 1px solid var(--rule);
-}
-
-.champ:last-child {
-  border-bottom: 0;
-}
-
-.champTerme {
-  font-family: var(--font-mono-stack);
-  font-size: var(--fs-100);
-  font-weight: 500;
-  letter-spacing: var(--ls-label);
-  text-transform: uppercase;
-  color: var(--ink-muted);
-}
-
-.champValeur {
-  font-family: var(--font-mono-stack);
-  font-size: var(--fs-200);
-  line-height: var(--lh-snug);
-  color: var(--ink-muted);
-}
-
-/* Cible tactile : 44px de haut au minimum, y compris pour un lien d’une seule
-   ligne dans une liste serrée. */
-.lien {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  font-size: var(--fs-300);
-  text-decoration: underline;
-  text-decoration-color: var(--ink-muted);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.25em;
-}
-
-.lien:hover {
-  text-decoration-color: var(--ink);
 }
