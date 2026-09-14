@@ -1,0 +1,150 @@
+/* ==========================================================================
+   Deux installations, deux barres de coût.
+
+   Le vocabulaire de la planche : un pictogramme au trait, une barre qui se lit
+   comme une cote, deux remplissages sans teinte. Achat = contour vide,
+   maintenance = aplat d'encre.
+   ========================================================================== */
+
+.figure {
+  display: grid;
+  gap: var(--s-7);
+  margin-block-start: var(--s-8);
+}
+
+.rangee {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  gap: var(--s-5);
+  align-items: start;
+}
+
+/* Le pictogramme est aligné sur la première ligne de texte de la rangée, pas
+   centré sur sa hauteur : il accompagne le nom, il ne flotte pas à côté. */
+.icone {
+  inline-size: 3rem;
+  block-size: 3rem;
+  margin-block-start: -0.25rem;
+  color: var(--ink);
+}
+
+.contenu {
+  display: grid;
+  gap: var(--s-3);
+  min-width: 0;
+}
+
+.nom {
+  color: var(--ink);
+}
+
+/* --- La barre ------------------------------------------------------------ */
+/* Deux segments côte à côte, dont la largeur est posée EN LIGNE par le
+   composant à partir des montants : la barre ne peut pas diverger des chiffres
+   affichés. `flex-basis` fixe la place finale dès le rendu — c'est ce qui
+   garantit l'absence de décalage : seule une transformation révèle. */
+.barre {
+  display: flex;
+  block-size: 1.25rem;
+  inline-size: 100%;
+}
+
+.achat,
+.maint {
+  display: block;
+  block-size: 100%;
+  flex-grow: 0;
+  flex-shrink: 0;
+  transform-origin: left center;
+}
+
+/* Le coût connu, borné : un contour. */
+.achat {
+  box-sizing: border-box;
+  border: 1.5px solid var(--ink);
+  background: var(--paper);
+  transition: transform var(--dur) var(--ease);
+}
+
+/* La masse qu'on ne voit pas venir : un aplat, qui prolonge l'achat d'une
+   poussée — il part quand l'achat a fini de se tracer. 240 + 120 = 360 ms. */
+.maint {
+  background: var(--ink);
+  transition: transform var(--dur-fast) var(--ease) var(--dur);
+}
+
+/* L'état par défaut est PLEIN : sans script, ou sous `prefers-reduced-motion`
+   (le script ne pose alors jamais « attente »), la figure est complète
+   d'emblée. Seul le script replie, puis relâche. */
+.figure[data-etat="attente"] .achat,
+.figure[data-etat="attente"] .maint {
+  transform: scaleX(0);
+  transition: none;
+}
+
+.figure[data-etat="joue"] .achat,
+.figure[data-etat="joue"] .maint {
+  transform: scaleX(1);
+}
+
+/* --- Les montants -------------------------------------------------------- */
+.montants {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2) var(--s-6);
+  margin: 0;
+  font-family: var(--font-mono-stack);
+  font-size: var(--fs-200);
+  line-height: var(--lh-snug);
+}
+
+.poste {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+  color: var(--ink-muted);
+}
+
+.poste dt::after {
+  content: "\00a0:";
+}
+
+.poste dd {
+  margin: 0;
+  color: var(--ink);
+  /* Chiffres à chasse fixe : la largeur ne bouge pas pendant le comptage. */
+  font-variant-numeric: tabular-nums;
+}
+
+.total dd {
+  font-weight: 500;
+}
+
+/* Les pastilles reprennent les deux remplissages de la barre. */
+.pastille {
+  align-self: center;
+  inline-size: 0.9rem;
+  block-size: 0.65rem;
+  box-sizing: border-box;
+}
+
+.pastille[data-fill="achat"] {
+  border: 1.5px solid var(--ink);
+  background: var(--paper);
+}
+
+.pastille[data-fill="maint"] {
+  background: var(--ink);
+}
+
+/* --- La mention d'exemple ------------------------------------------------ */
+/* Non négociable : des montants illustratifs doivent se dire comme tels. */
+.exemple {
+  max-width: 62ch;
+  padding-block-start: var(--s-4);
+  border-block-start: 1px solid var(--rule);
+  font-family: var(--font-mono-stack);
+  font-size: var(--fs-100);
+  line-height: var(--lh-snug);
+  color: var(--ink-muted);
+}

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CoutInstallation } from "./CoutInstallation";
 import s from "./Approche.module.css";
 
 /**
@@ -27,11 +28,11 @@ export function Approche() {
           Notre approche <span className={s.flag}>à valider par VRD</span>
         </p>
 
-        {/* Le titre suit la figure : les données disent qu'une installation
-            trop grosse coûte plus cher à l'achat AUSSI, pas seulement à l'usage.
-            L'ancienne formule (« le moins cher à l'achat… ») disait l'inverse. */}
+        {/* « Inadaptée », pas « trop grosse » ni « bon marché » : le mot ne
+            préjuge ni de la taille ni du prix. Il couvre le cas documenté (le
+            surdimensionnement, plus cher à l'achat aussi) comme les autres. */}
         <h2 id="approche-titre" className={s.statement}>
-          Une installation trop grosse se paie deux fois.
+          Une installation inadaptée se paie deux fois.
         </h2>
 
         <p className={s.body}>
@@ -40,6 +41,8 @@ export function Approche() {
           l’énergie, et la solidité du fournisseur. C’est ce coût-là que nous
           cherchons à réduire.
         </p>
+
+        <CoutInstallation />
 
 
           <Link href="/prestations" className={s.link}>

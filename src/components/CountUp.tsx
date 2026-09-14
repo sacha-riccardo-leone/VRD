@@ -19,10 +19,14 @@ export function CountUp({
   to,
   duration = 400,
   suffix = "",
+  format = String,
 }: {
   to: number;
   duration?: number;
   suffix?: string;
+  /** Mise en forme du nombre affiché — par défaut, tel quel. Sert aux montants
+      en francs (séparateur de milliers suisse), qui ne se lisent pas bruts. */
+  format?: (n: number) => string;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
   const [n, setN] = useState<number | null>(null); // null = valeur finale (SSR)
@@ -63,7 +67,7 @@ export function CountUp({
 
   return (
     <span ref={ref}>
-      {n === null ? to : n}
+      {format(n === null ? to : n)}
       {suffix}
     </span>
   );
