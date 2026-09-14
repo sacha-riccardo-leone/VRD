@@ -57,10 +57,13 @@
     opacity var(--dur-slow) var(--ease);
 }
 
-/* Les cinq positions. Le pivot : pour la voisine de GAUCHE, c'est son bord
-   droit (intérieur) qui vient vers le lecteur — rotateY négatif ; pour celle
-   de DROITE, son bord gauche — rotateY positif. Les positions ±2 sont hors
-   champ et transparentes : elles ne servent qu'au passage. */
+/* Les cinq positions. Le pivot : les voisines REGARDENT LE CENTRE — leur
+   bord intérieur s'éloigne, leur bord extérieur vient vers le lecteur, comme
+   les volets d'un paravent qui s'ouvrent. En CSS, rotateY positif éloigne le
+   bord droit : donc positif pour la voisine de GAUCHE (son bord droit,
+   intérieur, recule), négatif pour celle de DROITE. Première version à
+   l'envers, corrigée sur la remarque de Sacha (14.09.2026). Les positions ±2
+   sont hors champ et transparentes : elles ne servent qu'au passage. */
 .vue[data-pos="0"] {
   z-index: 2;
   transform: translateX(0) rotateY(0deg);
@@ -69,24 +72,24 @@
 
 .vue[data-pos="-1"] {
   z-index: 1;
-  transform: translateX(calc(-1 * var(--decale))) rotateY(calc(-1 * var(--angle)));
+  transform: translateX(calc(-1 * var(--decale))) rotateY(var(--angle));
   opacity: 0.5;
 }
 
 .vue[data-pos="1"] {
   z-index: 1;
-  transform: translateX(var(--decale)) rotateY(var(--angle));
+  transform: translateX(var(--decale)) rotateY(calc(-1 * var(--angle)));
   opacity: 0.5;
 }
 
 .vue[data-pos="-2"] {
-  transform: translateX(calc(-2 * var(--decale))) rotateY(calc(-1 * var(--angle)));
+  transform: translateX(calc(-2 * var(--decale))) rotateY(var(--angle));
   opacity: 0;
   pointer-events: none;
 }
 
 .vue[data-pos="2"] {
-  transform: translateX(calc(2 * var(--decale))) rotateY(var(--angle));
+  transform: translateX(calc(2 * var(--decale))) rotateY(calc(-1 * var(--angle)));
   opacity: 0;
   pointer-events: none;
 }
