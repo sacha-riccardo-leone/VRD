@@ -59,6 +59,17 @@ par-dessus (`--ink` sur `--rule`).
 lecteur, ≤400 ms, `prefers-reduced-motion` respecté, aucun décalage de mise
 en page.
 
+**Figure du coût — exception consignée (14.09.2026).** Les barres de
+`CoutInstallation` (accueil) se tracent en 600 + 600 ms, puis l'écart se
+compte en 600 ms : 1,8 s en tout, au-dessus du plafond. Décision de Sacha :
+à 360 ms, on ne voyait pas les barres s'élargir — et une barre qu'on ne voit
+pas s'élargir ne montre rien. C'est la SEULE animation qui dépasse 400 ms ;
+elle le fait pour être lue, pas pour décorer. Le reste de la règle tient :
+déclenchée par le lecteur, jouée une fois, pleine d'emblée sous
+`prefers-reduced-motion`, aucun décalage de mise en page. Les durées vivent
+dans le composant, en une seule table, et sont passées au CSS en propriétés
+personnalisées.
+
 **Le contenu technique est le sujet, jamais un décor.** Chaque schéma porte
 une unité, une étiquette ou une légende. Si supprimer la légende ne fait rien
 perdre, supprimer le visuel.

@@ -26,10 +26,18 @@ import s from "./CoutInstallation.module.css";
  *
  * MOUVEMENT — « le dessin s'assemble », l'unique idée du site. Quand le
  * lecteur amène la figure à l'écran, l'achat se trace, puis les vingt ans le
- * prolongent d'une poussée ; les montants comptent en même temps (CountUp,
- * le précédent du « 200+ »). 240 + 120 = 360 ms, sous le plafond de 400.
+ * prolongent d'une poussée ; les montants comptent EN MÊME TEMPS (CountUp en
+ * mode piloté : c'est cette figure qui donne le départ, pas chaque nombre
+ * pour lui-même), puis l'écart se compte en dernier — c'est la conclusion.
  * L'ordre gauche → droite est aussi l'ordre du temps : d'abord l'achat, puis
  * les années. C'est ce qui fait lire le croisement sans axe.
+ *
+ * DURÉE — EXCEPTION CONSIGNÉE (AGENTS.md, 14.09.2026). 600 + 600 ms pour les
+ * barres, 600 ms pour l'écart : 1,8 s en tout, au-dessus du plafond de 400 ms
+ * qui vaut partout ailleurs. À 360 ms, on ne voyait pas les barres
+ * s'élargir — constat de Sacha. Les durées vivent ICI, en une seule table,
+ * et sont passées à la feuille de style en propriétés personnalisées : le
+ * CSS ne peut pas diverger des compteurs.
  *
  * Sans JavaScript, ou sous `prefers-reduced-motion`, les barres sont rendues
  * pleines d'emblée : l'animation est un enrichissement, jamais une condition.
@@ -44,6 +52,17 @@ import s from "./CoutInstallation.module.css";
  */
 
 const ANNEES = 20;
+
+/** Les temps de la figure, en ms — la seule table. */
+const T = {
+  achat: 600, // l'achat se trace
+  suite: 600, // les vingt ans le prolongent, dès que l'achat a fini
+  ecart: 600, // l'écart se compte, une fois les deux barres posées
+};
+const T_BARRES = T.achat + T.suite;
+
+/** L'état de la figure, traduit pour les compteurs. */
+const PILOTE = { plein: "final", attente: "zero", joue: "compte" } as const;
 
 const LIGNES = [
   {
@@ -127,7 +146,10 @@ export function CoutInstallation() {
         // transition, et non un état initial.
         raf = requestAnimationFrame(() => setEtat("joue"));
       },
-      { threshold: 0.6 },
+      // 0,4 et non 0,6 : la figure est haute, et l'animation est longue —
+      // elle part dès que le lecteur en voit une bonne part, pour qu'il la
+      // voie jouer, pas finir.
+      { threshold: 0.4 },
     );
     io.observe(el);
     return () => {
@@ -137,7 +159,17 @@ export function CoutInstallation() {
   }, []);
 
   return (
-    <div className={s.figure} ref={ref} data-etat={etat}>
+    <div
+      className={s.figure}
+      ref={ref}
+      data-etat={etat}
+      style={
+        {
+          "--t-achat": `${T.achat}ms`,
+          "--t-suite": `${T.suite}ms`,
+        } as React.CSSProperties
+      }
+    >
       {LIGNES.map((l) => (
         <div className={s.rangee} key={l.key}>
           <Equipement />
@@ -167,20 +199,39 @@ export function CoutInstallation() {
                 <span className={s.pastille} data-fill="achat" aria-hidden="true" />
                 <dt>À l’achat</dt>
                 <dd>
-                  CHF&nbsp;<CountUp to={l.achat} format={chf} />
+                  CHF&nbsp;
+                  <CountUp
+                    to={l.achat}
+                    format={chf}
+                    pilote={PILOTE[etat]}
+                    duration={T.achat}
+                  />
                 </dd>
               </div>
               <div className={s.poste}>
                 <span className={s.pastille} data-fill="suite" aria-hidden="true" />
                 <dt>Les {ANNEES}&nbsp;ans qui suivent</dt>
                 <dd>
-                  CHF&nbsp;<CountUp to={l.suite} format={chf} />
+                  CHF&nbsp;
+                  <CountUp
+                    to={l.suite}
+                    format={chf}
+                    pilote={PILOTE[etat]}
+                    delay={T.achat}
+                    duration={T.suite}
+                  />
                 </dd>
               </div>
               <div className={`${s.poste} ${s.total}`}>
                 <dt>Total</dt>
                 <dd>
-                  CHF&nbsp;<CountUp to={l.total} format={chf} />
+                  CHF&nbsp;
+                  <CountUp
+                    to={l.total}
+                    format={chf}
+                    pilote={PILOTE[etat]}
+                    duration={T_BARRES}
+                  />
                 </dd>
               </div>
             </dl>
@@ -196,7 +247,14 @@ export function CoutInstallation() {
           de plus à l’achat
         </span>
         <span className={s.ecartVal}>
-          CHF&nbsp;<CountUp to={ECART} format={chf} />
+          CHF&nbsp;
+          <CountUp
+            to={ECART}
+            format={chf}
+            pilote={PILOTE[etat]}
+            delay={T_BARRES}
+            duration={T.ecart}
+          />
         </span>
       </p>
 

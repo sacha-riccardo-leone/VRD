@@ -74,19 +74,26 @@
   transform-origin: left center;
 }
 
+/* Les durées viennent du composant (`--t-achat`, `--t-suite`, posées en
+   ligne) : une seule table, partagée avec les compteurs. Elles DÉPASSENT le
+   plafond de 400 ms — exception consignée dans AGENTS.md (14.09.2026) :
+   à 360 ms, on ne voyait pas les barres s'élargir. Le repli sous
+   `prefers-reduced-motion` reste entier : le script ne replie jamais. */
+
 /* Le coût connu, borné, celui qu'on compare : un contour. */
 .achat {
   box-sizing: border-box;
   border: 1.5px solid var(--ink);
   background: var(--paper);
-  transition: transform var(--dur) var(--ease);
+  transition: transform var(--t-achat, var(--dur)) var(--ease);
 }
 
 /* La masse qu'on ne voit pas venir : un aplat, qui prolonge l'achat d'une
-   poussée — il part quand l'achat a fini de se tracer. 240 + 120 = 360 ms. */
+   poussée — il part quand l'achat a fini de se tracer. */
 .suite {
   background: var(--ink);
-  transition: transform var(--dur-fast) var(--ease) var(--dur);
+  transition: transform var(--t-suite, var(--dur-fast)) var(--ease)
+    var(--t-achat, var(--dur));
 }
 
 /* L'état par défaut est PLEIN : sans script, ou sous `prefers-reduced-motion`
