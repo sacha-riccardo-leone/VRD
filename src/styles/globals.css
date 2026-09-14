@@ -107,6 +107,79 @@ a {
 }
 
 /* ==========================================================================
+   Scrollbar — the sheet's margin rule.
+
+   The default Windows scrollbar is a grey slab with arrows that belongs to
+   no design. Ours reads like the rest of the sheet: a paper track with one
+   hairline on its inner edge (the margin rule of a drawing sheet), and a flat
+   ink bar for the thumb — square, no radius, no arrows. Rest = --rule-strong
+   (a separator that means something); hover and drag = --ink. Contrast by
+   weight, never by hue. Every value is a token, so a scroll container inside
+   `.technique` inverts by itself: dark track, light thumb.
+
+   Two implementations, one design. Chromium and WebKit take the pseudo-
+   elements; Firefox takes the standard properties. The `@supports not
+   selector()` guard matters: Chromium 121+ implements BOTH, and when
+   `scrollbar-color` is set it ignores the pseudo-elements — the guard keeps
+   the standard properties out of Chromium so the drawn version wins there.
+   Overlay scrollbars (macOS default, touch) are left alone by design: they
+   are the platform's, they show only while scrolling, and painting them
+   would pull them into the layout.
+   ========================================================================== */
+
+/* Physical `width`/`height`: the scrollbar pseudo-elements predate logical
+   properties and do not map them. */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--paper);
+  border-inline-start: 1px solid var(--rule);
+}
+
+::-webkit-scrollbar-track:horizontal {
+  border-inline-start: 0;
+  border-block-start: 1px solid var(--rule);
+}
+
+/* The bar floats 3 px inside the track: `background-clip` keeps the paint
+   inside the transparent border, so the bar is 6 px of ink in a 12 px lane. */
+::-webkit-scrollbar-thumb {
+  min-height: 44px;
+  background: var(--rule-strong);
+  background-clip: padding-box;
+  border: 3px solid transparent;
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+  min-height: 0;
+  min-width: 44px;
+}
+
+::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:active {
+  background-color: var(--ink);
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--paper);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--rule-strong) var(--paper);
+  }
+}
+
+/* ==========================================================================
    Utility primitives — the only globals. Everything else is a CSS Module.
    ========================================================================== */
 
