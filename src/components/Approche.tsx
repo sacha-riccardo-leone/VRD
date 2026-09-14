@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { CoutCycleVie } from "./CoutCycleVie";
 import s from "./Approche.module.css";
 
 /**
@@ -48,7 +47,6 @@ export function Approche() {
           </Link>
         </div>
 
-        <CoutCycleVie />
       </div>
     </section>
   );
