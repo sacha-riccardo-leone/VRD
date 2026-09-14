@@ -14,13 +14,23 @@ import s from "./PageHeader.module.css";
  * filet, ni cartouche, ni capitales, ni seconde police. Le détail des
  * réglages (rampe d'interlettrage, graisse 400, blanc) est dans le CSS.
  *
- * ALIGNEMENT OPTIQUE. À 120 px, l'approche gauche du dessin de caractère
- * cesse d'être négligeable : le fût du « P » de Prestations démarre à
- * 0,094 em du bord, le « C » de Contact à 0,047, le « A » d'À propos à 0,016.
- * Les cinq titres partiraient donc de trois retraits différents, contre un
- * chapô et un filet qui, eux, partent tous à zéro — ce qui se lit comme un
- * défaut de fabrication, pas comme un parti pris. Chaque titre est retiré de
- * sa propre approche pour que son ENCRE tombe sur la marge.
+ * ALIGNEMENT OPTIQUE, en deux temps.
+ *
+ * 1. L'approche. À 120 px, l'approche gauche du dessin de caractère cesse
+ *    d'être négligeable : le fût du « P » de Prestations démarre à 0,094 em
+ *    du bord, le « C » de Contact à 0,047, le « A » d'À propos à 0,016. Les
+ *    cinq titres partiraient donc de trois retraits différents, contre un
+ *    chapô et un filet qui, eux, partent tous à zéro. Chaque titre est retiré
+ *    de sa propre approche pour que son ENCRE tombe sur la marge.
+ *
+ * 2. Le débord des rondes. Aligner l'encre ne suffit pas pour une lettre
+ *    ronde : sa courbe recule, et l'œil place son bord un peu À L'INTÉRIEUR
+ *    de l'encre. Avec le « C » de Carrières calé pile sur la marge, le chapô
+ *    en dessous paraissait dépasser à gauche — constaté à l'écran. C'est la
+ *    raison pour laquelle, en composition, les rondes et les pointes débordent
+ *    légèrement la marge : elles doivent PARAÎTRE alignées, pas l'être. Les
+ *    rondes reçoivent donc un débord supplémentaire, du même ordre que leur
+ *    dépassement vertical sur la ligne de base.
  *
  * Une correction uniforme ne marcherait pas : entre le « P » et le « A »
  * l'écart est de 0,078 em, soit 9 px au corps maximal. Elle réparerait quatre
@@ -52,6 +62,19 @@ const APPROCHE: Record<string, number> = {
 /** 0,047 em — la valeur médiane, pour une initiale hors table (chiffre, symbole). */
 const APPROCHE_DEFAUT = 0.047;
 
+/**
+ * Débord optique des rondes, en em, AJOUTÉ à l'approche mesurée.
+ * 0,020 pour les pleines rondes (C, G, O, Q), la moitié pour le « S », dont
+ * seule la moitié du flanc est courbe. Ce chiffre n'est pas mesuré au canvas
+ * — il ne peut pas l'être, c'est une perception — il est du même ordre que le
+ * dépassement des rondes sous la ligne de base dans IBM Plex Sans, et il a été
+ * réglé sur le « C » de Carrières, le cas signalé.
+ */
+const DEBORD_ROND: Record<string, number> = {
+  C: 0.02, G: 0.02, O: 0.02, Q: 0.02,
+  S: 0.01,
+};
+
 function approcheDe(titre: string): number {
   // « À » et « É » portent l'approche de leur lettre de base : l'accent est
   // au-dessus de la capitale, il ne déborde pas à gauche.
@@ -61,7 +84,7 @@ function approcheDe(titre: string): number {
     .replace(/[̀-ͯ]/g, "")
     .charAt(0)
     .toUpperCase();
-  return APPROCHE[base] ?? APPROCHE_DEFAUT;
+  return (APPROCHE[base] ?? APPROCHE_DEFAUT) + (DEBORD_ROND[base] ?? 0);
 }
 
 export function PageHeader({ title, lede }: { title: string; lede: string }) {
