@@ -8,30 +8,28 @@ import s from "./CoutInstallation.module.css";
  * Deux installations, deux barres de coût — la figure de la section
  * « Notre approche ».
  *
- * CE QU'ELLE MONTRE. Une ligne par installation : un pictogramme d'équipement,
- * puis une barre horizontale en deux segments — coût d'achat, coût de
- * maintenance — et les montants en francs. La barre de l'installation
- * inadaptée est la plus longue, sur les DEUX segments : elle se paie deux
- * fois, c'est le titre de la section.
+ * CE QU'ELLE MONTRE. Le croisement. Une ligne par installation : un
+ * pictogramme d'équipement, puis une barre en deux segments — ce qu'on paie
+ * à l'achat, ce qu'on paie pendant les vingt ans qui suivent — et les
+ * montants. La première installation est la moins chère à l'achat : son
+ * contour est le plus court. Mais sa barre est la plus LONGUE au total.
+ * La seconde coûte un peu plus le premier jour, et beaucoup moins ensuite.
+ * C'est l'argument du bureau, et c'est tout ce que la figure dit.
  *
- * LES MONTANTS SONT UN EXEMPLE, et la figure le dit à l'écran. La base
- * (100'000 CHF d'achat pour l'installation adaptée) est posée pour lire des
- * ordres de grandeur ; ce sont les RAPPORTS qui viennent d'études publiées :
- *   - surdimensionnement d'un facteur 2 → +115 % d'investissement
- *     (OST, Instituts SPF + IET, pour l'OFEN — factsheet OptiPower 2023,
- *     cas calculé sur l'immeuble OST-FZ ; le surdimensionnement lui-même
- *     est la situation courante : médiane +40 % sur 500+ immeubles suisses) ;
- *   - entretien annuel 1,94 % de la valeur à neuf des installations
- *     techniques (Bahr & Bossmann, 136 bâtiments, 2013), sur 25 ans.
- * L'entretien se calcule sur la valeur à neuf : ce qui vaut plus cher coûte
- * plus cher à entretenir, chaque année. Rien d'autre n'est empilé — ni
- * l'énergie, ni la durée de vie, dont les seules valeurs publiées sont des
- * simulations assorties de « parfois ».
+ * LES MONTANTS SONT UN EXEMPLE, et la figure le dit à l'écran. Ils ne
+ * viennent d'aucun cas réel ni d'aucune étude : aucune source publique ne
+ * chiffre « la moins chère à l'achat contre la moins chère sur la durée »
+ * pour une installation CVCS — cherché, non trouvé (14.09.2026). Ce sont des
+ * montants fictifs, ronds, posés pour lire un PRINCIPE : le second segment
+ * regroupe l'énergie, l'entretien et les réparations — les trois postes qui
+ * courent après l'achat. Un cas du bureau, anonymisé, peut les remplacer.
  *
  * MOUVEMENT — « le dessin s'assemble », l'unique idée du site. Quand le
- * lecteur amène la figure à l'écran, l'achat se trace, puis la maintenance le
- * prolonge d'une poussée ; les montants comptent en même temps (CountUp, le
- * précédent du « 200+ »). 240 + 120 = 360 ms, sous le plafond de 400.
+ * lecteur amène la figure à l'écran, l'achat se trace, puis les vingt ans le
+ * prolongent d'une poussée ; les montants comptent en même temps (CountUp,
+ * le précédent du « 200+ »). 240 + 120 = 360 ms, sous le plafond de 400.
+ * L'ordre gauche → droite est aussi l'ordre du temps : d'abord l'achat, puis
+ * les années. C'est ce qui fait lire le croisement sans axe.
  *
  * Sans JavaScript, ou sous `prefers-reduced-motion`, les barres sont rendues
  * pleines d'emblée : l'animation est un enrichissement, jamais une condition.
@@ -40,28 +38,35 @@ import s from "./CoutInstallation.module.css";
  * AUCUN DÉCALAGE DE MISE EN PAGE : les segments ont leur largeur finale dès
  * le rendu ; seule une transformation les révèle.
  *
- * Monochrome. Achat = contour vide (le coût connu, borné) ; maintenance =
- * aplat d'encre (la masse qu'on ne voit pas venir). Ni teinte, ni dégradé.
+ * Monochrome. Achat = contour vide (le coût connu, borné, celui qu'on
+ * compare) ; les vingt ans = aplat d'encre (la masse qu'on ne voit pas
+ * venir). Ni teinte, ni dégradé.
  */
 
-const BASE_ACHAT = 100_000; // CHF — base d'exemple, installation adaptée
-const SURDIM = 2.15; // +115 % à l'achat pour un facteur 2 (OptiPower 2023)
-const TAUX_ENTRETIEN = 0.0194; // par an, sur la valeur à neuf (Bahr & Bossmann)
-const ANNEES = 25;
-
-const maintenance = (achat: number) =>
-  Math.round(achat * TAUX_ENTRETIEN * ANNEES);
+const ANNEES = 20;
 
 const LIGNES = [
-  { key: "adaptee", nom: "Installation adaptée", achat: BASE_ACHAT },
-  { key: "inadaptee", nom: "Installation inadaptée", achat: Math.round(BASE_ACHAT * SURDIM) },
-].map((l) => ({
-  ...l,
-  maintenance: maintenance(l.achat),
-  total: l.achat + maintenance(l.achat),
-}));
+  {
+    key: "prix",
+    nom: "La moins chère à l’achat",
+    choix: false,
+    achat: 80_000,
+    suite: 240_000,
+  },
+  {
+    key: "duree",
+    nom: "La moins chère sur vingt ans",
+    choix: true,
+    achat: 100_000,
+    suite: 170_000,
+  },
+].map((l) => ({ ...l, total: l.achat + l.suite }));
 
 const MAX = Math.max(...LIGNES.map((l) => l.total));
+
+/** Ce que la seconde fait économiser sur vingt ans, malgré l'achat plus cher. */
+const ECART = LIGNES[0].total - LIGNES[1].total;
+const SURCOUT_ACHAT = LIGNES[1].achat - LIGNES[0].achat;
 
 /** 104275 → « 104’275 » — séparateur de milliers suisse, apostrophe typographique. */
 const chf = (n: number) => n.toLocaleString("de-CH").replace(/[’'’]/g, "’");
@@ -137,36 +142,39 @@ export function CoutInstallation() {
         <div className={s.rangee} key={l.key}>
           <Equipement />
           <div className={s.contenu}>
-            <p className={`label ${s.nom}`}>{l.nom}</p>
+            <p className={`label ${s.nom}`}>
+              {l.nom}
+              {l.choix && <span className={s.choix}>Notre choix</span>}
+            </p>
 
             <div
               className={s.barre}
               role="img"
-              aria-label={`${l.nom} : achat ${chf(l.achat)} francs, maintenance sur ${ANNEES} ans ${chf(l.maintenance)} francs, total ${chf(l.total)} francs.`}
+              aria-label={`${l.nom} : ${chf(l.achat)} francs à l’achat, ${chf(l.suite)} francs sur les ${ANNEES} ans qui suivent, ${chf(l.total)} francs au total.`}
             >
               <span
                 className={s.achat}
                 style={{ flexBasis: `${(l.achat / MAX) * 100}%` }}
               />
               <span
-                className={s.maint}
-                style={{ flexBasis: `${(l.maintenance / MAX) * 100}%` }}
+                className={s.suite}
+                style={{ flexBasis: `${(l.suite / MAX) * 100}%` }}
               />
             </div>
 
             <dl className={s.montants}>
               <div className={s.poste}>
                 <span className={s.pastille} data-fill="achat" aria-hidden="true" />
-                <dt>Coût d’achat</dt>
+                <dt>À l’achat</dt>
                 <dd>
                   CHF&nbsp;<CountUp to={l.achat} format={chf} />
                 </dd>
               </div>
               <div className={s.poste}>
-                <span className={s.pastille} data-fill="maint" aria-hidden="true" />
-                <dt>Coût de maintenance, {ANNEES}&nbsp;ans</dt>
+                <span className={s.pastille} data-fill="suite" aria-hidden="true" />
+                <dt>Les {ANNEES}&nbsp;ans qui suivent</dt>
                 <dd>
-                  CHF&nbsp;<CountUp to={l.maintenance} format={chf} />
+                  CHF&nbsp;<CountUp to={l.suite} format={chf} />
                 </dd>
               </div>
               <div className={`${s.poste} ${s.total}`}>
@@ -180,12 +188,22 @@ export function CoutInstallation() {
         </div>
       ))}
 
+      {/* La conclusion en un chiffre — ce que le lecteur veut lire. Une ligne
+          de total, alignée sur les barres, pas sur les pictogrammes. */}
+      <p className={s.ecart}>
+        <span className={s.ecartNom}>
+          Économisé sur {ANNEES}&nbsp;ans, pour {chf(SURCOUT_ACHAT)}&nbsp;francs
+          de plus à l’achat
+        </span>
+        <span className={s.ecartVal}>
+          CHF&nbsp;<CountUp to={ECART} format={chf} />
+        </span>
+      </p>
+
       <p className={s.exemple}>
-        Exemple illustratif — base 100’000&nbsp;CHF d’achat pour l’installation
-        adaptée. Les rapports viennent d’études publiées&nbsp;: surcoût
-        d’achat d’une installation surdimensionnée, OST pour l’Office fédéral
-        de l’énergie, 2023&nbsp;; entretien 1,94&nbsp;% par an de la valeur à
-        neuf, 136&nbsp;bâtiments, 2013.
+        Exemple illustratif, montants fictifs&nbsp;: la figure montre le
+        principe, pas un cas réel. «&nbsp;Les {ANNEES}&nbsp;ans qui
+        suivent&nbsp;» regroupent l’énergie, l’entretien et les réparations.
       </p>
     </div>
   );

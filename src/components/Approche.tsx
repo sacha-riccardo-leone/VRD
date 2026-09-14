@@ -28,18 +28,19 @@ export function Approche() {
           Notre approche <span className={s.flag}>à valider par VRD</span>
         </p>
 
-        {/* « Inadaptée », pas « trop grosse » ni « bon marché » : le mot ne
-            préjuge ni de la taille ni du prix. Il couvre le cas documenté (le
-            surdimensionnement, plus cher à l'achat aussi) comme les autres. */}
+        {/* L'argument du bureau, dans l'ordre où il se vit : d'abord l'achat,
+            puis les années. La figure en dessous montre le croisement — la
+            moins chère le premier jour n'est pas la moins chère à la fin. */}
         <h2 id="approche-titre" className={s.statement}>
-          Une installation inadaptée se paie deux fois.
+          Un peu plus à l’achat. Beaucoup moins ensuite.
         </h2>
 
         <p className={s.body}>
           Nous ne choisissons pas une installation sur son prix d’achat. Nous
-          regardons ce qu’elle coûtera pendant toute sa vie&nbsp;: l’entretien,
-          l’énergie, et la solidité du fournisseur. C’est ce coût-là que nous
-          cherchons à réduire.
+          regardons ce qu’elle coûtera pendant toute sa vie&nbsp;: l’énergie,
+          l’entretien, les réparations. Celle qui coûte le moins le premier
+          jour n’est pas toujours celle qui coûte le moins sur vingt ans
+          — c’est ce coût-là que nous faisons baisser.
         </p>
 
         <CoutInstallation />
