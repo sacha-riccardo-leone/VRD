@@ -1,7 +1,6 @@
-/* Le filet bas est la coupe entre ce papier et l'anthracite du bandeau
-   SuitePrestations qui suit — lui n'en ajoute pas. */
+/* Pas de filet bas : le bandeau anthracite qui suit (BandeauSuite) porte le
+   sien en haut — la coupe entre papier et anthracite est à lui. */
 .band {
-  border-block-end: 1px solid var(--rule-strong);
   background: var(--paper);
 }
 

@@ -1,9 +1,10 @@
 /* ==========================================================================
-   Suite — le bandeau de clôture de l'accueil, en anthracite.
+   Suite — le bandeau de clôture, en anthracite. Un seul module pour
+   l'accueil et pour /prestations (composant BandeauSuite).
 
-   Même grammaire que l'appel à l'action de Prestations (kicker « Suite »,
-   titre, ligne d'appui, bouton primaire inversé), mais la hiérarchie est
-   RETOURNÉE : ici l'action est le sujet, le titre n'en est que la légende.
+   Grammaire : kicker « Suite », titre, ligne d'appui, bouton primaire
+   inversé — mais la hiérarchie est RETOURNÉE : l'action est le sujet, le
+   titre n'en est que la légende.
    Titre et bouton sont au même corps (--fs-700, celui d'un h2) : le bouton
    ne domine pas par le corps mais par l'aplat, la pleine largeur et
    l'inversion — les leviers qu'AGENTS.md prescrit pour la hiérarchie.
@@ -15,20 +16,19 @@
    réglage supplémentaire.
    ========================================================================== */
 
-/* Pas de filet haut : Approche ferme déjà sur son propre trait
-   (`border-block-end`, --rule-strong), qui devient la coupe entre le papier et
-   l'anthracite ; deux filets accolés feraient une double ligne. Pas de filet
-   bas non plus : le pied de page porte le sien, et vient au ras de
-   l'anthracite (voir SiteFooter.module.css). */
+/* Un filet haut, --rule-strong : la coupe entre le papier et l'anthracite.
+   Sur l'accueil, Approche ferme déjà sur le même trait — le sien est retiré
+   pour ne pas doubler la ligne. Pas de filet bas : le pied de page porte le
+   sien, et vient au ras de l'anthracite (voir SiteFooter.module.css). */
 .band {
+  border-block-start: 1px solid var(--rule-strong);
   background: var(--paper); /* = --dark sous .technique */
   color: var(--ink);
 }
 
 /* Le souffle suit la largeur au lieu de sauter à un palier : --s-8 sur
-   téléphone, --s-10 à la largeur de page. Un pas de plus que le bandeau de
-   Prestations (--s-9) : c'est la clôture de l'accueil, et le plus grand
-   bouton du site demande le plus grand souffle. */
+   téléphone, --s-10 à la largeur de page. C'est la clôture de la page, et le
+   plus grand bouton du site demande le plus grand souffle. */
 .inner {
   max-width: var(--page-max);
   margin-inline: auto;
@@ -39,7 +39,7 @@
 /* Le titre reste au corps de tout h2 du site — c'est la légende du bouton,
    pas un h3 déguisé. 28ch : « Neuf techniques, du concept à la mise en
    service. » (22,8 em en 600) tient sur deux lignes, pas trois. --s-3 sous
-   le kicker, comme le précédent. */
+   le kicker. */
 .title {
   margin-block-start: var(--s-3);
   max-width: 28ch;
@@ -152,4 +152,16 @@
 .primary:hover .shaft,
 .primary:focus-visible .shaft {
   transform: scaleX(1);
+}
+
+/* --------------------------------------------------------------------------
+   Ce qui suit le bouton — un complément secondaire, en encre soulignée : le
+   téléphone sur /prestations. Hauteur portée à 44 px, cible tactile.
+   -------------------------------------------------------------------------- */
+.apres {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-4);
+  margin-block-start: var(--s-5);
 }

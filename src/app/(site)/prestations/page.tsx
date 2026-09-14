@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { BandeauSuite } from "@/components/BandeauSuite";
 import { PageHeader } from "@/components/PageHeader";
 import { EnneagonNav } from "@/components/EnneagonNav";
 import { DISCIPLINES } from "@/content/disciplines";
@@ -481,32 +481,24 @@ export default function PrestationsPage() {
         </div>
       </details>
 
-      {/* --- Appel à l’action : inversion encre/papier ------------------- */}
-      <section className={`technique ${s.cta}`} aria-labelledby="cta-titre">
-        <div className={s.ctaInner}>
-          <p className="label">Suite</p>
-          <h2 id="cta-titre" className={s.ctaTitle}>
-            Un projet à cadrer&nbsp;?
-          </h2>
-          <p className={s.ctaText}>
-            Dites-nous le type de bâtiment, la phase en cours et l’échéance.
-            Nous vous répondrons sur ce que la technique demande, quand elle
-            doit intervenir et ce que nous pouvons prendre en charge.
-          </p>
-          <div className={s.actions}>
-            <Link href="/contact" className={s.ctaPrimary}>
-              Discuter d’un projet
-            </Link>
-            <a
-              href="tel:+41265520100"
-              className={s.ctaSecondary}
-              aria-label="Appeler VRD au 026 552 01 00"
-            >
-              026&nbsp;552&nbsp;01&nbsp;00
-            </a>
-          </div>
-        </div>
-      </section>
+      {/* --- Appel à l’action : le bandeau de clôture, le même que sur
+          l’accueil (BandeauSuite) — Sacha l’a voulu identique (14.09.2026).
+          Le téléphone reste, en complément secondaire sous le bouton. */}
+      <BandeauSuite
+        id="cta-titre"
+        titre={<>Un projet à cadrer&nbsp;?</>}
+        texte="Dites-nous le type de bâtiment, la phase en cours et l’échéance. Nous vous répondrons sur ce que la technique demande, quand elle doit intervenir et ce que nous pouvons prendre en charge."
+        href="/contact"
+        action="Discuter d’un projet"
+      >
+        <a
+          href="tel:+41265520100"
+          className={s.ctaSecondary}
+          aria-label="Appeler VRD au 026 552 01 00"
+        >
+          026&nbsp;552&nbsp;01&nbsp;00
+        </a>
+      </BandeauSuite>
     </main>
   );
 }
