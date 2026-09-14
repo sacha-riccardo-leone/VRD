@@ -1,0 +1,155 @@
+/* ==========================================================================
+   Suite — le bandeau de clôture de l'accueil, en anthracite.
+
+   Même grammaire que l'appel à l'action de Prestations (kicker « Suite »,
+   titre, ligne d'appui, bouton primaire inversé), mais la hiérarchie est
+   RETOURNÉE : ici l'action est le sujet, le titre n'en est que la légende.
+   Titre et bouton sont au même corps (--fs-700, celui d'un h2) : le bouton
+   ne domine pas par le corps mais par l'aplat, la pleine largeur et
+   l'inversion — les leviers qu'AGENTS.md prescrit pour la hiérarchie.
+   Ordre du DOM : kicker, titre, ligne d'appui (--fs-500), bouton.
+
+   La classe globale `.technique`, posée sur la section, réassigne les jetons :
+   `--ink` devient claire, `--paper` anthracite. Il reste à peindre la surface
+   avec les jetons réassignés ; encre, filets et anneau de focus suivent sans
+   réglage supplémentaire.
+   ========================================================================== */
+
+/* Pas de filet haut : Approche ferme déjà sur son propre trait
+   (`border-block-end`, --rule-strong), qui devient la coupe entre le papier et
+   l'anthracite ; deux filets accolés feraient une double ligne. Pas de filet
+   bas non plus : le pied de page porte le sien, et vient au ras de
+   l'anthracite (voir SiteFooter.module.css). */
+.band {
+  background: var(--paper); /* = --dark sous .technique */
+  color: var(--ink);
+}
+
+/* Le souffle suit la largeur au lieu de sauter à un palier : --s-8 sur
+   téléphone, --s-10 à la largeur de page. Un pas de plus que le bandeau de
+   Prestations (--s-9) : c'est la clôture de l'accueil, et le plus grand
+   bouton du site demande le plus grand souffle. */
+.inner {
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-block: clamp(var(--s-8), 3rem + 4vw, var(--s-10));
+  padding-inline: var(--gutter);
+}
+
+/* Le titre reste au corps de tout h2 du site — c'est la légende du bouton,
+   pas un h3 déguisé. 28ch : « Neuf techniques, du concept à la mise en
+   service. » (22,8 em en 600) tient sur deux lignes, pas trois. --s-3 sous
+   le kicker, comme le précédent. */
+.title {
+  margin-block-start: var(--s-3);
+  max-width: 28ch;
+}
+
+.text {
+  margin-block-start: var(--s-5);
+  max-width: 52ch;
+  font-size: var(--fs-500);
+  line-height: var(--lh-snug);
+  color: var(--ink-muted);
+}
+
+/* --------------------------------------------------------------------------
+   Le bouton — le plus grand du site, à dessein.
+   Un aplat d'encre (claire, ici) à texte papier (anthracite, ici), qui court
+   sur toute la largeur de la colonne : texte à gauche, flèche à droite.
+   Corps --fs-700 (31 → 44 px, fluide), --lh-tight, graisse 600 et
+   --ls-display : la typographie d'un titre, posée sur un bloc.
+
+   MESURES. Hauteur au repos : 2 × 32 px + 44 × 1,12 = 113 px sur grand
+   écran ; ≈ 137 px sur deux lignes à 375 px. Cible tactile très au-dessus de
+   44 px. À 320 px (seuil de reflow WCAG 1.4.10) : colonne 280 px, moins
+   2 × 24 px de padding, moins 24 px d'écart, moins la flèche 1,25 em ≈ 39 px
+   = 169 px pour le texte ; « prestations » en Plex Sans 600 à 31,5 px =
+   5,282 em − 11 × 0,018 em ≈ 160 px : ça passe. À --fs-800 (38 px) le mot
+   ferait 193 px : il déborderait. C'est pourquoi --fs-700 est le plafond
+   d'un aplat pleine largeur avec la flèche sur la même ligne — si l'on veut
+   « plus grand », c'est le bloc (padding) et le souffle qui montent, pas le
+   corps.
+
+   Padding en largeur : --s-5 sur téléphone (un gutter en plus ferait
+   commencer le libellé à 43 px du bord quand le kicker commence à 22), le
+   gutter à partir de la largeur de page, jamais plus que --s-7.
+   Le filet est un `box-shadow` intérieur et non une bordure : il n'occupe
+   aucune place, donc l'inversion ne décale rien.
+
+   Pas de transition sur l'inversion : l'inversion claque, comme le
+   soulignement des liens du site. Le seul mouvement du bandeau est la flèche
+   qui se trace — « une seule idée ».
+   -------------------------------------------------------------------------- */
+.primary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-5);
+  inline-size: 100%;
+  margin-block-start: var(--s-7);
+  padding-block: var(--s-6);
+  padding-inline: clamp(var(--s-5), var(--gutter), var(--s-7));
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: inset 0 0 0 2px var(--ink); /* filet visible une fois inversé */
+  font-size: var(--fs-700);
+  font-weight: 600;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-display);
+  text-decoration: none;
+}
+
+/* Inversion au survol et au focus clavier : fond anthracite, texte clair,
+   filet clair. L'anneau de focus (--focus-ring, clair sous .technique) se pose
+   à 2 px hors du bloc : deux traits clairs, lisibles l'un et l'autre. */
+.primary:hover,
+.primary:focus-visible {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* `balance` : sur deux lignes, « Voir nos / prestations » plutôt que
+   « Voir nos prestation- / s ». `break-word` : filet de sécurité jamais
+   déclenché par le libellé réel, mais si le mot change un jour, mieux vaut
+   une coupure qu'un défilement horizontal de toute la page. */
+.primaryText {
+  min-inline-size: 0;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+/* --------------------------------------------------------------------------
+   La flèche — elle porte LE mouvement du bandeau : « le dessin s'assemble ».
+   Au repos, elle est complète : une ligne de construction en tireté et une
+   pointe pleine — sur écran tactile, sans survol, on voit une flèche entière.
+   Au survol ou au focus, un trait plein se trace par-dessus le tireté, de la
+   pointe vers la gauche : `scaleX(0 → 1)`, origine à droite, en --dur, sur
+   `transform` seulement. Tireté opposé au plein — l'un des quatre leviers
+   d'emphase d'AGENTS.md, rendu littéral. La boîte du SVG ne change pas de
+   taille : rien ne bouge autour. Sous `prefers-reduced-motion`, --dur vaut
+   1 ms : le trait est plein d'emblée.
+   Le trait fait 2 px quelle que soit l'échelle (`non-scaling-stroke`) — le
+   même 2 px que le filet du bouton.
+   -------------------------------------------------------------------------- */
+.arrow {
+  flex: none;
+  inline-size: 1.25em;
+  block-size: 0.625em;
+  overflow: visible;
+}
+
+/* `fill-box` : la boîte d'une <line> horizontale 4→44 est le segment
+   lui-même, donc « right center » = (44, 12), la base de la pointe — sans
+   unité px interprétée dans le repère du viewBox. */
+.shaft {
+  transform: scaleX(0);
+  transform-box: fill-box;
+  transform-origin: right center;
+  transition: transform var(--dur) var(--ease);
+}
+
+.primary:hover .shaft,
+.primary:focus-visible .shaft {
+  transform: scaleX(1);
+}

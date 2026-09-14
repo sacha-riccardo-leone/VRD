@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { CoutInstallation } from "./CoutInstallation";
 import s from "./Approche.module.css";
 
@@ -19,6 +18,9 @@ import s from "./Approche.module.css";
  * Le français d'origine comportait deux fautes de construction (« nous mettant
  * en compte », « en focalisons sur ») : corrigées, la structure et tous les
  * termes techniques de l'auteur sont conservés.
+ *
+ * Le renvoi vers les prestations n'est plus ici : il est porté par le bandeau
+ * SuitePrestations qui suit, à l'échelle de la page (14.09.2026).
  */
 export function Approche() {
   return (
@@ -43,11 +45,6 @@ export function Approche() {
         </p>
 
         <CoutInstallation />
-
-
-          <Link href="/prestations" className={s.link}>
-            Voir nos prestations
-          </Link>
         </div>
 
       </div>

@@ -1,3 +1,5 @@
+/* Le filet bas est la coupe entre ce papier et l'anthracite du bandeau
+   SuitePrestations qui suit — lui n'en ajoute pas. */
 .band {
   border-block-end: 1px solid var(--rule-strong);
   background: var(--paper);
@@ -35,21 +37,4 @@
   font-size: var(--fs-500);
   line-height: var(--lh-snug);
   color: var(--ink-muted);
-}
-
-.link {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  margin-block-start: var(--s-7);
-  color: var(--ink);
-  font-weight: 600;
-  text-decoration: underline;
-  text-decoration-color: var(--ink-muted);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.35em;
-}
-
-.link:hover {
-  text-decoration-color: var(--ink);
 }
