@@ -189,7 +189,12 @@ export default function CarrieresPage() {
 
           <ol className={s.metiers}>
             {METIERS.map((m) => (
-              <li className={s.metier} key={m.num}>
+              /* tabIndex : le descriptif ne se révèle qu'au survol, et un
+                 clavier ne survole pas. Rendre la fiche focalisable lui donne
+                 le même accès (:focus-within) — WCAG 2.1.1. Le texte reste
+                 dans l'arbre d'accessibilité en permanence : il est masqué
+                 par l'opacité, pas retiré. */
+              <li className={s.metier} key={m.num} tabIndex={0}>
                 <p className="label">{m.num}</p>
                 <h3 className={s.metierTitle}>{m.intitule}</h3>
                 <p className={s.metierText}>{m.texte}</p>

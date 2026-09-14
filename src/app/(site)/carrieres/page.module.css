@@ -171,8 +171,49 @@
   line-height: var(--lh-snug);
 }
 
+/* Le descriptif n'apparaît qu'au survol de la fiche — fondu et glissement de
+   la gauche vers la droite.
+
+   AUCUN DÉCALAGE DE MISE EN PAGE (règle du projet) : le texte est masqué par
+   l'opacité, jamais par `display` ni par la hauteur. Il garde donc sa place
+   dans la grille, et la ligne ne bouge pas d'un pixel quand il apparaît. Au-
+   delà de 52rem il occupe la troisième colonne, à droite du titre : sa place
+   réservée est invisible. En dessous, la requête `hover: none` prend le
+   relais (voir plus bas).
+
+   240 ms, sous le plafond de 400 ; `--dur` tombe à 1 ms sous
+   `prefers-reduced-motion`, la réserve de mouvement est donc tenue sans
+   requête média supplémentaire. */
 .metierText {
   color: var(--ink-muted);
+  opacity: 0;
+  transform: translateX(-0.75rem);
+  transition:
+    opacity var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+
+.metier:hover .metierText,
+.metier:focus-within .metierText {
+  opacity: 1;
+  transform: none;
+}
+
+/* Sans pointeur capable de survoler (tactile), il n'y a rien à révéler : le
+   texte est là d'emblée. Un descriptif qui n'apparaîtrait jamais sur
+   téléphone serait un descriptif perdu. */
+@media (hover: none) {
+  .metierText {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* La fiche est focalisable : l'anneau de focus global s'y pose, mais son
+   décalage par défaut sortirait du filet de la ligne. Ramené à l'intérieur. */
+.metier:focus-visible {
+  outline-offset: -2px;
 }
 
 .equivalence {
