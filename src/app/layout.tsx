@@ -20,6 +20,11 @@ export const metadata: Metadata = {
   description:
     "Bureau d'ingénieurs-conseils en technique du bâtiment à Sugiez (FR) : chauffage, ventilation, climatisation, sanitaire.",
   robots: { index: false, follow: false, nocache: true },
+  /* Icônes : convention de fichiers de l'App Router, pas de champ `icons` —
+     src/app/favicon.ico (16/32/48, vrai .ico), icon.png (500 px, le fichier
+     fourni par Sacha le 14.09.2026, converti sans perte) et apple-icon.png
+     (180 px). Next les sert et écrit les <link rel="icon"> tout seul. Le fond
+     de l'icône est #f5f5f5 — --paper, comme themeColor. */
 };
 
 export const viewport: Viewport = {
