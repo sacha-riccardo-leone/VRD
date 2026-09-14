@@ -153,15 +153,3 @@
 .primary:focus-visible .shaft {
   transform: scaleX(1);
 }
-
-/* --------------------------------------------------------------------------
-   Ce qui suit le bouton — un complément secondaire, en encre soulignée : le
-   téléphone sur /prestations. Hauteur portée à 44 px, cible tactile.
-   -------------------------------------------------------------------------- */
-.apres {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--s-4);
-  margin-block-start: var(--s-5);
-}

@@ -14,8 +14,8 @@ import s from "./BandeauSuite.module.css";
  * inversé, retourné en sujet — un aplat clair sur toute la largeur de la
  * colonne, au corps d'un h2. Il domine par l'INVERSION et la pleine largeur,
  * les leviers d'AGENTS.md, pas par le corps : le titre reste au corps de tout
- * h2 du site. Ce qui suit le bouton (`children`, facultatif) est un
- * complément secondaire — le téléphone sur /prestations.
+ * h2 du site. Rien après le bouton : /prestations avait le téléphone en
+ * complément, retiré le 14.09.2026 — il est sur /contact, où mène le bouton.
  *
  * Composant serveur : pas d'état, pas de script. Le seul mouvement est dans le
  * CSS — la flèche qui se trace au survol ou au focus.
@@ -29,7 +29,6 @@ export function BandeauSuite({
   texte,
   href,
   action,
-  children,
 }: {
   /** Identifiant du titre, cible d'`aria-labelledby` — unique par page. */
   id: string;
@@ -38,7 +37,6 @@ export function BandeauSuite({
   href: string;
   /** Le texte du bouton. */
   action: ReactNode;
-  children?: ReactNode;
 }) {
   return (
     <section className={`technique ${s.band}`} aria-labelledby={id}>
@@ -95,8 +93,6 @@ export function BandeauSuite({
             />
           </svg>
         </Link>
-
-        {children && <div className={s.apres}>{children}</div>}
       </div>
     </section>
   );

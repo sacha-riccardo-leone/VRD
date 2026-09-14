@@ -482,23 +482,15 @@ export default function PrestationsPage() {
       </details>
 
       {/* --- Appel à l’action : le bandeau de clôture, le même que sur
-          l’accueil (BandeauSuite) — Sacha l’a voulu identique (14.09.2026).
-          Le téléphone reste, en complément secondaire sous le bouton. */}
+          l’accueil (BandeauSuite) — Sacha l’a voulu identique (14.09.2026),
+          puis sans le téléphone : il est sur /contact, où mène le bouton. */}
       <BandeauSuite
         id="cta-titre"
         titre={<>Un projet à cadrer&nbsp;?</>}
         texte="Dites-nous le type de bâtiment, la phase en cours et l’échéance. Nous vous répondrons sur ce que la technique demande, quand elle doit intervenir et ce que nous pouvons prendre en charge."
         href="/contact"
         action="Discuter d’un projet"
-      >
-        <a
-          href="tel:+41265520100"
-          className={s.ctaSecondary}
-          aria-label="Appeler VRD au 026 552 01 00"
-        >
-          026&nbsp;552&nbsp;01&nbsp;00
-        </a>
-      </BandeauSuite>
+      />
     </main>
   );
 }

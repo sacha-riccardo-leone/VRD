@@ -186,32 +186,6 @@
   color: var(--ink-muted);
 }
 
-/* --------------------------------------------------------------------------
-   Appel à l'action — le bandeau de clôture est le composant partagé
-   BandeauSuite (le même que sur l'accueil) ; il ne reste ici que le
-   complément secondaire, le téléphone, posé sous le grand bouton.
-   -------------------------------------------------------------------------- */
-/* Le téléphone : encre soulignée, 48 px de haut — cible tactile. */
-.ctaSecondary {
-  display: inline-flex;
-  align-items: center;
-  min-height: 48px;
-  /* Pas de retrait latéral : sous le bouton, le numéro part à la marge,
-     aligné sur le titre et sur le bord du bloc. */
-  padding-block: var(--s-3);
-  color: var(--ink);
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  text-decoration: underline;
-  text-decoration-color: var(--ink-muted);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.35em;
-}
-
-.ctaSecondary:hover {
-  text-decoration-color: var(--ink);
-}
-
 /* --- Ennéagone d'ouverture ----------------------------------------------- */
 /* Pleine largeur, hors de la colonne de texte : la section porte `.technique`,
    donc tous les jetons d'encre y sont déjà inversés sur anthracite. */
