@@ -15,8 +15,10 @@ import s from "./page.module.css";
  * technique décrit une mission d’ingénierie-conseil type. C’est du contenu
  * REPRÉSENTATIF, étiqueté comme tel à l’écran — note de relecture en tête de
  * page, marqueur « contenu représentatif » dans le cartouche de chaque
- * technique, marqueur « à valider » sur chaque liste de prestations, mention
- * sur la légende du schéma. Rien n’est marqué en commentaire seulement.
+ * technique, mention sur la légende du schéma. Rien n’est marqué en
+ * commentaire seulement. (Le marqueur « à valider » sur chaque liste de
+ * prestations a été retiré le 14.09.2026, à la demande de Sacha : VRD relira
+ * tout le site.)
  *
  * Ce qui n’apparaît pas, faute de source primaire — aucun projet, aucun
  * client, aucune référence, aucune certification (celles que l’on voit passer
@@ -122,7 +124,7 @@ export default function PrestationsPage() {
             </p>
 
             <p className={`label ${s.listLabel}`}>
-              Prestations <span className={s.flag}>à valider</span>
+              Prestations
             </p>
             <ul className={s.list}>
               <li>Calcul des déperditions et des puissances, local par local</li>
@@ -180,7 +182,7 @@ export default function PrestationsPage() {
             </p>
 
             <p className={`label ${s.listLabel}`}>
-              Prestations <span className={s.flag}>à valider</span>
+              Prestations
             </p>
             <ul className={s.list}>
               <li>Bilans de débits et concept de ventilation par zone</li>
@@ -263,7 +265,7 @@ export default function PrestationsPage() {
             </p>
 
             <p className={`label ${s.listLabel}`}>
-              Prestations <span className={s.flag}>à valider</span>
+              Prestations
             </p>
             <ul className={s.list}>
               <li>
@@ -347,7 +349,7 @@ export default function PrestationsPage() {
             </p>
 
             <p className={`label ${s.listLabel}`}>
-              Prestations <span className={s.flag}>à valider</span>
+              Prestations
             </p>
             <ul className={s.list}>
               <li>Modélisation des réseaux CVCS et export IFC</li>
@@ -431,7 +433,7 @@ export default function PrestationsPage() {
             </p>
 
             <p className={`label ${s.listLabel}`}>
-              Prestations <span className={s.flag}>à valider</span>
+              Prestations
             </p>
             <ul className={s.list}>
               <li>

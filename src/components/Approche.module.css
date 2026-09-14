@@ -18,19 +18,7 @@
 }
 
 .kicker {
-  display: flex;
-  align-items: center;
-  gap: var(--s-3);
   margin-block-end: var(--s-6);
-}
-
-/* Réserve visible : une copie non validée doit se voir autant que la copie. */
-.flag {
-  padding: 0.15em 0.5em;
-  border: 1px dashed var(--rule-strong);
-  color: var(--ink-muted);
-  text-transform: none;
-  letter-spacing: 0;
 }
 
 /* L'argument, en une phrase qui tient sur deux lignes. */

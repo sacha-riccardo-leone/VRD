@@ -12,8 +12,9 @@ import s from "./Approche.module.css";
  * PROVENANCE — texte proposé, pas encore validé par VRD. Il reprend une idée
  * formulée par un tiers, reformulée ici dans la voix du bureau. Il n'est donc
  * ni présenté entre guillemets, ni attribué à quiconque : une citation ferait
- * dire à VRD des mots qu'elle n'a pas écrits. La réserve est visible à l'écran,
- * comme partout ailleurs sur cette maquette.
+ * dire à VRD des mots qu'elle n'a pas écrits. Le marqueur « à valider par
+ * VRD » a été retiré de l'écran le 14.09.2026, à la demande de Sacha : le
+ * bureau relira tout le site, la réserve n'a pas besoin d'être affichée.
  *
  * Le français d'origine comportait deux fautes de construction (« nous mettant
  * en compte », « en focalisons sur ») : corrigées, la structure et tous les
@@ -24,9 +25,7 @@ export function Approche() {
     <section className={s.band} aria-labelledby="approche-titre">
       <div className={s.inner}>
         <div className={s.text}>
-        <p className={`label ${s.kicker}`}>
-          Notre approche <span className={s.flag}>à valider par VRD</span>
-        </p>
+        <p className={`label ${s.kicker}`}>Notre approche</p>
 
         {/* Le bureau parle de lui, à la première personne : c'est sa manière
             de choisir. « Long terme », pas « vingt ans » : les vingt ans sont
