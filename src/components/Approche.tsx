@@ -40,9 +40,7 @@ export function Approche() {
         <p className={s.body}>
           Le prix d’achat ne décide pas seul. Nous regardons ce qu’une
           installation coûtera pendant toute sa vie&nbsp;: l’énergie,
-          l’entretien, les réparations. Celle qui coûte le moins le premier
-          jour n’est pas toujours celle qui coûte le moins sur la durée
-          — c’est ce coût-là que nous faisons baisser.
+          l’entretien, les réparations.
         </p>
 
         <CoutInstallation />
