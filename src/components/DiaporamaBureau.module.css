@@ -7,9 +7,10 @@
    de deux diagonales (la surface non définie d'un plan). Monochrome.
    ========================================================================== */
 
-/* Centré sur la page, pas calé dans la colonne de texte. */
+/* Centré sur la page, pas calé dans la colonne de texte. Toute la largeur de
+   la colonne : la frise a besoin de place pour poser trois vues entières. */
 .diaporama {
-  max-width: 64rem;
+  max-width: var(--page-max);
   margin-inline: auto;
   margin-block-start: var(--s-6);
 }
@@ -17,29 +18,41 @@
 /* --- La scène ------------------------------------------------------------ */
 /* Les MESURES de la frise, en une seule table :
    --part    largeur de la vue centrale, en fraction de la scène ;
+   --reduit  échelle des voisines ;
    --decale  translation des voisines, en largeur de scène (cqi) ;
-   --angle   pivot des voisines ;
+   --angle   pivot des voisines.
+   Les voisines sont ENTIÈRES, jamais rognées, et à distance du centre
+   (remarque de Sacha, 14.09.2026). MESURÉ dans le navigateur, pas calculé :
+   la perspective (1400 px, origine au centre de la scène) grossit le bord
+   extérieur d'une voisine bien plus que cos 35° ne la rétrécit. À 0,52 de
+   son échelle, pivotée, la voisine se projette sur 0,236 de la scène ; posée
+   à 0,37 du centre, elle va de 0,252 à 0,488 — 0,03 de vide après le centre
+   (qui finit à 0,22), 0,012 avant le bord. Toute retouche de --part,
+   --reduit, --angle ou --decale se revérifie à l'écran.
    La hauteur de la scène est celle de la vue centrale : 3:2 × --part, soit
-   0,62 × 2/3 = 0,4133 de la largeur → 300/124. Elle ne dépend pas de la vue
+   0,44 × 2/3 = 0,2933 de la largeur → 300/88. Elle ne dépend pas de la vue
    affichée : aucun décalage de mise en page. */
 .scene {
-  --part: 0.62;
-  --decale: 40cqi;
+  --part: 0.44;
+  --reduit: 0.52;
+  --decale: 37cqi;
   --angle: 35deg;
   position: relative;
   container-type: inline-size;
   inline-size: 100%;
-  aspect-ratio: 300 / 124;
+  aspect-ratio: 300 / 88;
   overflow: hidden;
   perspective: 1400px;
 }
 
+/* Étroit : le centre garde plus de la moitié de la largeur, les voisines
+   sont plus petites encore ; même calcul, bord extérieur à 0,50. */
 @media (max-width: 40rem) {
   .scene {
-    --part: 0.82;
-    --decale: 52cqi;
-    --angle: 40deg;
-    aspect-ratio: 300 / 164; /* 0,82 × 2/3 = 0,5467 */
+    --part: 0.56;
+    --reduit: 0.42;
+    --decale: 40cqi;
+    aspect-ratio: 300 / 112; /* 0,56 × 2/3 = 0,3733 */
   }
 }
 
@@ -72,24 +85,28 @@
 
 .vue[data-pos="-1"] {
   z-index: 1;
-  transform: translateX(calc(-1 * var(--decale))) rotateY(var(--angle));
+  transform: translateX(calc(-1 * var(--decale))) rotateY(var(--angle))
+    scale(var(--reduit));
   opacity: 0.5;
 }
 
 .vue[data-pos="1"] {
   z-index: 1;
-  transform: translateX(var(--decale)) rotateY(calc(-1 * var(--angle)));
+  transform: translateX(var(--decale)) rotateY(calc(-1 * var(--angle)))
+    scale(var(--reduit));
   opacity: 0.5;
 }
 
 .vue[data-pos="-2"] {
-  transform: translateX(calc(-2 * var(--decale))) rotateY(var(--angle));
+  transform: translateX(calc(-2 * var(--decale))) rotateY(var(--angle))
+    scale(var(--reduit));
   opacity: 0;
   pointer-events: none;
 }
 
 .vue[data-pos="2"] {
-  transform: translateX(calc(2 * var(--decale))) rotateY(calc(-1 * var(--angle)));
+  transform: translateX(calc(2 * var(--decale))) rotateY(calc(-1 * var(--angle)))
+    scale(var(--reduit));
   opacity: 0;
   pointer-events: none;
 }
