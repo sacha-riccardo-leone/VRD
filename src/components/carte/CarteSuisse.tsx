@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CANTONS, ZONE } from "./cantons";
-import { MANQUANTS, POINTS, type Point } from "./points";
+import { MANQUANTS, POINTS, SIEGE, type Point } from "./points";
 import { ecarter } from "./relaxation";
 import s from "./CarteSuisse.module.css";
 
@@ -146,8 +146,15 @@ export function CarteSuisse() {
   // carte zoomée n'ouvrirait jamais son lien.
   const estUnClic = () => !glisse.current || glisse.current.bouge < 5;
 
-  const p = actif ? parSlug.get(actif) : null;
-  const place = actif ? places.find((q) => q.id === actif) : null;
+  // Le siège n'est ni dans `parSlug` ni dans `places` : il a sa propre fiche
+  // et sa place est fixe.
+  const siegeActif = actif === SIEGE.slug;
+  const p = actif && !siegeActif ? parSlug.get(actif) : null;
+  const place = siegeActif
+    ? { x: SIEGE.x, y: SIEGE.y, deplace: false }
+    : actif
+      ? places.find((q) => q.id === actif)
+      : null;
 
   // L'infobulle se place toute seule : deux booléens composent les quatre
   // placements. En pourcentage du conteneur, pour survivre au redimensionnement.
@@ -166,6 +173,11 @@ export function CarteSuisse() {
           <p className={s.legende}>
             {POINTS.length} références situées
             {MANQUANTS > 0 ? ` · ${MANQUANTS} sans localisation` : ""}
+            {" · "}
+            <span className={s.legendeSiege}>
+              <span className={s.pastilleSiege} aria-hidden="true" />
+              le bureau, {SIEGE.lieu} ({SIEGE.canton})
+            </span>
             <span className={s.aide}> — zoom : boutons, ou ⌘/Ctrl + molette</span>
           </p>
         </div>
@@ -261,9 +273,75 @@ export function CarteSuisse() {
                 );
               })}
             </g>
+
+            {/* Couche 2 bis — le siège. Même goutte, même taille constante à
+                l'écran, mais ROUGE (exception consignée dans AGENTS.md) et
+                étiquetée « VRD » en clair : la couleur seule ne porte pas la
+                distinction. Fixe — pas d'écartement. Lien vers la page
+                Contact, où l'adresse est. */}
+            {(() => {
+              const ech = TAILLE_EPINGLE_PX / pxParUnite;
+              const rCible = RAYON_CIBLE_PX / pxParUnite;
+              const ouvert = actif === SIEGE.slug;
+              return (
+                <g transform={`translate(${SIEGE.x} ${SIEGE.y}) scale(${ouvert ? 1.2 : 1})`}>
+                  <a
+                    href="/contact"
+                    className={s.epingle}
+                    aria-label={`${SIEGE.nom}, le bureau, ${SIEGE.lieu} (${SIEGE.canton}) — aller à la page Contact`}
+                    onMouseEnter={() => setActif(SIEGE.slug)}
+                    onMouseLeave={() => setActif(null)}
+                    onFocus={() => setActif(SIEGE.slug)}
+                    onBlur={() => setActif(null)}
+                    onClick={(e) => {
+                      if (!estUnClic()) e.preventDefault();
+                    }}
+                  >
+                    <ellipse cx={0} cy={0} rx={ech * 0.32} ry={ech * 0.12} className={s.ombre} />
+                    <path
+                      className={s.goutteSiege}
+                      fillRule="evenodd"
+                      strokeWidth={1 / pxParUnite}
+                      d={goutte(ech)}
+                    />
+                    <text
+                      className={s.etiquetteSiege}
+                      x={ech * 0.6}
+                      y={-ech * 0.62}
+                      dominantBaseline="middle"
+                      style={{ fontSize: `${10 / pxParUnite}px` }}
+                      aria-hidden="true"
+                    >
+                      VRD
+                    </text>
+                    <circle className={s.cible} cx={0} cy={-ech * 0.62} r={rCible} />
+                  </a>
+                </g>
+              );
+            })()}
           </svg>
 
           {/* Couche 3 — la fiche, en HTML à côté du SVG. */}
+          {siegeActif && place && (
+            <div
+              className={s.fiche}
+              aria-hidden="true"
+              style={{
+                left: aGauche ? undefined : `${fx}%`,
+                right: aGauche ? `${100 - fx}%` : undefined,
+                top: dessous ? `${fy}%` : undefined,
+                bottom: dessous ? undefined : `${100 - fy}%`,
+                marginBlock: dessous ? "1.2rem 0" : "0 1.2rem",
+                marginInline: aGauche ? "0 0.6rem" : "0.6rem 0",
+              }}
+            >
+              <p className={s.ficheNom}>{SIEGE.nom}</p>
+              <p className={s.ficheMeta}>
+                Le bureau · {SIEGE.lieu} / {SIEGE.canton}
+              </p>
+              <p className={s.ficheBudget}>{SIEGE.adresse}</p>
+            </div>
+          )}
           {p && place && (
             <div
               className={s.fiche}

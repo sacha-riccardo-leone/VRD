@@ -101,3 +101,28 @@ export const POINTS: Point[] = REALISATIONS.flatMap((r) => {
 
 /** Références qu'on ne sait pas situer — comptées, jamais devinées. */
 export const MANQUANTS = REALISATIONS.length - POINTS.length;
+
+/**
+ * Le siège — l'épingle rouge (demande de Sacha, 14.09.2026).
+ *
+ * Ce n'est PAS une référence : il ne passe ni par `REALISATIONS`, ni par
+ * l'écartement des épingles (le bureau ne bouge pas pour laisser la place à un
+ * chantier), ni dans le compte affiché sous la carte.
+ *
+ * Position : l'ADRESSE, pas le centre de la localité — c'est la seule
+ * exception à la convention de la carte avec la gare de La Chaux-de-Fonds, et
+ * pour la même raison : ici on sait exactement où c'est. Chemin du Chablais 46,
+ * 1786 Sugiez, telle qu'elle figure sur la page Contact. Coordonnée du
+ * registre des adresses swisstopo (api3.geo.admin.ch, origine « address ») :
+ * 46.96338 / 7.12303. Recoupée avec le centre du village dans le gazetteer
+ * swisstopo (46.96506 / 7.11703) et Nominatim (46.96175 / 7.11265) — l'adresse
+ * est à 500–800 m des deux, dans le village, côté lac.
+ */
+export const SIEGE = {
+  slug: "vrd-sugiez",
+  nom: "VRD ingénieurs-conseils SA",
+  lieu: "Sugiez",
+  canton: "FR",
+  adresse: "Chemin du Chablais 46, 1786 Sugiez",
+  ...projeter(7.12303, 46.96338),
+};

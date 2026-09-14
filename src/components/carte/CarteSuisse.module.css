@@ -120,6 +120,45 @@
   opacity: 0.35;
 }
 
+/* EXCEPTION CONSIGNÉE à la règle monochrome (AGENTS.md, 14.09.2026) — la
+   deuxième du dépôt après la sonde du hero. Le siège est en ROUGE, à la
+   demande de Sacha : rgb(255 56 56), 4,8:1 sur l'anthracite (WCAG 1.4.11
+   demande 3:1 pour un composant graphique). La couleur ne porte pas seule la
+   distinction : l'épingle est étiquetée « VRD » en clair, et sa fiche le dit.
+   Une seule occurrence de cette teinte sur tout le site — elle ne doit pas se
+   répandre. */
+.goutteSiege {
+  fill: rgb(255 56 56);
+  stroke: var(--dark);
+  stroke-width: 1;
+  paint-order: stroke;
+}
+
+/* L'étiquette « VRD » : clair sur anthracite, chasse fixe, taille constante à
+   l'écran (posée en ligne par le composant, comme les sigles des cantons). */
+.etiquetteSiege {
+  fill: var(--ink);
+  font-family: var(--font-mono-stack);
+  font-weight: 500;
+  letter-spacing: var(--ls-label);
+  pointer-events: none;
+}
+
+/* Le rappel dans la légende : la même pastille rouge, en HTML. */
+.legendeSiege {
+  white-space: nowrap;
+}
+
+.pastilleSiege {
+  display: inline-block;
+  inline-size: 0.6em;
+  block-size: 0.6em;
+  margin-inline-end: 0.35em;
+  border-radius: 50%;
+  background: rgb(255 56 56);
+  vertical-align: -0.02em;
+}
+
 .cible {
   fill: transparent;
   outline: none;

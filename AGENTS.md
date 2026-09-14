@@ -27,6 +27,14 @@ couleur d'accent** (décision du 28.08.2026) : les matériaux du client — cart
 site, signalétique — sont noir/blanc ; le jaune de gaz a été écarté pour ne pas
 imposer une teinte qu'ils n'ont pas choisie. Pas de cyan non plus.
 
+**Épingle du siège — exception consignée (14.09.2026).** Sur la carte de
+/realisations, l'épingle du bureau (Sugiez) est en rouge `rgb(255 56 56)`,
+décision de Sacha. C'est, avec les deux couleurs d'état de la sonde du hero,
+la seule teinte du site. Elle ne porte pas seule la distinction : l'épingle
+est étiquetée « VRD » en clair, la légende la nomme, la fiche le dit. Elle
+ne s'étend à rien d'autre — une deuxième épingle rouge, un titre rouge, un
+lien rouge sortiraient de l'exception.
+
 **Le contraste ne passe jamais par la teinte.** Hiérarchie et emphase :
 **inversion** encre↔papier, épaisseur de trait, tireté opposé au plein, poids
 typographique. Le bouton primaire est un aplat d'encre à texte papier ; au
