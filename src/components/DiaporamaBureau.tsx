@@ -16,35 +16,46 @@ import s from "./DiaporamaBureau.module.css";
  * et les deux diagonales sont celles d'une surface non définie sur un plan.
  * Cinq emplacements : un nombre de maquette, pas un nombre de pièces.
  *
- * STRUCTURE — la piste N'EST PAS dans le bouton. Un bouton rend son contenu
- * « présentationnel » et un `aria-label` en écrase le nom : une piste dans le
- * bouton aurait caché le texte des cadres (et, demain, l'`alt` des photos) à
- * tout lecteur d'écran. La piste est donc un bloc ordinaire, lu comme tel — la
- * vue courante seule, les autres sont `aria-hidden` — et le bouton « Photo
- * suivante » est une surface transparente posée PAR-DESSUS : c'est lui qu'on
- * clique, c'est lui qui prend le focus, et il ne porte aucun texte visible.
+ * LA FRISE (seconde version, même jour). La photo courante est au centre, à
+ * plat, pleine opacité. La précédente et la suivante restent visibles de
+ * part et d'autre, à 50 %, pivotées sur leur axe vertical vers le centre —
+ * les volets d'un paravent. Quand on avance, tout glisse d'un cran : la
+ * suivante vient au centre en se redressant, la courante part en se
+ * penchant. Chaque vue a une POSITION relative à la courante, −2 … +2 ; la
+ * feuille de style pose transformation et opacité par position, et la
+ * transition fait le reste. Les positions ±2 sont hors champ, invisibles :
+ * elles servent au passage, pour qu'une vue entre et sorte par le bon côté.
+ *
+ * INTERACTION. Cliquer la photo du centre : suivante. Cliquer une photo de
+ * côté : elle vient au centre. Deux boutons ← → de 44 px pour le clavier, un
+ * compteur en région vive et atomique. Boucle après la dernière.
+ *
+ * STRUCTURE — les cadres NE SONT PAS dans les boutons. Un bouton rend son
+ * contenu « présentationnel » et un `aria-label` en écrase le nom : le texte
+ * des cadres (et, demain, l'`alt` des photos) doit rester lisible. Chaque vue
+ * porte donc son cadre, lu comme un bloc ordinaire — seule la vue courante
+ * n'est pas `aria-hidden` — et une surface cliquable transparente posée
+ * PAR-DESSUS, sans texte, dont le nom est son action.
  *
  * LE JOUR OÙ LES PHOTOS ARRIVENT : dans chaque `.vue`, remplacer le
  * `<span className={s.cadre}>` par une image (next/image, `fill`, `alt` qui
  * décrit la pièce), garder l'ordre d'`EMPLACEMENTS`, retirer « à fournir »
- * du compteur et de l'intro de la page. La piste, la surface, les commandes
- * ne changent pas — l'`alt` de la vue courante sera lu, les autres non.
+ * du compteur et de l'intro de la page. Rien d'autre ne change.
  *
- * FONCTIONNEMENT. Clic sur la scène ou sur → : suivante ; ← : précédente ;
- * boucle après la dernière. Deux boutons de 44 px pour le clavier, un
- * compteur en région vive et atomique pour qu'un lecteur d'écran entende le
- * message entier (« 02 / 05 · emplacement réservé »), pas le seul chiffre
- * qui change.
- *
- * MOUVEMENT — le glissement de la piste, `transform` seul, en --dur (240 ms),
- * déclenché par le lecteur : dans la règle. Sous `prefers-reduced-motion`,
- * --dur vaut 1 ms, la vue change sans glisser. Aucun décalage de mise en
- * page : la scène a un rapport 3:2 fixe, quelle que soit la vue.
+ * MOUVEMENT — glissement et pivot en une seule transition, `transform` et
+ * `opacity` seuls, en --dur-slow (400 ms, le plafond), déclenchée par le
+ * lecteur. Sous `prefers-reduced-motion`, --dur-slow vaut 1 ms : la vue
+ * change de place sans glisser. Aucun décalage de mise en page : la scène a
+ * une hauteur fixe, dérivée du rapport 3:2 de la vue centrale.
  */
 
 const NOMBRE = 5;
 const EMPLACEMENTS = Array.from({ length: NOMBRE }, (_, i) => i + 1);
 const deux = (n: number) => String(n).padStart(2, "0");
+
+/** Position d'une vue par rapport à la courante, dans −2 … +2, en anneau. */
+const position = (i: number, courante: number) =>
+  ((i - courante + NOMBRE + 2) % NOMBRE) - 2;
 
 export function DiaporamaBureau() {
   const [index, setIndex] = useState(0);
@@ -59,13 +70,13 @@ export function DiaporamaBureau() {
       aria-label="Les locaux — emplacements réservés aux photos"
     >
       <div className={s.scene}>
-        <div
-          className={s.piste}
-          style={{ transform: `translateX(-${index * 100}%)` }}
-        >
-          {EMPLACEMENTS.map((n) => (
-            <div className={s.vue} key={n} aria-hidden={n - 1 !== index}>
-              <span className={s.cadre}>
+        {EMPLACEMENTS.map((n, i) => {
+          const pos = position(i, index);
+          const courante = pos === 0;
+          const visible = Math.abs(pos) <= 1;
+          return (
+            <div className={s.vue} key={n} data-pos={pos}>
+              <span className={s.cadre} aria-hidden={!courante}>
                 {/* Les deux diagonales d'une surface non définie. Trait de
                     1 px à toute taille (`non-scaling-stroke`), dans --rule. */}
                 <svg
@@ -85,18 +96,29 @@ export function DiaporamaBureau() {
                   Photo du bureau à fournir par VRD
                 </span>
               </span>
-            </div>
-          ))}
-        </div>
 
-        {/* La surface cliquable, par-dessus la piste. Sans contenu : son nom
-            est son action, et rien de visible ne le contredit. */}
-        <button
-          type="button"
-          className={s.surface}
-          onClick={suivante}
-          aria-label="Photo suivante"
-        />
+              {/* La surface cliquable, par-dessus le cadre. Sans contenu :
+                  son nom est son action. Hors champ, pas de bouton du tout —
+                  rien de focalisable qui ne se voie pas. */}
+              {visible &&
+                (courante ? (
+                  <button
+                    type="button"
+                    className={s.surface}
+                    onClick={suivante}
+                    aria-label="Photo suivante"
+                  />
+                ) : (
+                  <button
+                    type="button"
+                    className={s.surface}
+                    onClick={() => setIndex(i)}
+                    aria-label={`Voir l’emplacement ${deux(n)}`}
+                  />
+                ))}
+            </div>
+          );
+        })}
       </div>
 
       <div className={s.commandes}>
