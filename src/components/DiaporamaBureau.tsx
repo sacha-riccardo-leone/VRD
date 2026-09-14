@@ -67,7 +67,7 @@ export function DiaporamaBureau() {
       className={s.diaporama}
       role="region"
       aria-roledescription="diaporama"
-      aria-label="Les locaux — emplacements réservés aux photos"
+      aria-label="Les locaux : emplacements réservés aux photos"
     >
       <div className={s.scene}>
         {EMPLACEMENTS.map((n, i) => {

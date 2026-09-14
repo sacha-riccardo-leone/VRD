@@ -22,7 +22,7 @@ import s from "./page.module.css";
 export const metadata: Metadata = {
   title: "Réalisations",
   description:
-    "Huit références en technique du bâtiment : manufactures horlogères, gare CFF, surfaces commerciales et culturelles — CVCS et MCR, de l’étude au suivi d’exécution.",
+    "Huit références en technique du bâtiment : manufactures horlogères, gare CFF, surfaces commerciales et culturelles : CVCS et MCR, de l’étude au suivi d’exécution.",
 };
 
 /** Le français écrit 22,1 — pas 22.1. */
@@ -65,7 +65,7 @@ export default function RealisationsPage() {
             <dd className={s.totalValue}>{budgetFr}</dd>
           </div>
           <div className={s.total}>
-            <dt className={s.totalLabel}>Cantons — {CANTONS.join(" · ")}</dt>
+            <dt className={s.totalLabel}>Cantons : {CANTONS.join(" · ")}</dt>
             <dd className={s.totalValue}>{CANTONS.length}</dd>
           </div>
         </dl>
@@ -94,7 +94,7 @@ export default function RealisationsPage() {
                     <>
                       <span aria-hidden="true">*</span>
                       <span className="visuallyHidden">
-                        {" "}— maître d’ouvrage confidentiel
+                        {" "}(maître d’ouvrage confidentiel)
                       </span>
                     </>
                   ) : null}
@@ -144,7 +144,7 @@ export default function RealisationsPage() {
                   href={c.site}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`${c.nom} — ${c.siteLibelle ?? "site officiel"}, nouvel onglet`}
+                  aria-label={`${c.nom}, ${c.siteLibelle ?? "site officiel"}, nouvel onglet`}
                 >
                   <LogoClient client={c} />
                 </a>

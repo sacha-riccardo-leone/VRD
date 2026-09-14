@@ -37,7 +37,7 @@ export const REALISATIONS: Realisation[] = [
     annees: "2022–2024",
     role: "Ingénierie CVCS et MCR",
     descriptif:
-      "Extension d’une usine dévolue à la fabrication de produits horlogers — boîtiers et cadrans haut de gamme.",
+      "Extension d’une usine dévolue à la fabrication de produits horlogers (boîtiers et cadrans haut de gamme).",
     surface: "11’000 m²",
     budgetCHF: 7_500_000,
     budgetLabel: "≈ 7.5 mios CHF",
@@ -57,7 +57,7 @@ export const REALISATIONS: Realisation[] = [
   },
   {
     slug: "tag-heuer-cornol",
-    maitre: "TAG-Heuer — Branch of LVMH",
+    maitre: "TAG-Heuer (Branch of LVMH)",
     lieu: "Cornol",
     canton: "JU",
     annees: "2023–2026",
@@ -70,7 +70,7 @@ export const REALISATIONS: Realisation[] = [
   },
   {
     slug: "2k99-la-fonderie-bienne",
-    maitre: "2K99 SA — La Fonderie",
+    maitre: "2K99 SA – La Fonderie",
     lieu: "Bienne",
     canton: "BE",
     annees: "2023–2026",
@@ -83,13 +83,13 @@ export const REALISATIONS: Realisation[] = [
   },
   {
     slug: "tag-heuer-la-chaux-de-fonds",
-    maitre: "TAG-Heuer — Branch of LVMH",
+    maitre: "TAG-Heuer (Branch of LVMH)",
     lieu: "La Chaux-de-Fonds",
     canton: "NE",
     annees: "2023–2026",
     role: "Ingénierie CVCS et MCR",
     descriptif:
-      "Assainissement et mise en conformité de l’installation de froid — climatique et process — de l’usine, raccordement au CAD et assainissement des installations de ventilation.",
+      "Assainissement et mise en conformité de l’installation de froid (climatique et process) de l’usine, raccordement au CAD et assainissement des installations de ventilation.",
     budgetCHF: 1_400_000,
     budgetLabel: "≈ 1.4 mios CHF",
   },
@@ -184,8 +184,8 @@ export const CLIENTS: Client[] = [
   { nom: "UNIL", logo: "/logos/unil.png", site: "https://www.unil.ch" },
   { nom: "Canton de Vaud", logo: "/logos/canton-de-vaud.webp", site: "https://www.vd.ch" },
   { nom: "Ville de Nyon", logo: "/logos/ville-de-nyon.webp", site: "https://www.nyon.ch" },
-  { nom: "tl — transports lausannois", logo: "/logos/tl.svg", site: "https://www.t-l.ch" },
-  { nom: "eHnv — Étab. hospitaliers du Nord vaudois", logo: "/logos/ehnv.svg", site: "https://www.ehnv.ch" },
+  { nom: "tl (transports lausannois)", logo: "/logos/tl.svg", site: "https://www.t-l.ch" },
+  { nom: "eHnv (Étab. hospitaliers du Nord vaudois)", logo: "/logos/ehnv.svg", site: "https://www.ehnv.ch" },
   { nom: "Groupe COMINA Architecture", logo: "/logos/groupe-comina.webp", site: "https://www.comina-architecture.ch/fr/" },
   { nom: "CCHE", logo: "/logos/cche.png", site: "https://cche.com" },
   { nom: "a-rr.", logo: "/logos/a-rr.png", site: "https://a-rr.ch" },

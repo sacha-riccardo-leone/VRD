@@ -23,7 +23,7 @@ import s from "./page.module.css";
  * Disallow s'appliquent déjà.
  */
 export const metadata = {
-  title: "Labo — illustrations techniques",
+  title: "Labo : illustrations techniques",
 };
 
 export default function Labo() {
@@ -39,7 +39,7 @@ export default function Labo() {
           <p className={s.caption}>
             Isothermes 18–24&nbsp;°C. Déplacez le curseur : la source de chaleur
             le suit avec inertie, l’isotherme la plus proche passe en trait plein
-            avec sa valeur. Schéma d’illustration — contenu de démonstration.
+            avec sa valeur. Schéma d’illustration : contenu de démonstration.
           </p>
         </div>
       </section>
@@ -53,7 +53,7 @@ export default function Labo() {
           <p className={s.caption}>
             Le dessin s’assemble à l’arrivée dans le cadre : le départ se trace,
             le retour et les symboles suivent. Trait plein = départ, tireté =
-            retour. Illustration — contenu de démonstration.
+            retour. Illustration : contenu de démonstration.
           </p>
           <div className={s.schemaFigure}>
             <SchematicLoop />
@@ -69,7 +69,7 @@ export default function Labo() {
           </h2>
           <p className={s.caption}>
             Quatre circuits, vanne d’isolement et débitmètre chacun. Trait plein =
-            départ, tireté = retour. Illustration — contenu de démonstration.
+            départ, tireté = retour. Illustration : contenu de démonstration.
           </p>
           <div className={s.schemaFigure}>
             <Manifold />
@@ -85,7 +85,7 @@ export default function Labo() {
           </h2>
           <p className={s.caption}>
             L’assemblage s’éclate à l’arrivée dans le cadre : chaque pièce rejoint
-            sa position, en cascade. Illustration — contenu de démonstration.
+            sa position, en cascade. Illustration : contenu de démonstration.
           </p>
           <div className={s.explodedGrid}>
             <div className={s.explodedFigure}>
@@ -112,7 +112,7 @@ export default function Labo() {
           <p className={s.caption}>
             Air neuf, filtration G4 puis F7, batteries froide et chaude,
             soufflage ; reprise en gaine tiretée via récupérateur avant rejet.
-            Illustration — contenu de démonstration.
+            Illustration : contenu de démonstration.
           </p>
           <div className={s.schemaFigure}>
             <AirHandlingUnit />
@@ -128,7 +128,7 @@ export default function Labo() {
           </h2>
           <p className={s.caption}>
             Trois niveaux, piquage et robinet d’arrêt par étage, ballon en pied.
-            Trait plein = eau froide, tireté = eau chaude. Illustration —
+            Trait plein = eau froide, tireté = eau chaude. Illustration :
             contenu de démonstration.
           </p>
           <div className={s.schemaFigureNarrow}>
@@ -141,11 +141,11 @@ export default function Labo() {
         <div className={s.schemaInner}>
           <p className="label">Prototype · gaz</p>
           <h2 id="gaz-titre" className={s.title}>
-            Rampe gaz — bloc sécurité
+            Rampe gaz : bloc sécurité
           </h2>
           <p className={s.caption}>
             Vanne d’arrêt, filtre, détendeur, compteur et double électrovanne de
-            sécurité jusqu’au brûleur. Illustration — contenu de démonstration.
+            sécurité jusqu’au brûleur. Illustration : contenu de démonstration.
           </p>
           <div className={s.schemaFigure}>
             <RampeGaz />
@@ -161,7 +161,7 @@ export default function Labo() {
           </h2>
           <p className={s.caption}>
             Murs hachurés, débattement de porte, chaînes de cotes, repère de
-            niveau et raccordement du radiateur départ/retour. Illustration —
+            niveau et raccordement du radiateur départ/retour. Illustration :
             contenu de démonstration.
           </p>
           <div className={s.schemaFigure}>
@@ -177,7 +177,7 @@ export default function Labo() {
             Coupe axonométrique de bâtiment
           </h2>
           <p className={s.caption}>
-            Trois niveaux en écorché : chaufferie en pied, colonne montante départ/retour, piquages d’étage et CTA en toiture. Géométrie 3D réelle, projetée. Illustration — contenu de démonstration.
+            Trois niveaux en écorché : chaufferie en pied, colonne montante départ/retour, piquages d’étage et CTA en toiture. Géométrie 3D réelle, projetée. Illustration : contenu de démonstration.
           </p>
           <div className={s.schemaFigure}>
             <BatimentCoupeIso />
@@ -192,7 +192,7 @@ export default function Labo() {
             Chaufferie axonométrique
           </h2>
           <p className={s.caption}>
-            Chaudière 150 kW, ballon tampon 1 000 L et collecteur DN 80 sur dalle quadrillée ; départ plein, retour tireté, régime 70/50 °C. Illustration — contenu de démonstration.
+            Chaudière 150 kW, ballon tampon 1 000 L et collecteur DN 80 sur dalle quadrillée ; départ plein, retour tireté, régime 70/50 °C. Illustration : contenu de démonstration.
           </p>
           <div className={s.schemaFigure}>
             <ChaufferieIso />
@@ -207,7 +207,7 @@ export default function Labo() {
             Réseau de gaines
           </h2>
           <p className={s.caption}>
-            Caisson, gaine principale 600 × 300 traitée en volume et trois piquages coudés vers leurs bouches ; reprise en tireté. Illustration — contenu de démonstration.
+            Caisson, gaine principale 600 × 300 traitée en volume et trois piquages coudés vers leurs bouches ; reprise en tireté. Illustration : contenu de démonstration.
           </p>
           <div className={s.schemaFigure}>
             <ReseauGainesIso />
@@ -219,10 +219,10 @@ export default function Labo() {
         <div className={s.schemaInner}>
           <p className="label">Prototype · axonométrie</p>
           <h2 id="circulateur-titre" className={s.title}>
-            Circulateur — vue éclatée
+            Circulateur : vue éclatée
           </h2>
           <p className={s.caption}>
-            Sept pièces alignées sur l’axe d’éclatement, arêtes cachées tiretées, axe pointillé, refoulement DN 65 à 12 m³/h. Illustration — contenu de démonstration.
+            Sept pièces alignées sur l’axe d’éclatement, arêtes cachées tiretées, axe pointillé, refoulement DN 65 à 12 m³/h. Illustration : contenu de démonstration.
           </p>
           <div className={s.schemaFigureNarrow}>
             <CirculateurEclateIso />
@@ -297,7 +297,7 @@ export default function Labo() {
           <h2 id="sprinkler-titre" className={s.title}>
             Réseau sprinkler
           </h2>
-          <p className={s.caption}>Réservoir, pompe, clapet anti-retour, poste de contrôle sous eau (vanne verrouillée, clapet d’alarme, cloche hydraulique, manomètres), colonne montante, antenne et têtes à déflecteur. Ligne d’essai en tireté vers l’égout. Illustration — contenu de démonstration.</p>
+          <p className={s.caption}>Réservoir, pompe, clapet anti-retour, poste de contrôle sous eau (vanne verrouillée, clapet d’alarme, cloche hydraulique, manomètres), colonne montante, antenne et têtes à déflecteur. Ligne d’essai en tireté vers l’égout. Illustration : contenu de démonstration.</p>
           <div className={s.schemaFigure}>
             <ReseauSprinkler />
           </div>
@@ -310,7 +310,7 @@ export default function Labo() {
           <h2 id="bilan-titre" className={s.title}>
             Bilan énergétique
           </h2>
-          <p className={s.caption}>Apports en trait plein (solaire, pompe à chaleur sur sondes géothermiques), déperditions en tireté par poste (toiture, murs, fenêtres, ventilation, plancher), échelle de performance A–G. Illustration — contenu de démonstration.</p>
+          <p className={s.caption}>Apports en trait plein (solaire, pompe à chaleur sur sondes géothermiques), déperditions en tireté par poste (toiture, murs, fenêtres, ventilation, plancher), échelle de performance A–G. Illustration : contenu de démonstration.</p>
           <div className={s.schemaFigure}>
             <BilanEnergetique />
           </div>

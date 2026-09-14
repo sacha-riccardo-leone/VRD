@@ -313,7 +313,7 @@ export function CirculateurEclateIso() {
       className={s.svg}
       viewBox="0 0 384 424"
       role="img"
-      aria-label="Vue éclatée axonométrique d'un circulateur : sept pièces empilées sur un axe vertical en pointillé et repérées de 1 à 7 — 1 bouchon de purge, 2 bride ronde à quatre boulons M16, 3 joint torique, 4 corps de pompe percé d'un alésage et muni d'un piquage de refoulement DN 65 débitant 12 mètres cubes par heure, 5 roue à aubes de 190 millimètres de diamètre, 6 moteur de 1,5 kilowatt avec boîte à bornes et bout d'arbre, 7 socle antivibratile de 26 centimètres de côté."
+      aria-label="Vue éclatée axonométrique d'un circulateur : sept pièces empilées sur un axe vertical en pointillé et repérées de 1 à 7 : 1 bouchon de purge, 2 bride ronde à quatre boulons M16, 3 joint torique, 4 corps de pompe percé d'un alésage et muni d'un piquage de refoulement DN 65 débitant 12 mètres cubes par heure, 5 roue à aubes de 190 millimètres de diamètre, 6 moteur de 1,5 kilowatt avec boîte à bornes et bout d'arbre, 7 socle antivibratile de 26 centimètres de côté."
     >
       <g transform="translate(240,354)">
         {/* axe d'éclatement — pointillé fin, traverse tout l'empilage */}

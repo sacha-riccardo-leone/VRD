@@ -41,7 +41,7 @@ import s from "./page.module.css";
 export const metadata: Metadata = {
   title: "Carrières",
   description:
-    "Projeteur, technicien ES ou ingénieur HES en techniques du bâtiment — rejoins l’équipe de VRD ingénieurs-conseils à Sugiez. Candidature spontanée bienvenue.",
+    "Projeteur, technicien ES ou ingénieur HES en techniques du bâtiment : rejoins l’équipe de VRD ingénieurs-conseils à Sugiez. Candidature spontanée bienvenue.",
 };
 
 type Raison = {
@@ -59,13 +59,13 @@ const RAISONS: Raison[] = [
     num: "01",
     titre: "Une équipe où l’on se parle",
     texte:
-      "Six collaborateurs. À la direction, deux amis ingénieurs HES qui sont à l’origine du bureau. Pour poser une question, tu traverses la pièce — pas trois niveaux hiérarchiques. Ce que tu proposes se discute le jour même.",
+      "Six collaborateurs. À la direction, deux amis ingénieurs HES qui sont à l’origine du bureau. Pour poser une question, tu traverses la pièce, pas trois niveaux hiérarchiques. Ce que tu proposes se discute le jour même.",
   },
   {
     num: "02",
     titre: "Neuf domaines, pas un seul",
     texte:
-      "Chauffage, ventilation, froid, sanitaire, sprinkler, BIM, MCR, énergétique, sécurité incendie. Le bureau couvre les neuf, donc ton horizon ne se limite pas à un seul lot. C’est plus exigeant qu’une spécialisation — et c’est comme ça qu’on apprend vite.",
+      "Chauffage, ventilation, froid, sanitaire, sprinkler, BIM, MCR, énergétique, sécurité incendie. Le bureau couvre les neuf, donc ton horizon ne se limite pas à un seul lot. C’est plus exigeant qu’une spécialisation, et c’est comme ça qu’on apprend vite.",
   },
   {
     num: "03",
@@ -185,8 +185,8 @@ export default function CarrieresPage() {
           </ol>
 
           <p className={s.equivalence}>
-            … ou une expérience équivalente. Si tu as appris le métier autrement
-            — sur le chantier, en reconversion, ailleurs qu’en Suisse — écris
+            … ou une expérience équivalente. Si tu as appris le métier autrement,
+            sur le chantier, en reconversion ou ailleurs qu’en Suisse, écris
             quand même.
           </p>
         </div>

@@ -63,7 +63,7 @@ const COORDONNEES: Record<string, Coord> = {
   "coop-savigny": {
     lat: 46.5379,
     lng: 6.7302,
-    deduit: "Commune unique de ce nom en Suisse (VD) — le portfolio ne donne pas le canton.",
+    deduit: "Commune unique de ce nom en Suisse (VD) ; le portfolio ne donne pas le canton.",
   },
 };
 

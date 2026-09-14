@@ -70,7 +70,7 @@ export function HeroProbe() {
         : 0;
 
       // Le diagnostic, formulé comme une question tranchable.
-      let verdict = "—";
+      let verdict = "…";
       if (pr && sr) {
         const plaqueCouvre = pr.bottom >= basFenetre - 0.5;
         const suiteVisible = sr.top < basFenetre - 0.5;
@@ -114,7 +114,7 @@ export function HeroProbe() {
       }
       if (!rs.length) l.push("temps par image : aucun relevé (defilez sur le hero)");
 
-      setAlerte(verdict !== "ok" && verdict !== "—");
+      setAlerte(verdict !== "ok" && verdict !== "…");
       setTxt(l.join("\n"));
     };
 

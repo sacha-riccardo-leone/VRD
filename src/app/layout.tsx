@@ -15,7 +15,7 @@ import "@/styles/globals.css";
 export const metadata: Metadata = {
   title: {
     default: "VRD ingénieurs-conseils SA",
-    template: "%s — VRD ingénieurs-conseils SA",
+    template: "%s · VRD ingénieurs-conseils SA",
   },
   description:
     "Bureau d'ingénieurs-conseils en technique du bâtiment à Sugiez (FR) : chauffage, ventilation, climatisation, sanitaire.",

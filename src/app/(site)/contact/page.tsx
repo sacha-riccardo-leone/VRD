@@ -39,7 +39,7 @@ import s from "./page.module.css";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Coordonnées de VRD ingénieurs-conseils SA à Sugiez (Mont-Vully, FR) — adresse, téléphone, e-mail et formulaire de contact.",
+    "Coordonnées de VRD ingénieurs-conseils SA à Sugiez (Mont-Vully, FR) : adresse, téléphone, e-mail et formulaire de contact.",
 };
 
 export default function ContactPage() {
@@ -190,7 +190,7 @@ export default function ContactPage() {
                 Objet <span className={s.req}>requis</span>
               </label>
               <p id="objet-aide" className={s.aide}>
-                Par exemple&nbsp;: «&nbsp;Étude CVC — rénovation d’un immeuble de
+                Par exemple&nbsp;: «&nbsp;Étude CVC, rénovation d’un immeuble de
                 12&nbsp;logements&nbsp;».
               </p>
               <input
@@ -235,7 +235,7 @@ export default function ContactPage() {
 
           <p className={s.privacy}>
             <span className={s.flag}>rédaction d’exemple</span>
-            Confidentialité — une fois le formulaire raccordé, les informations
+            Confidentialité&nbsp;: une fois le formulaire raccordé, les informations
             saisies ne serviraient qu’à traiter la demande, ne seraient ni cédées
             ni exploitées à des fins publicitaires, et seraient effacées à la
             clôture du dossier. Ce paragraphe montre la forme que prendrait la

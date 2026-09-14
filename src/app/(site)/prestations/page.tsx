@@ -56,7 +56,7 @@ import s from "./page.module.css";
 export const metadata: Metadata = {
   title: "Prestations",
   description:
-    "Chauffage, ventilation, froid, sanitaire, sprinkler, BIM, MCR, énergétique et sécurité incendie — les neuf domaines du bureau, de l’étude et du dimensionnement à la mise en service.",
+    "Chauffage, ventilation, froid, sanitaire, sprinkler, BIM, MCR, énergétique et sécurité incendie : les neuf domaines du bureau, de l’étude et du dimensionnement à la mise en service.",
 };
 
 /**
@@ -110,8 +110,8 @@ export default function PrestationsPage() {
           <div className={s.techBody}>
             <p>
               Le dimensionnement part des besoins réels&nbsp;: déperditions
-              calculées pièce par pièce, puis choix de la production — pompe à
-              chaleur, chaudière, raccordement à un réseau de chaleur — et de la
+              calculées pièce par pièce, puis choix de la production (pompe à
+              chaleur, chaudière, raccordement à un réseau de chaleur) et de la
               température de départ qui va avec. Les réseaux suivent&nbsp;:
               diamètres, pertes de charge, hauteur manométrique des
               circulateurs, équilibrage des colonnes et des boucles.
@@ -164,8 +164,8 @@ export default function PrestationsPage() {
 
           <div className={s.techBody}>
             <p>
-              Les débits s’établissent local par local à partir de l’usage —
-              occupation, apports internes, charges d’humidité — puis se
+              Les débits s’établissent local par local à partir de l’usage
+              (occupation, apports internes, charges d’humidité), puis se
               confrontent aux exigences de la norme SIA&nbsp;382/1. Viennent
               ensuite le dimensionnement des centrales double flux, des réseaux
               de gaines et des bouches, en tenant la vitesse d’air et le niveau
@@ -252,14 +252,14 @@ export default function PrestationsPage() {
               probable selon la directive W3 de la SSIGE, avec les vitesses et
               les volumes que l’hygiène impose&nbsp;: la légionelle se traite au
               dimensionnement et à la température, pas après coup. La production
-              d’eau chaude s’étudie avec le chauffage — pompe à chaleur,
+              d’eau chaude s’étudie avec le chauffage&nbsp;: pompe à chaleur,
               appoint, accumulation, rendement du bouclage.
             </p>
             <p>
               Les évacuations, les colonnes de chute et la ventilation primaire
               se calent tôt avec la structure, parce qu’une chute déplacée en
-              cours d’exécution coûte cher. Les besoins de défense incendie —
-              postes incendie, colonnes — se reprennent du concept de protection
+              cours d’exécution coûte cher. Les besoins de défense incendie
+              (postes incendie, colonnes) se reprennent du concept de protection
               incendie du projet, puis se coordonnent avec les réseaux d’eau,
               les percements et les gaines techniques.
             </p>
@@ -306,7 +306,7 @@ export default function PrestationsPage() {
             <p className={s.todo}>
               <strong>Contenu à fournir.</strong> Ce domaine figure au portfolio de
               VRD et à son organigramme 2026, mais aucun descriptif n’existe à
-              ce jour — ni sur le site actuel, ni dans le portfolio. À rédiger
+              ce jour, ni sur le site actuel, ni dans le portfolio. À rédiger
               avec le bureau.
             </p>
           </div>
@@ -387,7 +387,7 @@ export default function PrestationsPage() {
             <p className={s.todo}>
               <strong>Contenu à fournir.</strong> Ce domaine figure au portfolio de
               VRD et à son organigramme 2026, mais aucun descriptif n’existe à
-              ce jour — ni sur le site actuel, ni dans le portfolio. À rédiger
+              ce jour, ni sur le site actuel, ni dans le portfolio. À rédiger
               avec le bureau.
             </p>
           </div>
@@ -418,8 +418,8 @@ export default function PrestationsPage() {
               Avant tout dimensionnement vient le bilan&nbsp;: besoins de
               chaleur et de froid, eau chaude sanitaire, électricité des
               installations techniques. Les variantes de production se comparent
-              ensuite sur une même base — investissement, consommation,
-              entretien, émissions — pour que le maître d’ouvrage arbitre sur
+              ensuite sur une même base (investissement, consommation,
+              entretien, émissions) pour que le maître d’ouvrage arbitre sur
               des chiffres.
             </p>
             <p>
@@ -474,7 +474,7 @@ export default function PrestationsPage() {
             <p className={s.todo}>
               <strong>Contenu à fournir.</strong> Ce domaine figure à
               l’organigramme VRD&nbsp;2026, avec son responsable, mais aucun
-              descriptif n’existe à ce jour — ni sur le site actuel, ni dans le
+              descriptif n’existe à ce jour, ni sur le site actuel, ni dans le
               portfolio. À rédiger avec le bureau.
             </p>
           </div>

@@ -36,7 +36,7 @@ const ON_PAPER: Pair[] = [
     fg: "#d0d0d0",
     bg: "#f5f5f5",
     use: "--rule sur --paper",
-    limit: "filets décoratifs — jamais porteurs de sens",
+    limit: "filets décoratifs : jamais porteurs de sens",
     decorative: true,
   },
 ];
@@ -49,7 +49,7 @@ const ON_DARK: Pair[] = [
 ];
 
 const TYPE_STEPS = [
-  { token: "--fs-800", el: "sans", note: "titre de page — un seul par page" },
+  { token: "--fs-800", el: "sans", note: "titre de page : un seul par page" },
   { token: "--fs-700", el: "sans", note: "titre de section" },
   { token: "--fs-600", el: "sans", note: "sous-section" },
   { token: "--fs-500", el: "sans", note: "chapô, intertitre" },
@@ -133,13 +133,13 @@ export default function TokensPage() {
           Aucune teinte d’accent (décision du 28.08.2026) : les matériaux du client sont noir et blanc. La hiérarchie
           et l’emphase passent par l’<strong>inversion</strong> encre↔papier, l’<strong>épaisseur de trait</strong>, le
           <strong> tireté opposé au plein</strong> et le <strong>poids typographique</strong>. Le bouton primaire est un
-          aplat d’encre à texte papier ; au survol il s’inverse (papier, texte encre, filet d’encre) — voir « États
+          aplat d’encre à texte papier ; au survol il s’inverse (papier, texte encre, filet d’encre) : voir « États
           interactifs » plus bas.
         </p>
         <p className={s.note}>
           Un schéma technique sépare ses circuits par épaisseur de trait et par tireté avant tout&nbsp;: ça survit à
           l’impression en noir et blanc et au daltonisme. Sur fond sombre, l’isotherme active du champ thermique se
-          distingue par le seul trait continu — même teinte, même épaisseur.
+          distingue par le seul trait continu : même teinte, même épaisseur.
         </p>
       </section>
 
@@ -156,7 +156,7 @@ export default function TokensPage() {
                 className={t.el === "mono" ? s.sampleMono : s.sample}
                 style={{ fontSize: `var(${t.token})` }}
               >
-                Chauffage, ventilation, climatisation — cœur d’îlot, 1 250 m²
+                Chauffage, ventilation, climatisation : cœur d’îlot, 1 250 m²
               </span>
             </li>
           ))}
@@ -178,7 +178,7 @@ export default function TokensPage() {
       <section className={s.section} aria-labelledby="t-etats">
         <h2 id="t-etats">États interactifs</h2>
         <p className={s.note}>
-          Naviguez au clavier&nbsp;: l’anneau de focus doit rester visible sur les deux fonds — encre sur papier
+          Naviguez au clavier&nbsp;: l’anneau de focus doit rester visible sur les deux fonds : encre sur papier
           (16.28:1), papier sur anthracite (14.85:1). Cible tactile minimale 44&nbsp;×&nbsp;44&nbsp;px.
         </p>
         <div className={s.states}>
@@ -206,20 +206,20 @@ export default function TokensPage() {
         <p className={s.note}>
           Une seule idée&nbsp;: « le dessin s’assemble ». Plafond dur à 400&nbsp;ms, déclenché par le lecteur, jamais en
           boucle, aucun décalage de mise en page. Sous <code>prefers-reduced-motion</code>, toutes les durées passent à
-          1&nbsp;ms&nbsp;— l’état final est identique.
+          1&nbsp;ms&nbsp; : l’état final est identique.
         </p>
         <dl className={s.motion}>
           <div>
             <dt className="label">--dur-fast</dt>
-            <dd>120 ms — retours d’état (survol, focus)</dd>
+            <dd>120 ms : retours d’état (survol, focus)</dd>
           </div>
           <div>
             <dt className="label">--dur</dt>
-            <dd>240 ms — transitions de composant</dd>
+            <dd>240 ms : transitions de composant</dd>
           </div>
           <div>
             <dt className="label">--dur-slow</dt>
-            <dd>400 ms — assemblage d’un schéma. Plafond.</dd>
+            <dd>400 ms : assemblage d’un schéma. Plafond.</dd>
           </div>
         </dl>
       </section>

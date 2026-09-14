@@ -178,7 +178,7 @@ export function CarteSuisse() {
               <span className={s.pastilleSiege} aria-hidden="true" />
               le bureau, {SIEGE.lieu} ({SIEGE.canton})
             </span>
-            <span className={s.aide}> — zoom : boutons, ou ⌘/Ctrl + molette</span>
+            <span className={s.aide}> · zoom : boutons, ou ⌘/Ctrl + molette</span>
           </p>
         </div>
 
@@ -247,7 +247,7 @@ export function CarteSuisse() {
                     <a
                       href={`#${pt.slug}`}
                       className={s.epingle}
-                      aria-label={`${pt.nom}, ${pt.lieu}${pt.canton ? ` (${pt.canton})` : ""} — aller à la fiche${q.deplace ? ", position ajustée pour lisibilité" : ""}`}
+                      aria-label={`${pt.nom}, ${pt.lieu}${pt.canton ? ` (${pt.canton})` : ""}, aller à la fiche${q.deplace ? ", position ajustée pour lisibilité" : ""}`}
                       onMouseEnter={() => setActif(q.id)}
                       onMouseLeave={() => setActif(null)}
                       onFocus={() => setActif(q.id)}
@@ -288,7 +288,7 @@ export function CarteSuisse() {
                   <a
                     href="/contact"
                     className={s.epingle}
-                    aria-label={`${SIEGE.nom}, le bureau, ${SIEGE.lieu} (${SIEGE.canton}) — aller à la page Contact`}
+                    aria-label={`${SIEGE.nom}, le bureau, ${SIEGE.lieu} (${SIEGE.canton}), aller à la page Contact`}
                     onMouseEnter={() => setActif(SIEGE.slug)}
                     onMouseLeave={() => setActif(null)}
                     onFocus={() => setActif(SIEGE.slug)}
@@ -405,7 +405,7 @@ export function CarteSuisse() {
         <p className={s.pied}>
           <span>Frontières : OFS / swisstopo via swiss-maps (BSD-3-Clause).</span>
           <span>
-            Positions au centre de la localité — sauf la gare de La
+            Positions au centre de la localité, sauf la gare de La
             Chaux-de-Fonds, située à l’ouvrage.
           </span>
         </p>

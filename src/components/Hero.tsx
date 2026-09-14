@@ -320,7 +320,7 @@ export function Hero() {
         </div>
       </div>
 
-      <h1 className="visuallyHidden">VRD — Ingénieurs conseils</h1>
+      <h1 className="visuallyHidden">VRD Ingénieurs conseils</h1>
       <HeroProbe />
     </>
   );

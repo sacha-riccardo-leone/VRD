@@ -47,7 +47,7 @@ import s from "./page.module.css";
 export const metadata: Metadata = {
   title: "À propos",
   description:
-    "L’équipe et le bureau de VRD ingénieurs-conseils SA — six personnes à Sugiez (Mont-Vully, FR), deux ingénieurs HES à la direction.",
+    "L’équipe et le bureau de VRD ingénieurs-conseils SA : six personnes à Sugiez (Mont-Vully, FR), deux ingénieurs HES à la direction.",
 };
 
 /* --- Les deux organes inscrits au registre du commerce. Ils sont deux des six
